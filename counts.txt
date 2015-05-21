@@ -1,7 +1,7 @@
   ASW0002asp: 4
   ASW00096rm: 1
   ASW0002dx7: 10
-! ASW0008wmr: 0
+  ASW0008wmr: 2
   ASW0004nan: 1
 ! ASW0004wgd: 0
 ! ASW00007mq: 0
