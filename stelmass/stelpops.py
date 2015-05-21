@@ -1,16 +1,17 @@
-from numpy import ndarray
+from numpy import ndarray, log10
 from scipy.interpolate import interp1d
 
 fil = open('Rafael_chab.dat')
-lyst = fil.readlines()[10:]
+lyst = fil.readlines()[13:]
 z = ndarray(shape=len(lyst))
 jr = 0*z
 sr = 0*z
 for i in range(len(lyst)):
     v = lyst[i].split()
+    v = [float(s) for s in v]
     z[i] = v[0]
-    jr[i] = v[3]
-    sr[i] = v[4]
+    jr[i] = v[3] - 2.5*log10(v[4])
+    sr[i] = v[5] - 2.5*log10(v[6])
 
 magjr = interp1d(z,jr)
 magsr = interp1d(z,sr)
