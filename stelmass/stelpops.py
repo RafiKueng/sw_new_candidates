@@ -1,7 +1,9 @@
 from numpy import ndarray, log10
 from scipy.interpolate import interp1d
+import matplotlib.pyplot as pl
 
-fil = open('Rafael_chab.dat')
+
+fil = open('Rafael_salp.dat')
 lyst = fil.readlines()[13:]
 z = ndarray(shape=len(lyst))
 jr = 0*z
@@ -31,18 +33,21 @@ for lyne in lyst:
     if zp !=0 and mag != 0:
         zl.append(zp)
         logm = (magjr(zp)-mag)*0.4
-        msjr.append(10**(logm-10))
+        msjr.append(10**(logm))
         logm = (magsr(zp)-mag)*0.4
-        mssr.append(10**(logm-10))
+        mssr.append(10**(logm))
         print msjr[-1],mssr[-1]
     else:
         print
 
 
-from pylab import plot, scatter, show
 # plot(z,magjr(z))
 # plot(z,magsr(z))
-# scatter(z,msjr)
-# show()
+pl.scatter(zl,msjr,c='g')
+pl.scatter(zl,mssr,c='r')
+pl.axes().set_yscale('log')
+pl.xlabel('redshift')
+pl.ylabel('stellar mass in $M_\odot$')
+pl.show()
 
 
