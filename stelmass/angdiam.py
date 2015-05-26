@@ -19,3 +19,6 @@ def sig_factor(zlens,zsrc):
     Dls = asrc*r[1]
     return Dl*Ds/Dls
 
+# Multiply masses by
+# sig_factor(zl_actual,zs_actual)/sig_factor(zl_used,zs_used)
+
