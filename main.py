@@ -944,6 +944,11 @@ def createStats():
                 f.write("%s\n" % asw)
                 
 
+def writeStatesToFile():
+    with open('models_old.txt', 'w') as f:
+        f.writelines([str(_)+'\n' for _ in D.cldFlatList])
+
+
 #
 # AND THE END
 ###############################################################################
