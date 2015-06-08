@@ -1,19 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-how to collect all candaidate models:
-
-1. run main.py for the ones from the old system of the list candidates.csv
-2. run writeModelsToFile() to write those to old_models.csv
-
-3. run this file
-4. run fetch_talk to get the new ones from the talk page
-5. run write_models() to write them to the file new_models.csv
-
-6. run collect_all_models_() to merge the two lists to "all_models.csv"
-
-
-
-
 
 Created on Wed May 27 17:20:02 2015
 
@@ -98,7 +84,7 @@ def fetch_talk():
 
 
 
-def writemodels(models):
+def write_models(models):
     with open('new_models.csv', 'w') as f:
         for m in models:
             f.write(','.join(m)+'\n')
