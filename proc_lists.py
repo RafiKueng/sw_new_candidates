@@ -6,7 +6,15 @@ Created on Mon Jun  8 02:16:15 2015
 """
 
 
+state_path = 'data'
+state_fn = "%s.state"
 
+cfg_path = 'data'
+cfg_fn = "%s.cfg"
+
+
+import os
+import requests as rq
 
 
 all_models = []
@@ -42,57 +50,27 @@ def add_candidate_id_lookup():
         
 
 
+def get_states():
+    for i, m in enumerate(all_models):
+        print "%5.1f%% getting state %s ..." % (100.0/len(all_models)*i, m[0])
+        get_single_model(m[1], m[0])
 
 
-def do_something():
-    path = '.'
-    nmodels = []
-    for _ in models:
-        model_id = _[0]
-        tp = _[1]
-        print "get model", model_id, "(%s)" % tp
-
-        get_single_model(tp, model_id, path)
-        get_config(tp, model_id, path)
-        if tp=="old":
-            dat = parse_config(model_id)
-        else:
-            dat = "ok"
-            
-        nmodels.append(tp, model_id, dat)
-        
-    models = nmodels
-    
-    with open('all_models.txt', 'w') as f:
-        for d in models:
-            f.write(','.join(d))
-            
-    
-            
-def get_config(model_id):
-    pass
-        
-def parse_config(model_id):
-    with open(cfgtmpl % model_id) as f:
-        lns = f.readlines()
-    
-    for l in lns:
-        if "" in l:
-            return "ok"
-    return "chk"
-    
-    
-cfgtmpl = '%s.config'
-
-def get_single_model(tp, id, path):
+def get_single_model(tp, mid):
     if tp=='old':
-        url = 'http://mite.physik.uzh.ch/result/%s/state.txt' % id    
+        url = 'http://mite.physik.uzh.ch/result/%s/state.txt' % mid    
     else:
-        p1 = id[:2]
-        p2 = id[2:]
+        p1 = mid[:2]
+        p2 = mid[2:]
         url = 'http://labs.spacewarps.org/media/spaghetti/%s/%s/state.glass' % (p1, p2)
     
-    path = os.path.join(path, "state_%s.gls" % id)
+    path = os.path.join(state_path, state_fn % mid)
+    
+    stream_get(url, path)
+
+
+
+def stream_get(filepath, url):
     
     r = rq.get(url, stream=True)
     
@@ -101,16 +79,35 @@ def get_single_model(tp, id, path):
         return
 
     if 'content-type' in r.headers and 'json' in r.headers['content-type']:
-        print 'ERROR: no valid png file (json)' 
+        print 'ERROR while getting %s (%s)' % (filepath, url)
 
-    with open(path, 'w') as f:
+    with open(filepath, 'w') as f:
         for chunk in r.iter_content(1024*4):
             f.write(chunk)
-    print 'done'
+    
+
+def get_configs():
+    for i, m in enumerate(all_models):
+        print "%5.1f%% getting config %s ..." % (100.0/len(all_models)*i, m[0])
+        get_single_config_file(m[1], m[0])
+    
+
+def get_single_config_file(tp, mid):
+    
+    if tp=='old':
+        url = 'http://mite.physik.uzh.ch/result/%s/cfg.gls' % mid
+    else:
+        url = 'http://labs.spacewarps.org:8080/db/spaghetti/%s' % mid
+        
+    path = os.path.join(cfg_path, cfg_fn % mid)
+    
+    stream_get(path, url)
+
 
 
 def main():
     load_all_models()
-
+    add_candidate_id_lookup()
+    #get_states()
 
 main()
