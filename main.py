@@ -181,12 +181,21 @@ def readClaudesList():
     
     lenses = []
 
-    with open(claudecsv, 'rb') as csvfile:
-        csvr = csv.reader(csvfile)
-        for row in csvr:
-            print row
-            if row[8].startswith("ASW"):
-                lenses.append(row[8])
+#    with open(claudecsv, 'rb') as csvfile:
+#        csvr = csv.reader(csvfile)
+#        for row in csvr:
+#            print row
+#            if row[8].startswith("ASW"):
+#                lenses.append(row[8])
+
+    with open(claudecsv, 'rb') as f:
+        ccsvl = f.readlines()
+
+    for row in ccsvl:
+        tkns = row.strip().split('\t')
+        print tkns
+        if tkns[8].startswith("ASW"):
+            lenses.append(tkns[8])
 
     D.candidatesNames = lenses
     
