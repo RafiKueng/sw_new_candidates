@@ -29,7 +29,7 @@ kencdirname = 'kappaenc'
 thumbdirname = 'thumb_imgs'
 thumbdir = join(outdir, thumbdirname)
 allresultscsv = join(outdir, 'all_results.csv')
-claudecsv = 'candidates2.csv'
+claudecsv = 'candidates.csv'
 ratingcsv = "rating.csv"
 
 

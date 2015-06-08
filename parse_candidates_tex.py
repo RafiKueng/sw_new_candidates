@@ -22,6 +22,6 @@ for line in lns:
     
     
 def write_csv():
-    with open('cand_from_tex.csv', 'w') as f:
+    with open('candidates.csv', 'w') as f:
         for c in candidates:
             f.write('\t'.join(c)+'\n')
