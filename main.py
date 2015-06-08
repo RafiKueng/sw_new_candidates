@@ -944,9 +944,18 @@ def createStats():
                 f.write("%s\n" % asw)
                 
 
-def writeStatesToFile():
-    with open('models_old.txt', 'w') as f:
-        f.writelines([str(_)+'\n' for _ in D.cldFlatList])
+def writeModelsToFile():
+    with open('old_models.csv', 'w') as f:
+        for _ in D.cldFlatList:
+            mid = "%06i" % int(_)
+            asw = D.models[_]['model_name']
+            usr = D.models[_]['user']
+            pxr = D.models[_]['pixrad']
+            nmod = D.models[_]['n_models']
+            rlens = D.models[_]['redshift_lens']
+            rsrc = D.models[_]['redshift_source']
+            
+            f.write(','.join([mid, asw, '', usr, pxr, nmod, rlens, rsrc])+'\n')
 
 
 #

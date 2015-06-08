@@ -1,124 +1,144 @@
 # -*- coding: utf-8 -*-
 """
+how to collect all candaidate models:
+
+1. run main.py for the ones from the old system of the list candidates.csv
+2. run writeModelsToFile() to write those to old_models.csv
+
+3. run this file
+4. run fetch_talk to get the new ones from the talk page
+5. run write_models() to write them to the file new_models.csv
+
+6. run collect_all_models_() to merge the two lists to "all_models.csv"
+
+
+
+
+
 Created on Wed May 27 17:20:02 2015
 
 @author: rafik
 """
 
 import requests as rq
+import os
 
 
-
-def get_single_model(tp, id, path):
-	if tp=='old':
-		url = 'http://mite.physik.uzh.ch/result/%s/state.txt' % id    
-	else:
-		p1 = id[:2]
-		p2 = id[2:]
-		url = 'http://labs.spacewarps.org/media/spaghetti/%s/%s/state.glass' % (p1, p2)
     
-	path = os.path.join(path, "state_%s.gls" % id)
-	
-	r = rq.get(url, stream=True)
-	
-	if r.status_code >= 300: # requests takes care of redirects!
-		print 'ERROR:', r.status_code
-		continue
-
-	if 'content-type' in r.headers and 'json' in r.headers['content-type']:
-		print 'ERROR: no valid png file (json)' 
-
-	with open(path, 'w') as f:
-		for chunk in r.iter_content(1024*4):
-			f.write(chunk)
-	print 'done'
-
-	
     
 def fetch_talk():
+
+    models = []
     
-	models = []
-	
-	page = 1
-	
-	while True:
+    page = 1
+    acomms = {}
+    
+    while True:
 
-		print "scanning pg", page
-		url = "https://api.zooniverse.org/projects/spacewarp/talk/boards/BSW0000006/discussions/DSW0000eo1?page=%i" % page
-		
-		resp = rq.get(url)
-		
-		try:
-			comms = resp.json()['comments']
-		except KeyError:
-			break
-		
-		print ".. found n comments:", len(comms)
-		
-		for i, comm in enumerate(comms)
-			txt = comm['body']
-			lines = txt.split('\r\n')
-			
-			for line in lines:
-				parts = line.split('-')
-				if len(parts) == 3 and parts[1].startswith('*** Rev'):
-					mdl = parts[2].strip()
-					models.append(mdl)
-					print "    comm", i, "; found model: ", mdl
-		page = page + 1
-	return models
-	
+        print "scanning pg", page
+        url = "https://api.zooniverse.org/projects/spacewarp/talk/boards/BSW0000006/discussions/DSW0000eo1?page=%i" % page
+        
+        acomms[page] = {}
+        
+        resp = rq.get(url)
+        
+        try:
+            comms = resp.json()['comments']
+        except KeyError:
+            break
+
+        if len(comms) < 1:
+            break
+        
+        print ".. found n comments:", len(comms)
+        
+        for i, comm in enumerate(comms):
+            acomms[page][i]=comm
+            txt = comm['body']
+            lines = txt.split('\n')
+            
+            mdl = ''
+            swid = ''
+            asw = ''
+            usr = comm['user_name']
+            
+            for line in lines:
+                parts = line.split('-')
+                if len(parts) == 3:
+                    if '***Revised' in parts[1]:
+                        mdl = parts[2].strip()
+                        if len(mdl.split(']('))>1:
+                            mdl = mdl.split('](')[0][1:]
+                        if len(mdl)<10:
+                            mdl = '%06i' % int(mdl)
+                        elif len(mdl)>10:
+                            mdl=''
+                    if '***SW ID' in parts[1]:
+                        sswid = parts[2].strip().split(" ")
+                        for s in sswid:
+                            if s.startswith('#'):
+                                swid = s
+                            if s.startswith('ASW'):
+                                asw += s + ' '
+                            if s.startswith('[ASW'):
+                                asw = s.split('](')[0][1:]
+            
+            if not mdl=='':
+                asw=asw.strip()
+                usr = usr.strip(' \n')
+                models.append([mdl, asw, swid, usr])
+                print "    comm", i
+                print "       model:", mdl
+                print "       usr  :", usr
+                print "       swid :", swid
+                print "       asw  :", asw
+        page = page + 1
+
+    return models, acomms
+
+
+
 def writemodels(models):
-	with open('new_models.txt', 'w') as f:
-		f.writelines(models)
-		
-def parse_config(model_id):
-	with open(cfgtmpl % model_id) as f:
-		lns = f.readlines()
-	
-	for l in lns:
-		if "" in l:
-			return "ok"
-	return "chk"
+    with open('new_models.csv', 'w') as f:
+        for m in models:
+            f.write(','.join(m)+'\n')
+  
 
 
-def getmodels():
-	
-	path = '.'
-	
-	models = []
-	
-	with open('oldmodels.txt') as f:
-		lns = f.readlines()
-	for ln in lns:
-		models.append(('old', ln))
 
-	with open('newmodels.txt') as f:
-		lns = f.readlines()
-	for ln in lns:
-		models.append(('new', ln))
+def collect_all_models():
+    
+    tmp = []
+    models = []
+    
+    with open('old_models.csv') as f:
+        lns = f.readlines()
+    for ln in lns:
+        tmp.append(ln.strip())
+
+    with open('new_models.csv') as f:
+        lns = f.readlines()
+    for ln in lns:
+        tmp.append(ln.strip())
+        
+    for t in tmp:
+        _ = t.split(',')
+        if _[0].startswith('0'):
+            typ = 'old'
+        else:
+            typ = 'new'
+        
+        for i in range(8-len(_)): #fill up empty columns
+            _ = _ + ['',]
+            
+        print typ, _
+        models.append([_[0],typ] + _[1:])
+
+    with open('all_candidate_models.csv', 'w') as f:
+        for _ in models:
+            f.write(','.join(_)+'\n')
 
 
-	nmodels = []
-	for tp, model_id in models:
-		print "get model", model_id, "(%s)" % tp
-		get_single_model(tp, model_id, path)
-		get_config(tp, model_id, path)
-		if tp=="old":
-			dat = parse_config(model_id)
-		else:
-			dat = "ok"
-			
-		nmodels.append(tp, model_id, dat)
-		
-	models = nmodels
-	
-	with open('all_models.txt', 'w') as f:
-		for d in models:
-			f.write(','.join(d))
-			
-	
-			
-	
-	
-	
+    
+    
+    
