@@ -77,7 +77,7 @@ def fetch_talk():
                         sswid = parts[2].strip().split(" ")
                         for s in sswid:
                             if s.startswith('#'):
-                                swid = s
+                                swid = s[1:]
                             if s.startswith('ASW'):
                                 asw += s + ' '
                             if s.startswith('[ASW'):
