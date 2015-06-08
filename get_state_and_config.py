@@ -108,6 +108,7 @@ def get_single_config_file(tp, mid):
 def main():
     load_all_models()
     add_candidate_id_lookup()
-    #get_states()
+    get_states()
+    get_configs()
 
 main()
