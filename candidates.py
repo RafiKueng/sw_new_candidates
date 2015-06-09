@@ -103,3 +103,5 @@ else:
 # nice shortcut.. if imported, use it like
 #
 by = candidates
+get_swid = dict([(k,v['swid']) for  k,v in by['asw' ].items()])
+get_asw =  dict([(k,v['asw' ]) for  k,v in by['swid'].items()])

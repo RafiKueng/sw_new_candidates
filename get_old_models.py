@@ -973,16 +973,17 @@ def createStats():
 
 def writeModelsToFile():
     with open('tmp_old_models.csv', 'w') as f:
+        f.write(','.join(['mid', 'asw', 'user', 'pxradius', 'n_models', 'z_lens', 'z_src'])+'\n')
         for _ in D.cldFlatList:
             mid = "%06i" % int(_)
             asw = D.models[_]['model_name']
             usr = D.models[_]['user']
             pxr = D.models[_]['pixrad']
             nmod = D.models[_]['n_models']
-            rlens = D.models[_]['redshift_lens']
-            rsrc = D.models[_]['redshift_source']
+            zlens = D.models[_]['redshift_lens']
+            zsrc = D.models[_]['redshift_source']
             
-            f.write(','.join([mid, asw, '', usr, pxr, nmod, rlens, rsrc])+'\n')
+            f.write(','.join([mid, asw, usr, pxr, nmod, zlens, zsrc])+'\n')
 
 
 import cPickle as pickle
@@ -993,6 +994,7 @@ def writeModelsToPickleFile():
         
         mid = int(_)
         data[mid] = {
+            'mid'     : mid,
             'asw'     : D.models[_]['model_name'],
             'user'    : D.models[_]['user'],
             'pixrad'  : D.models[_]['pixrad'],

@@ -15,11 +15,30 @@ Collect the model meta data:
 2. run get_old_models.py
     fetches all the models metadata from the old system (mite) that are on the
     candidates list. (or loads the corresponding pickles file if already done once)
-    output: tmp0_old_models.csv (for inspection)
-            tmp0_old_models.pickle (for caching, later usage)
-    
+    output: tmp_old_models.csv (for inspection)
+            tmp_old_models.pickle (for caching, later usage)
 
-5. get_new_models_list.py
+3. run get_new_models.py
+    fetches all models from spacewarps talk thread
+    output: tmp_new_models.csv (for inspection)
+            tmp_new_models.pickle (for caching, later usage)
+
+4. run get_all_models.py
+    combines the old and new models lists
+    (you don't actually need to run the former two..)
+    output: tmp_all_models.csv (for inspection)
+            tmp_all_models.pickle (for caching, later usage)
+
+5. run get_state_and_config.py
+    this executes get_all_models and then fetches for all those models
+    the state and the config file from the appropriate source
+    download is skipped if file is already present
+    output: data/*.state and data/*.cfg
+
+
+
+    
+    5. get_new_models_list.py
 6. get_new_models_list.py:fetch_talk() to get the new ones from the talk page
 7. get_new_models_list.py:write_models() to write them to the file tmp1_new_models.csv
 

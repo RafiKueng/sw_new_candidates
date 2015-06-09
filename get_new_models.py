@@ -93,6 +93,7 @@ def fetch_talk():
 def save_csv():
     print "get_new_models: save_csv"
     with open('tmp_new_models.csv', 'w') as f:
+        f.write(','.join(['model', 'asw', 'swid', 'user'])+'\n')
         for m in _models:
             m = [str(_) for _ in m]
             f.write(','.join(m)+'\n')
@@ -139,39 +140,5 @@ else:
 
 
 
-#def collect_all_models():
-#    
-#    tmp = []
-#    models = []
-#    
-#    with open('tmp0_old_models.csv') as f:
-#        lns = f.readlines()
-#    for ln in lns:
-#        tmp.append(ln.strip())
-#
-#    with open('tmp1_new_models.csv') as f:
-#        lns = f.readlines()
-#    for ln in lns:
-#        tmp.append(ln.strip())
-#        
-#    for t in tmp:
-#        _ = t.split(',')
-#        if _[0].startswith('0'):
-#            typ = 'old'
-#        else:
-#            typ = 'new'
-#        
-#        for i in range(8-len(_)): #fill up empty columns
-#            _ = _ + ['',]
-#            
-#        print typ, _
-#        models.append([_[0],typ] + _[1:])
-#
-#    with open('tmp2_all_models.csv', 'w') as f:
-#        for _ in models:
-#            f.write(','.join(_)+'\n')
-#
-#
-#    
     
     
