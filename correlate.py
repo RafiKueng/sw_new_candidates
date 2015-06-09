@@ -69,6 +69,7 @@ for swid, vals in data_sw.items():
     for model in models_sw[swid]:
         try:
             tot_mass = model[9]
+            tot_mass_lo = 
         except KeyError:
             continue
         

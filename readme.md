@@ -5,8 +5,12 @@ how to collect all candaidate models and data:
 
 Collect the model meta data:
 -----------
-1. extract the tex table from the paper to candidates.tex
-2. parse_candidates_tex.py
+
+1. extract the tex table from the paper to candidates.tex (only body)
+   candidates.py will automatically parse and load this table if its imported somewhere
+   and save the table as csv (to check) and pickle (as cache: for future faster load)
+   if you update the table, remove the candidates.pickle!!
+
 
 3. main.py for the ones from the old system of the list candidates.csv
 4. main.py:writeModelsToFile() to write those to tmp0_old_models.csv
