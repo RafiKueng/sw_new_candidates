@@ -1009,7 +1009,7 @@ def main():
     getUserData()
     #makeThumbs()
     
-    createHTMLTree()
+    #createHTMLTree()
     createStats()
     
     writeModelsToFile()

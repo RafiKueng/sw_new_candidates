@@ -7,12 +7,15 @@ Collect the model meta data:
 -----------
 
 1. extract the tex table from the paper to candidates.tex (only body)
-   candidates.py will automatically parse and load this table if its imported somewhere
-   and save the table as csv (to check) and pickle (as cache: for future faster load)
-   if you update the table, remove the candidates.pickle!!
+    candidates.py will automatically parse and load this table if its imported somewhere
+    and save the table as csv (to check) and pickle (as cache: for future faster load)
+    if you update the table, remove the candidates.pickle!!
 
 
-3. main.py for the ones from the old system of the list candidates.csv
+2. run main.py
+    fetches all the models metadata from the old system (mite) that are on the
+    candidates list.
+
 4. main.py:writeModelsToFile() to write those to tmp0_old_models.csv
 
 5. get_new_models_list.py
