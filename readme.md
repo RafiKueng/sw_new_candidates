@@ -33,7 +33,7 @@ Collect the model meta data:
     this executes get_all_models and then fetches for all those models
     the state and the config file from the appropriate source
     download is skipped if file is already present
-    output: data/*.state and data/*.cfg
+    output: data/*.state and data/*.cfg files
 
 
 
