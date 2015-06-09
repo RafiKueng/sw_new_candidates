@@ -12,11 +12,12 @@ Collect the model meta data:
     if you update the table, remove the candidates.pickle!!
 
 
-2. run main.py
+2. run get_old_models.py
     fetches all the models metadata from the old system (mite) that are on the
-    candidates list.
-
-4. main.py:writeModelsToFile() to write those to tmp0_old_models.csv
+    candidates list. (or loads the corresponding pickles file if already done once)
+    output: tmp0_old_models.csv (for inspection)
+            tmp0_old_models.pickle (for caching, later usage)
+    
 
 5. get_new_models_list.py
 6. get_new_models_list.py:fetch_talk() to get the new ones from the talk page

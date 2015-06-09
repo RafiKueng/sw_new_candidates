@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """
+gets the models mentioned in a thread on talk.spacewarps
+
+
+
 
 Created on Wed May 27 17:20:02 2015
 
@@ -8,14 +12,16 @@ Created on Wed May 27 17:20:02 2015
 
 import requests as rq
 import os
+import cPickle as pickle
 
+picklename = 'tmp_new_models.pickle'
 
-new_models = []
-    
+data = {}
+_models = []
+
 def fetch_talk():
+    print "get_new_models: fetch talk"
 
-    models = []
-    
     page = 1
     acomms = {}
     
@@ -56,14 +62,14 @@ def fetch_talk():
                         if len(mdl.split(']('))>1:
                             mdl = mdl.split('](')[0][1:]
                         if len(mdl)<10:
-                            mdl = '%06i' % int(mdl)
+                            mdl = int(mdl)
                         elif len(mdl)>10:
                             mdl=''
                     if '***SW ID' in parts[1]:
                         sswid = parts[2].strip().split(" ")
                         for s in sswid:
                             if s.startswith('#'):
-                                swid = s[1:]
+                                swid = "SW%02i" % int(s[3:])
                             if s.startswith('ASW'):
                                 asw += s + ' '
                             if s.startswith('[ASW'):
@@ -72,7 +78,7 @@ def fetch_talk():
             if not mdl=='':
                 asw=asw.strip()
                 usr = usr.strip(' \n')
-                models.append([mdl, asw, swid, usr])
+                _models.append([mdl, asw, swid, usr])
                 print "    comm", i
                 print "       model:", mdl
                 print "       usr  :", usr
@@ -80,53 +86,92 @@ def fetch_talk():
                 print "       asw  :", asw
         page = page + 1
 
-    new_models = models
-    return models, acomms
+    #return _models
 
 
 
-def write_models():
-    models = new_models
-    with open('tmp1_new_models.csv', 'w') as f:
-        for m in models:
+def save_csv():
+    print "get_new_models: save_csv"
+    with open('tmp_new_models.csv', 'w') as f:
+        for m in _models:
+            m = [str(_) for _ in m]
             f.write(','.join(m)+'\n')
   
 
-
-
-def collect_all_models():
+def save_pickle():
+    print "get_new_models: save_pickle"
     
-    tmp = []
-    models = []
-    
-    with open('tmp0_old_models.csv') as f:
-        lns = f.readlines()
-    for ln in lns:
-        tmp.append(ln.strip())
-
-    with open('tmp1_new_models.csv') as f:
-        lns = f.readlines()
-    for ln in lns:
-        tmp.append(ln.strip())
+    for model in _models:
+        mid = model[0]
         
-    for t in tmp:
-        _ = t.split(',')
-        if _[0].startswith('0'):
-            typ = 'old'
-        else:
-            typ = 'new'
-        
-        for i in range(8-len(_)): #fill up empty columns
-            _ = _ + ['',]
+        data[mid] = {
+            'asw'  : model[1],
+            'user' : model[3],
+            'swid' : model[2],
+            'mid'  : mid
+        }
             
-        print typ, _
-        models.append([_[0],typ] + _[1:])
-
-    with open('tmp2_all_models.csv', 'w') as f:
-        for _ in models:
-            f.write(','.join(_)+'\n')
+    with open(picklename, 'w') as f:
+        pickle.dump(data, f, -1)
+        
 
 
+
+data = {}
+
+def main():
+    fetch_talk()
+    save_csv()
+    save_pickle()
     
+
+
+if __name__ == "__main__":
+    main()
+else:
+    if os.path.isfile(picklename):
+        print "loaded new models from temp pickle"
+        with open(picklename) as f:
+            data = pickle.load(f)
+    else:
+        main()
+        
+
+
+
+#def collect_all_models():
+#    
+#    tmp = []
+#    models = []
+#    
+#    with open('tmp0_old_models.csv') as f:
+#        lns = f.readlines()
+#    for ln in lns:
+#        tmp.append(ln.strip())
+#
+#    with open('tmp1_new_models.csv') as f:
+#        lns = f.readlines()
+#    for ln in lns:
+#        tmp.append(ln.strip())
+#        
+#    for t in tmp:
+#        _ = t.split(',')
+#        if _[0].startswith('0'):
+#            typ = 'old'
+#        else:
+#            typ = 'new'
+#        
+#        for i in range(8-len(_)): #fill up empty columns
+#            _ = _ + ['',]
+#            
+#        print typ, _
+#        models.append([_[0],typ] + _[1:])
+#
+#    with open('tmp2_all_models.csv', 'w') as f:
+#        for _ in models:
+#            f.write(','.join(_)+'\n')
+#
+#
+#    
     
     

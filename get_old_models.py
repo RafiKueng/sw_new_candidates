@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-
 """
+gets all the models from mite.
+then collects a list of those models of lens candidates, that are on the
+candidates list.
+
+result is cached in 'tmp0_old_models.pickle'
+and output as csv for inspection
+
+can be used as a module and imported:
+
+import get_old_models as old_models
+old_models.data
+
+
+
 Created on Mon Jan 19 17:33:36 2015
 
 @author: rafik
@@ -32,7 +46,7 @@ allresultscsv = join(outdir, 'all_results.csv')
 claudecsv = 'candidates.csv'
 ratingcsv = "rating.csv"
 
-picklename = 'tmp0_old_models.pickle'
+picklename = 'tmp_old_models.pickle'
 
 lensdatadirname = 'lensdata'
 lensdatadir = join(outdir, lensdatadirname)
@@ -958,7 +972,7 @@ def createStats():
                 
 
 def writeModelsToFile():
-    with open('tmp0_old_models.csv', 'w') as f:
+    with open('tmp_old_models.csv', 'w') as f:
         for _ in D.cldFlatList:
             mid = "%06i" % int(_)
             asw = D.models[_]['model_name']
