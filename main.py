@@ -954,7 +954,7 @@ def createStats():
                 
 
 def writeModelsToFile():
-    with open('old_models.csv', 'w') as f:
+    with open('tmp0_old_models.csv', 'w') as f:
         for _ in D.cldFlatList:
             mid = "%06i" % int(_)
             asw = D.models[_]['model_name']

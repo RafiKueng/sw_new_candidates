@@ -85,7 +85,7 @@ def fetch_talk():
 
 
 def write_models(models):
-    with open('new_models.csv', 'w') as f:
+    with open('tmp1_new_models.csv', 'w') as f:
         for m in models:
             f.write(','.join(m)+'\n')
   
@@ -97,12 +97,12 @@ def collect_all_models():
     tmp = []
     models = []
     
-    with open('old_models.csv') as f:
+    with open('tmp0_old_models.csv') as f:
         lns = f.readlines()
     for ln in lns:
         tmp.append(ln.strip())
 
-    with open('new_models.csv') as f:
+    with open('tmp1_new_models.csv') as f:
         lns = f.readlines()
     for ln in lns:
         tmp.append(ln.strip())
@@ -120,7 +120,7 @@ def collect_all_models():
         print typ, _
         models.append([_[0],typ] + _[1:])
 
-    with open('all_candidate_models.csv', 'w') as f:
+    with open('tmp2_all_models.csv', 'w') as f:
         for _ in models:
             f.write(','.join(_)+'\n')
 

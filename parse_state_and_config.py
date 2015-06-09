@@ -24,7 +24,7 @@ from get_state_and_config import state_path, state_fn, cfg_path, cfg_fn
 all_models = []
 def load_all_models():
     
-    with open('all_candidate_models.csv') as f:
+    with open('tmp3_all_models_with_state_id_cfg.csv') as f:
         for line in f.readlines():
             all_models.append(line[:-1].split(','))
 
@@ -111,9 +111,48 @@ def parse_cfg(mid, tp):
     }
 
 
+
+paper_table = {}
+def read_paper_table():
+    with open('candidates.csv') as f:
+        lns = f.readlines()
+    for line in lns:
+        tkn = line.strip().split('\t')
+
+        pid = "SW%02i" % int(tkn[0][2:])
+        asw = tkn[8]
+        
+        d = {
+            'z_lens': int(tkn[4]),
+            'z_src' : int(tkn[7])
+        }
+        
+        paper_table[pid] = d
+        paper_table[asw] = d
+
+       
+
+scale_fact = 440./500*0.187
+
+def correct_scaling(i):
+    
+    try:
+        v = int(all_models[i][10])
+    except ValueError:
+        v = 0
+    if v<3:
+        all_models[i][9] = all_models[i][9] * ( (scale_fact*100)**2 )
+        
+    
+
+
+
+
 def print_data():
-    head = ['mid', 'type', 'asw', 'paperid', 'user', 'pixrad', 'nmodels','xsrc','zlens','m<R','glsv','lmtv','pxscale']
-    with open('all_data.csv', 'w') as f:
+    head = ['mid', 'type', 'asw', 'paperid', 'user', 'pixrad', 'nmodels',
+            'xsrc','zlens','m<R','glsv','lmtv','pxscale','z_lens_real', 'z_src_real']
+
+    with open('all_candidates_data.csv', 'w') as f:
         f.write(','.join(head)+'\n')
         for m in all_models:
             f.write(','.join([str(_) for _ in m])+'\n')
@@ -121,7 +160,9 @@ def print_data():
 
 
 
+
 load_all_models()
+read_paper_table()
 
 for i, model in enumerate(all_models):
 
@@ -147,10 +188,15 @@ for i, model in enumerate(all_models):
     
     for k, v in a2b.items():
         if len(str(model[k]))>0 and not model[k] == str(cfg[v]):
-            print '     differen vals', model, k, v, model[k], cfg[v]
+            print '     different vals', model, k, v, model[k], cfg[v]
         all_models[i][k] = cfg[v]
     
+    d = paper_table[all_models[3]]
+    all_models[i].extend([d['z_lens'], d['z_src']])
     
+    correct_scaling(i)
+
+print_data()    
     
 
 

@@ -19,10 +19,11 @@ import requests as rq
 
 all_models = []
 def load_all_models():
-    
-    with open('all_candidate_models.csv') as f:
+   
+    with open('tmp2_all_models.csv') as f:
         for line in f.readlines():
             all_models.append(line[:-1].split(','))
+
 
 candidate_id_lookup = {}
 def add_candidate_id_lookup():
@@ -66,7 +67,10 @@ def get_single_model(tp, mid):
     
     path = os.path.join(state_path, state_fn % mid)
     
-    stream_get(url, path)
+    if not os.path.isfile(path):
+        stream_get(url, path)
+    else:
+        print "   state already present, skipping"
 
 
 
@@ -101,14 +105,23 @@ def get_single_config_file(tp, mid):
         
     path = os.path.join(cfg_path, cfg_fn % mid)
     
-    stream_get(path, url)
+    if not os.path.isfile(path):
+        stream_get(path, url)
+    else:
+        print "   cfg already present, skipping"
 
+
+def save_data():
+    with open('tmp3_all_models_with_state_id_cfg.csv', 'w') as f:
+        for m in all_models:
+            f.write(','.join(m)+'\n')
 
 
 def main():
     load_all_models()
     add_candidate_id_lookup()
-    get_states()
-    get_configs()
+    #get_states()
+    #get_configs()
+    save_data()
 
 main()
