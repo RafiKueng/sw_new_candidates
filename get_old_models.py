@@ -32,6 +32,7 @@ allresultscsv = join(outdir, 'all_results.csv')
 claudecsv = 'candidates.csv'
 ratingcsv = "rating.csv"
 
+picklename = 'tmp0_old_models.pickle'
 
 lensdatadirname = 'lensdata'
 lensdatadir = join(outdir, lensdatadirname)
@@ -173,11 +174,12 @@ def populateTree(path, loc):
 # create the datastructures
 ###############################################################################
 
+import candidates
+
 def readClaudesList():
     ''' run after dictSLresults'''
 
     print "\nPARSE CLAUDES LIST:\n"
-    print claudecsv   
     
     lenses = []
 
@@ -188,14 +190,16 @@ def readClaudesList():
 #            if row[8].startswith("ASW"):
 #                lenses.append(row[8])
 
-    with open(claudecsv, 'rb') as f:
-        ccsvl = f.readlines()
+#    with open(claudecsv, 'rb') as f:
+#        ccsvl = f.readlines()
+#
+#    for row in ccsvl:
+#        tkns = row.strip().split('\t')
+#        print tkns
+#        if tkns[8].startswith("ASW"):
+#            lenses.append(tkns[8])
 
-    for row in ccsvl:
-        tkns = row.strip().split('\t')
-        print tkns
-        if tkns[8].startswith("ASW"):
-            lenses.append(tkns[8])
+    lenses = candidates.by['asw'].keys()
 
     D.candidatesNames = lenses
     
@@ -983,8 +987,10 @@ def writeModelsToPickleFile():
             'r_src'   : D.models[_]['redshift_source'],
         }
             
-    with open('tmp0_old_models.pickle', 'w') as f:
+    with open(picklename, 'w') as f:
         pickle.dump(data, f, -1)
+        
+    return data
     
     
 
@@ -993,8 +999,10 @@ def writeModelsToPickleFile():
 #
 # AND THE END
 ###############################################################################
+data = {}
 
 def main():
+    
     if not isfile(allresultscsv):
         fetchSLresults()
         
@@ -1004,18 +1012,29 @@ def main():
 
 #    getModelImgs()
 #    getLensImgs()
-    getLensJSONData()
-    loadLensJSONData()
-    getUserData()
+#    getLensJSONData()
+#    loadLensJSONData()
+#    getUserData()
     #makeThumbs()
     
     #createHTMLTree()
     createStats()
     
     writeModelsToFile()
-    writeModelsToPickleFile()
-
+    data = writeModelsToPickleFile()
+    
+    return data
    
 if __name__ == "__main__":
-    main()
+    a = main()
+    
+else:
+    if isfile(picklename):
+        with open(picklename) as f:
+            data = pickle.load(f)
+        print "loaded old models from temp pickle"
+            
+    else:
+        data = main()
+        
     
