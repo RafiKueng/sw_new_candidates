@@ -21,5 +21,6 @@ Collect model data (state / config and parse:
 ----------
 
 9. get_state_and_config.py --> tmp3_all_models_with_state_id_cfg.csv
-10. parse_State_and_config.py --> all_candidates_data.csv
-11. parse_State_and_config.py:print_data()
+10. open ../glass/interactive_glass
+11. parse_State_and_config.py --> all_candidates_data.csv
+12. parse_State_and_config.py:print_data()

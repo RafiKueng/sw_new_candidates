@@ -5,6 +5,11 @@ Created on Mon Jun  8 02:38:54 2015
 @author: rafik
 """
 
+def write_csv():
+    with open('candidates.csv', 'w') as f:
+        for c in candidates:
+            f.write('\t'.join(c)+'\n')
+
 candidates = []
 
 with open('candidates.tex') as f:
@@ -20,8 +25,5 @@ for line in lns:
     tkns[0] = "SW%02i" % int(tkns[0][2:])
     candidates.append(tkns)
     
-    
-def write_csv():
-    with open('candidates.csv', 'w') as f:
-        for c in candidates:
-            f.write('\t'.join(c)+'\n')
+            
+write_csv()

@@ -10,7 +10,7 @@ import requests as rq
 import os
 
 
-    
+new_models = []
     
 def fetch_talk():
 
@@ -80,11 +80,13 @@ def fetch_talk():
                 print "       asw  :", asw
         page = page + 1
 
+    new_models = models
     return models, acomms
 
 
 
-def write_models(models):
+def write_models():
+    models = new_models
     with open('tmp1_new_models.csv', 'w') as f:
         for m in models:
             f.write(','.join(m)+'\n')

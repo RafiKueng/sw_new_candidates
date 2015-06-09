@@ -120,8 +120,8 @@ def save_data():
 def main():
     load_all_models()
     add_candidate_id_lookup()
-    #get_states()
-    #get_configs()
+    get_states()
+    get_configs()
     save_data()
 
 main()

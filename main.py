@@ -211,12 +211,12 @@ def readClaudesList():
                 }
             resp = rq.post('http://mite.physik.uzh.ch/api', data=data)
             try:
-                json = resp.json()
+                jsond = resp.json()
             except:
                 print 'error'
                 continue
             #print json, resp.text, resp.status_code
-            lensid = json[0]
+            lensid = jsond[0]
             D.lenses[lensname] = {'id': lensid}
 
             D.lensName_2_lensID[lensname] = lensid
@@ -374,7 +374,7 @@ def getLensJSONData():
         print "getting data for lens", lensname, '(%3i / %3i)' % (i, ln),
 
         if isfile(fn):
-            print 'file present!'
+            print 'file present!',
 #            with open(fn) as jsonf:
 #                json = JSON.loads(jsonf.read())
         else:
@@ -383,15 +383,17 @@ def getLensJSONData():
                 resp = rq.get("https://api.zooniverse.org/projects/spacewarp/talk/subjects/"+lensname)
                 if resp.status_code >= 400 or len(resp.text) ==0:
                     raise ValueError
-                json = resp.json()
+                jsond = resp.json()
                 print 'ok',
             except:
                 print 'error',
-                json = {}
+                jsond = {}
             
             with open(fn, 'w') as jsonf:
-                jsonf.write(JSON.dumps(json))
+                jsonf.write(JSON.dumps(jsond))
                 print 'written',
+                
+        print 
                 
         # do something with data? no do in loadJSON..
 
@@ -870,8 +872,6 @@ def createHTMLTree():
 #    symlink('assets/js', join(outdir, 'js'))
 #    symlink('assets/css', join(outdir, 'css'))
 
-import json
-
 def makeObj(obj):
     chi = []
     for k, v in obj.items():
@@ -895,7 +895,7 @@ def makeJSON(asw):
         'children': makeObj(d)
         }
     with open('%s.json'%asw, 'w') as f:
-        json.dump(o, f)
+        JSON.dump(o, f)
     
 
 def makeAllJSON():
@@ -913,7 +913,7 @@ def makeAllJSON():
         }
         
     with open('all.json', 'w') as f:
-        json.dump(o, f)
+        JSON.dump(o, f)
 
 
 def makeAllWithModelsJSON():
@@ -932,7 +932,7 @@ def makeAllWithModelsJSON():
         }
         
     with open('all_wm.json', 'w') as f:
-        json.dump(o, f)
+        JSON.dump(o, f)
 
 
 def createStats():
@@ -967,6 +967,29 @@ def writeModelsToFile():
             f.write(','.join([mid, asw, '', usr, pxr, nmod, rlens, rsrc])+'\n')
 
 
+import cPickle as pickle
+def writeModelsToPickleFile():
+    
+    data = {}
+    for _ in D.cldFlatList:
+        
+        mid = int(_)
+        data[mid] = {
+            'asw'     : D.models[_]['model_name'],
+            'user'    : D.models[_]['user'],
+            'pixrad'  : D.models[_]['pixrad'],
+            'n_models': D.models[_]['n_models'],
+            'r_lens'  : D.models[_]['redshift_lens'],
+            'r_src'   : D.models[_]['redshift_source'],
+        }
+            
+    with open('tmp0_old_models.pickle', 'w') as f:
+        pickle.dump(data, f, -1)
+    
+    
+
+
+
 #
 # AND THE END
 ###############################################################################
@@ -979,15 +1002,18 @@ def main():
     readClaudesList()
     processLists()
 
-    getModelImgs()
+#    getModelImgs()
 #    getLensImgs()
     getLensJSONData()
     loadLensJSONData()
     getUserData()
-    makeThumbs()
+    #makeThumbs()
     
     createHTMLTree()
     createStats()
+    
+    writeModelsToFile()
+    writeModelsToPickleFile()
 
    
 if __name__ == "__main__":

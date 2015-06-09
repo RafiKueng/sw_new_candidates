@@ -37,7 +37,7 @@ def parse_state(mid):
         state = loadstate(path)
     except IOError:
         print "!! error reading state %s, skipping" % mid
-        return ''
+        return 0
     state.make_ensemble_average()
     obj, data = state.ensemble_average['obj,data'][0]
     mLtR = data['M(<R)'][-1]
@@ -123,8 +123,8 @@ def read_paper_table():
         asw = tkn[8]
         
         d = {
-            'z_lens': int(tkn[4]),
-            'z_src' : int(tkn[7])
+            'z_lens': float(tkn[4]),
+            'z_src' : float(tkn[7])
         }
         
         paper_table[pid] = d
@@ -143,14 +143,38 @@ def correct_scaling(i):
     if v<3:
         all_models[i][9] = all_models[i][9] * ( (scale_fact*100)**2 )
         
-    
 
+from stelmass.angdiam import sig_factor
+
+def correct_mass(i):
+    
+    zl_actual = all_models[i][13]
+    zs_actual = 2.0                 #!!!!!!!!! source redshifts not yet available, using estimate
+    zl_used = all_models[i][7]
+    zs_used = all_models[i][8]
+    
+    org_mass = all_models[i][9]
+
+    print "        ",
+    print zl_actual,zs_actual,zl_used,zs_used,org_mass,
+    print sig_factor(zl_actual,zs_actual),
+    print sig_factor(zl_used,zs_used),
+    
+    if zl_actual*zs_actual*zl_used*zs_used*org_mass >0:
+        corr_mass = org_mass * sig_factor(zl_actual,zs_actual)/sig_factor(zl_used,zs_used)
+    else:
+        corr_mass = 0
+    print corr_mass
+    
+    all_models[i].append(corr_mass)
+    
 
 
 
 def print_data():
     head = ['mid', 'type', 'asw', 'paperid', 'user', 'pixrad', 'nmodels',
-            'xsrc','zlens','m<R','glsv','lmtv','pxscale','z_lens_real', 'z_src_real']
+            'z_lens_used','z_src_used','m<R','glsv','lmtv','pxscale','z_lens_real', 'z_src_real',
+            'corrected_mass']
 
     with open('all_candidates_data.csv', 'w') as f:
         f.write(','.join(head)+'\n')
@@ -161,41 +185,51 @@ def print_data():
 
 
 
+
+def parse_stuff():
+    for i, model in enumerate(all_models):
+    
+        mid = model[0]
+        tp = model[1]
+        print "%5.1f%% working on %s (%i)..." % (100.0/len(all_models)*i, mid, i)
+        
+        mLtR = parse_state(mid)
+        all_models[i].append(mLtR)
+        
+        cfg = parse_cfg(mid, tp)
+        #print cfg
+        
+        all_models[i].extend([cfg['glsv'], cfg['lmtv'], cfg['pxscale']])
+        
+        a2b = {
+            4 : 'user',
+            5 : 'pixrad',
+            6 : 'nmodel',
+            7 : 'zlens',
+            8 : 'zsrc',
+        }
+        
+        for k, v in a2b.items():
+            if len(str(model[k]))>0 and not model[k] == str(cfg[v]):
+                print '     different vals', model, k, v, model[k], cfg[v]
+            all_models[i][k] = cfg[v]
+        
+        d = paper_table[all_models[i][3]]
+        all_models[i].extend([d['z_lens'], d['z_src']])
+        
+def correct_stuff():
+    for i, model in enumerate(all_models):
+        mid = model[0]
+        tp = model[1]
+        print "%5.1f%% correcting on %s (%i)..." % (100.0/len(all_models)*i, mid, i)
+        correct_scaling(i)
+        correct_mass(i)
+        
+    
 load_all_models()
 read_paper_table()
-
-for i, model in enumerate(all_models):
-
-    mid = model[0]
-    tp = model[1]
-    print "%5.1f%% working on %s ..." % (100.0/len(all_models)*i, mid)
-    
-    mLtR = parse_state(mid)
-    all_models[i].append(mLtR)
-    
-    cfg = parse_cfg(mid, tp)
-    #print cfg
-    
-    all_models[i].extend([cfg['glsv'], cfg['lmtv'], cfg['pxscale']])
-    
-    a2b = {
-        4 : 'user',
-        5 : 'pixrad',
-        6 : 'nmodel',
-        7 : 'zlens',
-        8 : 'zsrc',
-    }
-    
-    for k, v in a2b.items():
-        if len(str(model[k]))>0 and not model[k] == str(cfg[v]):
-            print '     different vals', model, k, v, model[k], cfg[v]
-        all_models[i][k] = cfg[v]
-    
-    d = paper_table[all_models[3]]
-    all_models[i].extend([d['z_lens'], d['z_src']])
-    
-    correct_scaling(i)
-
+parse_stuff()
+correct_stuff()
 print_data()    
     
 
