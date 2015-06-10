@@ -109,6 +109,8 @@ x = []
 x_lo = []
 x_hi = []
 y = []
+y_lo = []
+y_hi = []
 
 for mid, adata in all_models.items():
     
@@ -119,31 +121,35 @@ for mid, adata in all_models.items():
         continue
     
     Mtot_ave = adata['Mtot_ens_ave_z_corrected']
-    Mtot_lo = 0.0
-    Mtot_hi = 0.0
+    Mtot_lo = Mtot_ave - adata['Mtot_min_z_corrected']
+    Mtot_hi = adata['Mtot_max_z_corrected'] - Mtot_ave
     
     try:
-        Mstel_ave, Mstel_lo, Mstel_hi = stel_data_sw[swid]
+        Mstel_ave, Mstel_err_lo, Mstel_err_hi, Mstel_jr, Mstel_sr = stel_data_sw[swid]
     except KeyError:
         continue
     
     x.append(Mstel_ave)
-    x_lo.append(Mstel_ave - Mstel_lo)
-    x_hi.append(Mstel_hi - Mstel_ave)
+    x_lo.append(Mstel_err_lo)
+    x_hi.append(Mstel_err_hi)
     
     y.append(Mtot_ave)
+    y_lo.append(Mtot_lo)
+    y_hi.append(Mtot_hi)
 
         
 x = np.array(x)
 x_lo = np.array(x_lo)
 x_hi = np.array(x_hi)
 y = np.array(y)
+y_lo = np.array(y_lo)
+y_hi = np.array(y_hi)
 
 ax = plt.subplot(111)
 
 ax.plot([1e7,1e15],[1e7,1e15],'k:')
 
-ax.errorbar(x, y, yerr=[x_lo*0, x_lo*0], xerr=[x_lo, x_hi],
+ax.errorbar(x, y, yerr=[y_lo, y_hi], xerr=[x_lo, x_hi],
             fmt='o', ecolor='g', capthick=1)
 
 #axis limits

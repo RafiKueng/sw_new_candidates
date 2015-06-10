@@ -50,7 +50,7 @@ def get_stellar_masses(fnn = 'Rafael_salp.dat'):
             msjr.append(10**(logm))
             logm = (magsr(zp)-mag)*0.4
             mssr.append(10**(logm))
-            print msjr[-1],mssr[-1]
+            print '%9.2e %9.2e' % (msjr[-1],mssr[-1])
             a = msjr[-1]
             b = mssr[-1]
         else:
@@ -58,11 +58,11 @@ def get_stellar_masses(fnn = 'Rafael_salp.dat'):
             a = 0
             b = 0
 
-        v = (a + b) / 2.0
-        v_err_lo = a
-        v_err_hi = b
+        v = (a * b)**0.5
+        v_err_lo = v - a
+        v_err_hi = b - v
 
-        d = (v, v_err_lo, v_err_hi)        
+        d = (v, v_err_lo, v_err_hi, a, b)        
         
         asw = asw.strip()
         data_asw[asw] = d

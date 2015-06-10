@@ -59,8 +59,14 @@ def parse_state(mid):
         obj, data = state.ensemble_average['obj,data'][0]
         
         M_ens_ave = data['M(<R)'][-1]
-        M_min = 0.0
-        M_max = 0.0
+
+        M_min = M_ens_ave
+        M_max = M_ens_ave
+        for gmodel in state.models:
+            M = gmodel['obj,data'][0][1]['M(<R)'][-1]
+            
+            if M < M_min: M_min = M 
+            if M > M_max: M_max = M
 
     else:
         M_ens_ave = 0.0
@@ -71,6 +77,8 @@ def parse_state(mid):
     all_models[mid]['Mtot_ens_ave'] = M_ens_ave
     all_models[mid]['Mtot_min'] = M_min
     all_models[mid]['Mtot_max'] = M_max
+    
+    print '      %9.2e (%9.2e ... %9.2e)' % (M_ens_ave, M_min, M_max)
     
     
 def parse_cfg(mid):
@@ -144,7 +152,7 @@ def parse_cfg(mid):
     
     for k,v in data.items():
         if k in all_models[mid].keys() and not all_models[mid].get(k) == v:
-            print "      !!overwriting value!! key: %16s  old: %s (%s) with %s (%s)" % tuple([
+            print "      !!overwriting value!! key: %16s  old: %s %s with %s %s" % tuple([
                 str(_) for _ in (k, all_models[mid].get(k), type(all_models[mid].get(k)), v, type(v))
             ])
         all_models[mid][k] = v
