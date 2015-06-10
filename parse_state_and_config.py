@@ -83,7 +83,7 @@ def parse_cfg(mid):
     with open(path) as f:
         lines = f.readlines()
         
-    glsv = 0
+    glsv = 1
     lmtv = ''
     pxscale = 0.0
     pixrad = 0
@@ -158,12 +158,17 @@ def correct_scaling(mid):
     
     f = ( (scale_fact*100)**2 )
 
-    if all_models[mid]['gls_ver'] < 3:
+    # version 3 and higher have correct scaling already applied
+    if all_models[mid]['gls_ver'] < 3 and all_models[mid]['gls_ver'] >= 0:
         print '   correcting scaling with f=%5.2f' % f
         
         all_models[mid]['Mtot_ens_ave'] *= f
         all_models[mid]['Mtot_min'] *= f
         all_models[mid]['Mtot_max'] *= f
+        
+        # make it negative to indicate that this has already been fixed in a previous run
+        # this is a problem in case of reruns in the same session
+        all_models[mid]['gls_ver'] *= -1 
         
 
 

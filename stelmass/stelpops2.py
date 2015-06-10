@@ -4,12 +4,13 @@ from numpy import ndarray, log10
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as pl
 
+import candidates
 
 zl = []
 msjr = []
 mssr = []
 
-def bla(fnn = 'Rafael_salp.dat'):
+def get_stellar_masses(fnn = 'Rafael_salp.dat'):
 
     data_asw = {}
     data_sw = {}
@@ -28,16 +29,21 @@ def bla(fnn = 'Rafael_salp.dat'):
     magjr = interp1d(z,jr)
     magsr = interp1d(z,sr)
     
-    with open('candidates.csv') as f:
-        lyst = f.readlines()
+#    with open('candidates.csv') as f:
+#        lyst = f.readlines()
     
-    for lyne in lyst:
-        v = lyne.strip().split('\t')
-        id = v[0]
-        zp = float(v[4])
-        mag = float(v[5])
-        asw = v[8]
-        print asw,id,
+    for asw, data in candidates.by['asw'].items():
+        swid = data['swid']
+        zp = data['z_lens']
+        mag = data['m_i']
+        
+#    for lyne in lyst:
+#        v = lyne.strip().split('\t')
+#        id = v[0]
+#        zp = float(v[4])
+#        mag = float(v[5])
+#        asw = v[8]
+        print asw,swid,
         if zp !=0 and mag != 0:
             zl.append(zp)
             logm = (magjr(zp)-mag)*0.4
@@ -52,16 +58,15 @@ def bla(fnn = 'Rafael_salp.dat'):
             a = 0
             b = 0
 
-        v = a+b / 2.0
+        v = (a + b) / 2.0
         v_err_lo = a
         v_err_hi = b
 
         d = (v, v_err_lo, v_err_hi)        
         
-        nid =  'SW%02i' % int(id[2:])
         asw = asw.strip()
         data_asw[asw] = d
-        data_sw[nid] = d
+        data_sw[swid] = d
         
     return data_asw, data_sw
         
