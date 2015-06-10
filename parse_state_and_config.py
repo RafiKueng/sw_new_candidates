@@ -204,7 +204,7 @@ def correct_mass(mid):
             model[k+'_z_corrected'] = corr_mass
             print '      m: %e -> %e' % (model[k], model[k+'_z_corrected'])
         else:
-            model[k+'_z_corrected'] = 0
+            model[k+'_z_corrected'] = 0.0
             print '      no data available'
 
 
