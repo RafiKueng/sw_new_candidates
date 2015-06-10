@@ -7,6 +7,9 @@ cd .
 
 %run <this_file.py>
 
+thats why is't not good to use this as an import package..
+(even if the code to do so is there..)
+instead, just load the pickle
 
 
 Created on Mon Jun  8 03:47:50 2015
@@ -17,224 +20,273 @@ Created on Mon Jun  8 03:47:50 2015
 import numpy as np
 import os
 import json
+import cPickle as pickle
 
 from get_state_and_config import state_path, state_fn, cfg_path, cfg_fn
+import get_all_models
+import candidates
 
 
-all_models = []
-def load_all_models():
-    
-    with open('tmp3_all_models_with_state_id_cfg.csv') as f:
-        for line in f.readlines():
-            all_models.append(line[:-1].split(','))
+csv_name = 'all_data.csv'
+pickle_name = 'all_data.pickle'
+
+#all_models = []
+#def load_all_models():
+#    
+#    with open('tmp3_all_models_with_state_id_cfg.csv') as f:
+#        for line in f.readlines():
+#            all_models.append(line[:-1].split(','))
 
     
 def parse_state(mid):
     
-    path = os.path.join(state_path, state_fn % mid)
+    print '   parsing state', mid
     
+    if all_models[mid].has_key('Mtot_ens_ave'):
+        print '      skipping, data already present'
+        return
+        
+    path = os.path.join(state_path, state_fn % mid)
+
+    state = None    
     try:
         state = loadstate(path)
     except IOError:
         print "!! error reading state %s, skipping" % mid
-        return 0
-    state.make_ensemble_average()
-    obj, data = state.ensemble_average['obj,data'][0]
-    mLtR = data['M(<R)'][-1]
-    
-    return mLtR
-    
-    
-def parse_cfg(mid, tp):
+        
+    if state:
+        state.make_ensemble_average()
+        obj, data = state.ensemble_average['obj,data'][0]
+        
+        M_ens_ave = data['M(<R)'][-1]
+        M_min = 0.0
+        M_max = 0.0
 
+    else:
+        M_ens_ave = 0.0
+        M_min = 0.0
+        M_max = 0.0
+
+    
+    all_models[mid]['Mtot_ens_ave'] = M_ens_ave
+    all_models[mid]['Mtot_min'] = M_min
+    all_models[mid]['Mtot_max'] = M_max
+    
+    
+def parse_cfg(mid):
+    
+    print '   parsing cfg', mid
+
+    tp = all_models[mid]['type']
     path = os.path.join(cfg_path, cfg_fn % mid)
 
     with open(path) as f:
         lines = f.readlines()
         
-    glsv = ''
+    glsv = 0
     lmtv = ''
-    pxscale = ''
-    pixrad = ''
-    nmodel = ''
-    zlens = ''
-    zsrc = ''
+    pxscale = 0.0
+    pixrad = 0
+    nmodel = 0
+    zlens = 0.0
+    zsrc = 0.0
     user = ''
     
     if tp=='old':
         for l in lines:
             if l.startswith("# LMT_GLS_v"):
-                glsv = str(l[11:12])
+                glsv = l[11:12]
             if l.startswith("# LMT_v"):
-                lmtv = str(l[7:-1])
+                lmtv = l[7:-1]
             if l.startswith(" 'pxScale'"):
-                pxscale = float(l.split(':')[1].strip()[:-1])
+                pxscale = l.split(':')[1].strip()[:-1]
             if l.startswith('pixrad('):
-                pixrad = int(l.split('(')[1].split(')')[0])
+                pixrad = l.split('(')[1].split(')')[0]
             if l.startswith('model('):
-                nmodel = int(l.split('(')[1].split(')')[0])
+                nmodel = l.split('(')[1].split(')')[0]
             if l.startswith('zlens('):
-                zlens = float(l.split('(')[1].split(')')[0])
+                zlens = l.split('(')[1].split(')')[0]
             if l.startswith('source('):
-                zsrc = float(l.split('(')[1].split(',')[0])
+                zsrc = l.split('(')[1].split(',')[0]
             if l.startswith('meta(author='):
-                user = str(l.split("'")[1])
+                user = l.split("'")[1]
                 
     else:
         try:
             jcfg = json.loads(''.join(lines))
         except:
-            "!! error could not load json file", mid
+            "      !! error could not load json file", mid
             return ['',]*6
         
         glsv = '5'
         lmtv = '2.0.0'
-        pxscale = float(jcfg['obj']['pxScale'])
-        pixrad = int(jcfg['obj']['pixrad'])
-        nmodel = int(jcfg['obj']['n_models'])
-        zlens = float(jcfg['obj']['z_lens'])
-        zsrc = float(jcfg['obj']['z_src'])
-        user = str(jcfg['obj']['author'])
+        pxscale = jcfg['obj']['pxScale']
+        pixrad = jcfg['obj']['pixrad']
+        nmodel = jcfg['obj']['n_models']
+        zlens = jcfg['obj']['z_lens']
+        zsrc = jcfg['obj']['z_src']
+        user = jcfg['obj']['author']
         
+    print '      ', glsv, lmtv, pxscale, pixrad, nmodel, zlens, zsrc, user
             
     #return (glsv, lmtv, pxscale, pixrad, nmodel, zlens, zsrc)
     
-    return {
-        'glsv'    : glsv,
-        'lmtv'    : lmtv,
-        'pxscale' : pxscale,
-        'user'    : user,
-        'pixrad'  : pixrad,
-        'nmodel'  : nmodel,
-        'zsrc'    : zsrc,
-        'zlens'   : zlens
+    data = {
+        'gls_ver'     : int(     glsv    ),
+        'lmt_ver'     : str(     lmtv    ),
+        'pixscale'    : float(   pxscale ),
+        'user'        : unicode( user    ).strip(),
+        'pixrad'      : int(     pixrad  ),
+        'n_models'    : int(     nmodel  ),
+        'z_src_used'  : float(   zsrc    ),
+        'z_lens_used' : float(   zlens   )
     }
+    
+    for k,v in data.items():
+        if k in all_models[mid].keys() and not all_models[mid].get(k) == v:
+            print "      !!overwriting value!! key: %16s  old: %s (%s) with %s (%s)" % tuple([
+                str(_) for _ in (k, all_models[mid].get(k), type(all_models[mid].get(k)), v, type(v))
+            ])
+        all_models[mid][k] = v
 
 
-
-paper_table = {}
-def read_paper_table():
-    with open('candidates.csv') as f:
-        lns = f.readlines()
-    for line in lns:
-        tkn = line.strip().split('\t')
-
-        pid = "SW%02i" % int(tkn[0][2:])
-        asw = tkn[8]
-        
-        d = {
-            'z_lens': float(tkn[4]),
-            'z_src' : float(tkn[7])
-        }
-        
-        paper_table[pid] = d
-        paper_table[asw] = d
-
-       
+      
 
 scale_fact = 440./500*0.187
 
-def correct_scaling(i):
+def correct_scaling(mid):
     
-    try:
-        v = int(all_models[i][10])
-    except ValueError:
-        v = 0
-    if v<3:
-        all_models[i][9] = all_models[i][9] * ( (scale_fact*100)**2 )
+    f = ( (scale_fact*100)**2 )
+
+    if all_models[mid]['gls_ver'] < 3:
+        print '   correcting scaling with f=%5.2f' % f
         
+        all_models[mid]['Mtot_ens_ave'] *= f
+        all_models[mid]['Mtot_min'] *= f
+        all_models[mid]['Mtot_max'] *= f
+        
+
 
 from stelmass.angdiam import sig_factor
 
-def correct_mass(i):
+def correct_mass(mid):
+
+    print '   correcting mass for differen redshifts'
     
-    zl_actual = all_models[i][13]
+    model = all_models[mid]
+    
+    zl_actual = model['z_lens_actual']
     zs_actual = 2.0                 #!!!!!!!!! source redshifts not yet available, using estimate
-    zl_used = all_models[i][7]
-    zs_used = all_models[i][8]
+    zl_used = model['z_lens_used']
+    zs_used = model['z_src_used']
     
-    org_mass = all_models[i][9]
-
-    print "        ",
-    print zl_actual,zs_actual,zl_used,zs_used,org_mass,
-    print sig_factor(zl_actual,zs_actual),
-    print sig_factor(zl_used,zs_used),
-    
-    if zl_actual*zs_actual*zl_used*zs_used*org_mass >0:
-        corr_mass = org_mass * sig_factor(zl_actual,zs_actual)/sig_factor(zl_used,zs_used)
-    else:
-        corr_mass = 0
-    print corr_mass
-    
-    all_models[i].append(corr_mass)
-    
-
-
-
-def print_data():
-    head = ['mid', 'type', 'asw', 'paperid', 'user', 'pixrad', 'nmodels',
-            'z_lens_used','z_src_used','m<R','glsv','lmtv','pxscale','z_lens_real', 'z_src_real',
-            'corrected_mass']
-
-    with open('all_candidates_data.csv', 'w') as f:
-        f.write(','.join(head)+'\n')
-        for m in all_models:
-            f.write(','.join([str(_) for _ in m])+'\n')
+    # we trust claude.. he looks up stuff, if we don't have any data, and if he didn't used default values
+    if zl_actual == 0.0 and model['user']=='c_cld' and not zl_used == 0.5 and not zs_used == 1.0:
+        print '!!!   trusting claudes values ',
+        print "( zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f )" % (zl_actual,zl_used,zs_actual,zs_used)
+        zl_actual = zl_used
+        zs_actual = zs_used
         
+    f_act = sig_factor(zl_actual,zs_actual)
+    f_use = sig_factor(zl_used,zs_used)
+    
+    print "      zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
+        zl_actual,zl_used,zs_actual,zs_used,
+        f_act, f_use
+    )
 
+    keys = ['Mtot_ens_ave', 'Mtot_min', 'Mtot_max']
+    
+    for k in keys:
+        if zl_actual * zs_actual * zl_used * zs_used > 0:
+            org_mass = model[k]
+            corr_mass = org_mass * f_act / f_use
+            model[k+'_z_corrected'] = corr_mass
+            print '      m: %e -> %e' % (model[k], model[k+'_z_corrected'])
+        else:
+            model[k+'_z_corrected'] = 0
+            print '      no data available'
 
 
 
 
 def parse_stuff():
-    for i, model in enumerate(all_models):
+    print "parse_state_and_config: parse stuff"
+
+    for i, mid in enumerate(all_models.keys()):
     
-        mid = model[0]
-        tp = model[1]
-        print "%5.1f%% working on %s (%i)..." % (100.0/len(all_models)*i, mid, i)
+        print "%5.1f%% working on %s (%i)..." % (100.0/len(all_models.keys())*i, mid, i)
         
-        mLtR = parse_state(mid)
-        all_models[i].append(mLtR)
-        
-        cfg = parse_cfg(mid, tp)
-        #print cfg
-        
-        all_models[i].extend([cfg['glsv'], cfg['lmtv'], cfg['pxscale']])
-        
-        a2b = {
-            4 : 'user',
-            5 : 'pixrad',
-            6 : 'nmodel',
-            7 : 'zlens',
-            8 : 'zsrc',
-        }
-        
-        for k, v in a2b.items():
-            if len(str(model[k]))>0 and not model[k] == str(cfg[v]):
-                print '     different vals', model, k, v, model[k], cfg[v]
-            all_models[i][k] = cfg[v]
-        
-        d = paper_table[all_models[i][3]]
-        all_models[i].extend([d['z_lens'], d['z_src']])
+        parse_state(mid)        
+        parse_cfg(mid)
+       
+        asw = all_models[mid]['asw']
+        try:
+            z_lens_actual = candidates.by['asw'][asw]['z_lens']
+        except KeyError:
+            z_lens_actual = 0.0
+        all_models[mid]['z_lens_actual'] = z_lens_actual
+
         
 def correct_stuff():
-    for i, model in enumerate(all_models):
-        mid = model[0]
-        tp = model[1]
-        print "%5.1f%% correcting on %s (%i)..." % (100.0/len(all_models)*i, mid, i)
-        correct_scaling(i)
-        correct_mass(i)
+    
+    for i, mid in enumerate(all_models.keys()):
+        print "%5.1f%% correcting on %s (%i) [%s by %s]..." % (100.0/len(all_models.keys())*i, mid, i, all_models[mid]['asw'], all_models[mid]['user'])
+        correct_scaling(mid)
+        correct_mass(mid)
         
+
+
+def save_csv():
+    print "parse_state_and_config: save_csv"
     
-load_all_models()
-read_paper_table()
-parse_stuff()
-correct_stuff()
-print_data()    
+    keys = {}
+    for mid, m in all_models.items():
+        for k in m.keys():
+            keys[k] = ''
+    keys = keys.keys()
+    
+    with open(csv_name, 'w') as f:
+        f.write(','.join(keys)+'\n') # write header
+        
+        for mid, data in all_models.items():
+            for k in keys:
+                f.write('%s,' % str(data.get(k,'')))
+            f.write('\n')
+  
+
+def save_pickle():
+    print "parse_state_and_config: save_pickle"
+    
+    with open(pickle_name, 'w') as f:
+        pickle.dump(all_models, f, -1)
+
+
+ 
     
 
+all_models = {}
 
+def main():
+    print "parse_state_and_config: running main"
+    
+    parse_stuff()
+    correct_stuff()
+    save_csv()
+    save_pickle()
+    
 
+if __name__ == "__main__":
+    all_models = get_all_models.data
+    main()
+else:
+    if os.path.isfile(pickle_name):
+        print "parse_state_and_config: loaded all data from pickle"
+        with open(pickle_name) as f:
+            all_models = pickle.load(f)
+    else:
+        all_models = get_all_models.data
+        main()
 
 
 

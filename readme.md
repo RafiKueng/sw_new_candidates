@@ -25,29 +25,22 @@ Collect the model meta data:
 
 4. run get_all_models.py
     combines the old and new models lists
-    (you don't actually need to run the former two..)
     output: tmp_all_models.csv (for inspection)
             tmp_all_models.pickle (for caching, later usage)
 
 5. run get_state_and_config.py
+    (you don't actually need to run the former three..)
     this executes get_all_models and then fetches for all those models
     the state and the config file from the appropriate source
     download is skipped if file is already present
     output: data/*.state and data/*.cfg files
-
-
-
     
-    5. get_new_models_list.py
-6. get_new_models_list.py:fetch_talk() to get the new ones from the talk page
-7. get_new_models_list.py:write_models() to write them to the file tmp1_new_models.csv
+6. run parse_state_and_config.py
+    run inside a glass interactive shell:
+    ../glass/interactive_glass
+    %run parse_state_and_config.py
+    This updates the data structure with data from the config files and
+    calculates important data from the state file (total mass)
+    output: all_data.csv (for inspection)
+            all_data.pickle (for caching, later usage)
 
-8. get_new_models_list.py:collect_all_models_() to merge the two lists to "tmp2_all_models.csv"
-
-Collect model data (state / config and parse:
-----------
-
-9. get_state_and_config.py --> tmp3_all_models_with_state_id_cfg.csv
-10. open ../glass/interactive_glass
-11. parse_State_and_config.py --> all_candidates_data.csv
-12. parse_State_and_config.py:print_data()

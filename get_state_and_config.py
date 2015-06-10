@@ -19,29 +19,17 @@ import requests as rq
 import get_all_models
 
 
-all_models = []
+all_models = get_all_models.data
       
 
-def isOldType(mid):
-    if type(mid)==int:
-        return True
-    elif (type(mid)==unicode or type(mid)==str) and len(mid)==10:
-        return False
-    else:
-        print mid
-        print len(mid)
-        print type(mid)
-        raise ValueError('what a strange mid')
-
-
 def get_states():
-    for i, mid in enumerate(all_models):
-        print "%5.1f%% getting state %s ..." % (100.0/len(all_models)*i, mid)
+    for i, mid in enumerate(all_models.keys()):
+        print "%5.1f%% getting state %s ..." % (100.0/len(all_models.keys())*i, mid)
         get_single_state(mid)
 
 
 def get_single_state(mid):
-    if isOldType(mid):
+    if all_models[mid]['type']=='old':
         url = 'http://mite.physik.uzh.ch/result/%06i/state.txt' % mid    
     else:
         p1 = mid[:2]
@@ -54,6 +42,7 @@ def get_single_state(mid):
     
     if not os.path.isfile(path):
         stream_get(url, path)
+        print "   done"
     else:
         print "   state already present, skipping"
 
@@ -76,14 +65,14 @@ def stream_get(url, filepath):
     
 
 def get_configs():
-    for i, mid in enumerate(all_models):
-        print "%5.1f%% getting config %s ..." % (100.0/len(all_models)*i, mid)
+    for i, mid in enumerate(all_models.keys()):
+        print "%5.1f%% getting config %s ..." % (100.0/len(all_models.keys())*i, mid)
         get_single_config_file(mid)
     
 
 def get_single_config_file(mid):
     
-    if isOldType(mid):
+    if all_models[mid]['type']=='old':
         url = 'http://mite.physik.uzh.ch/result/%06i/cfg.gls' % mid
     else:
         url = 'http://labs.spacewarps.org:8080/db/spaghetti/%s' % mid
@@ -92,13 +81,17 @@ def get_single_config_file(mid):
     
     if not os.path.isfile(path):
         stream_get(url, path)
+        print "   done"
     else:
         print "   cfg already present, skipping"
 
 
+
+
+
+
 ### MAIN ####################################################################
 
-all_models = get_all_models.data.keys()
 get_states()
 get_configs()
 

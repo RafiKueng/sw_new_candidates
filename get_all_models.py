@@ -48,6 +48,21 @@ def check_swid():
             print "   problem: not matching swid with %s: %s vs %s" % (str(mid), n_swid, o_swid)
             data[mid]['swid'] = n_swid
 
+def set_type():
+
+    for mid, d in data.items():
+        if type(mid)==int:
+            d['type'] = 'old'
+        elif (type(mid)==unicode or type(mid)==str) and len(mid)==10:
+            d['type'] = 'new'
+        else:
+            print mid
+            print len(mid)
+            print type(mid)
+            raise ValueError('what a strange mid')
+
+    
+
             
 def save_csv():
     print "get_all_models: save_csv"
@@ -77,6 +92,7 @@ def save_pickle():
 def main():
     collect_all_models()
     check_swid()
+    set_type()
     save_csv()
     save_pickle()
     

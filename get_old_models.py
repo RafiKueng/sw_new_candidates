@@ -997,10 +997,10 @@ def writeModelsToPickleFile():
             'mid'     : mid,
             'asw'     : D.models[_]['model_name'],
             'user'    : D.models[_]['user'],
-            'pixrad'  : D.models[_]['pixrad'],
-            'n_models': D.models[_]['n_models'],
-            'r_lens'  : D.models[_]['redshift_lens'],
-            'r_src'   : D.models[_]['redshift_source'],
+            'pixrad'  : int(D.models[_]['pixrad']),
+            'n_models': int(D.models[_]['n_models']),
+            'z_lens_used'  : float(D.models[_]['redshift_lens']),
+            'z_src_used'   : float(D.models[_]['redshift_source']),
         }
             
     with open(picklename, 'w') as f:
