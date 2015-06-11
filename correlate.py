@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
+import candidates
 from stelmass.stelpops2 import get_stellar_masses
 
 pickle_name = 'all_data.pickle'
@@ -194,5 +195,20 @@ ax.set_xlim(xmin=amin, xmax=amax)
 
 plt.show()
     
-    
+
+# analysis
+
+#lenses with photometr. redshift in paper
+l_zphot = [k for k, v in candidates.by['asw'].items() if v['z_lens']>0]
+l_zphot_swid = [v['swid'] for k, v in candidates.by['asw'].items() if v['z_lens']>0]
+
+# those that are in the plot
+l_used = [str(_) for _ in tmpp.keys()]
+
+missing_l = []
+for asw in l_zphot:
+    swid = candidates.by['asw'][asw]['swid']
+    if asw not in l_used:
+        missing_l.append((asw, swid))
+
     
