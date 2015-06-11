@@ -112,7 +112,34 @@ y = []
 y_lo = []
 y_hi = []
 
-for mid, adata in all_models.items():
+
+# only slect newest
+if True:
+    tmpp = {}
+    for mid, adata in all_models.items():
+        asw = adata['asw'] 
+        dat = adata['created_on']
+    
+        if adata['Mtot_ens_ave_z_corrected'] == 0.0:
+            continue
+       
+        if tmpp.get(asw, None):
+            if tmpp[asw]['created_on'] < dat: # if current newer than previous
+                tmpp[asw] = adata
+        else:
+            tmpp[asw] = adata
+    
+    selected_models = {}
+    for asw, data in tmpp.items():
+        selected_models[data['mid']] = data
+
+else:
+    selected_models = all_models       
+
+
+for mid, adata in selected_models.items():
+    
+    print "gathering data:", mid
     
     asw = adata['asw']
     swid = adata['swid']
@@ -153,8 +180,12 @@ ax.errorbar(x, y, yerr=[y_lo, y_hi], xerr=[x_lo, x_hi],
             fmt='o', ecolor='g', capthick=1)
 
 #axis limits
-amin = 1e8
-amax = 1e13
+amin = 2e8
+amax = 2e13
+
+plt.title("Stellar vs Lensing Mass")
+ax.set_xlabel('Stellar Mass $m_{stel}$')
+ax.set_ylabel('Lensing Mass $m_{lens}$')
 
 ax.set_xscale("log", nonposx='clip')
 ax.set_yscale("log", nonposy='clip')

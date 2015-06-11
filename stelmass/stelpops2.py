@@ -43,7 +43,7 @@ def get_stellar_masses(fnn = 'Rafael_salp.dat'):
 #        zp = float(v[4])
 #        mag = float(v[5])
 #        asw = v[8]
-        print asw,swid,
+        print "   stelpos2:",asw,swid,
         if zp !=0 and mag != 0:
             zl.append(zp)
             logm = (magjr(zp)-mag)*0.4

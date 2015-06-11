@@ -80,7 +80,19 @@ def parse_state(mid):
     
     print '      %9.2e (%9.2e ... %9.2e)' % (M_ens_ave, M_min, M_max)
     
+
+# quick hack incomming...
+oldtabledate = {}
+def loadoldtable():
+    global oldtabledate
+    with open('output/all_results.csv') as f:
+        lines = f.readlines()
+    lines = lines[1:]
+    for line in lines:
+        tkns = line.split(',')
+        oldtabledate[int(tkns[0])] = tkns[5]
     
+
 def parse_cfg(mid):
     
     print '   parsing cfg', mid
@@ -118,6 +130,7 @@ def parse_cfg(mid):
                 zsrc = l.split('(')[1].split(',')[0]
             if l.startswith('meta(author='):
                 user = l.split("'")[1]
+        created_on = oldtabledate[mid][:19]
                 
     else:
         try:
@@ -134,8 +147,10 @@ def parse_cfg(mid):
         zlens = jcfg['obj']['z_lens']
         zsrc = jcfg['obj']['z_src']
         user = jcfg['obj']['author']
+        ddd = jcfg['created_at']
+        created_on = ddd[:10]+' '+ddd[11:-1]
         
-    print '      ', glsv, lmtv, pxscale, pixrad, nmodel, zlens, zsrc, user
+    print '      ', glsv, lmtv, pxscale, pixrad, nmodel, zlens, zsrc, user, created_on
             
     #return (glsv, lmtv, pxscale, pixrad, nmodel, zlens, zsrc)
     
@@ -147,7 +162,8 @@ def parse_cfg(mid):
         'pixrad'      : int(     pixrad  ),
         'n_models'    : int(     nmodel  ),
         'z_src_used'  : float(   zsrc    ),
-        'z_lens_used' : float(   zlens   )
+        'z_lens_used' : float(   zlens   ),
+        'created_on'  : str(     created_on)
     }
     
     for k,v in data.items():
@@ -283,6 +299,7 @@ all_models = {}
 def main():
     print "parse_state_and_config: running main"
     
+    loadoldtable()
     parse_stuff()
     correct_stuff()
     save_csv()
