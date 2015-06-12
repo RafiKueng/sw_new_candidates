@@ -124,7 +124,7 @@ if True:
         if adata['Mtot_ens_ave_z_corrected'] == 0.0:
             continue
        
-        if tmpp.get(asw, None):
+        if tmpp.has_key(asw):
             if tmpp[asw]['created_on'] < dat: # if current newer than previous
                 tmpp[asw] = adata
         else:
@@ -140,10 +140,9 @@ else:
 
 for mid, adata in selected_models.items():
     
-    print "gathering data:", mid
-    
     asw = adata['asw']
     swid = adata['swid']
+    print "gathering data:", swid, asw, mid
     
     if adata['Mtot_ens_ave_z_corrected'] == 0.0:
         continue
@@ -200,7 +199,6 @@ plt.show()
 
 #lenses with photometr. redshift in paper
 l_zphot = [k for k, v in candidates.by['asw'].items() if v['z_lens']>0]
-l_zphot_swid = [v['swid'] for k, v in candidates.by['asw'].items() if v['z_lens']>0]
 
 # those that are in the plot
 l_used = [str(_) for _ in tmpp.keys()]
@@ -210,5 +208,17 @@ for asw in l_zphot:
     swid = candidates.by['asw'][asw]['swid']
     if asw not in l_used:
         missing_l.append((asw, swid))
+
+t = len(l_zphot)
+s = len(tmpp.keys())
+q = len(set([str(v['asw']) for k, v in all_models.items()]))
+print 'report:'
+print 'candidates in paper:', len(candidates.by['asw'])
+print 'we have models for those many candidates', q
+print 'candidates in paper with z_phot:', t
+print 'from those: candidates that have a model and are in the plot:', s
+print 'models missing:', t-s
+for r in missing_l: print r
+
 
     
