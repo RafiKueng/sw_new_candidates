@@ -172,7 +172,8 @@ y = np.array(y)
 y_lo = np.array(y_lo)
 y_hi = np.array(y_hi)
 
-ax = plt.subplot(111)
+fig = plt.figure(figsize=(6,6), dpi=200)
+ax = fig.add_subplot(111)
 
 ax.plot([1e7,1e15],[1e7,1e15],'k:')
 
@@ -192,7 +193,8 @@ ax.set_yscale("log", nonposy='clip')
 ax.set_ylim(ymin=amin, ymax=amax)
 ax.set_xlim(xmin=amin, xmax=amax)
 
-plt.show()
+fig.savefig('plot.png')
+#plt.show()
     
 
 # analysis
