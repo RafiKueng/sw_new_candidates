@@ -15,9 +15,11 @@ Created on Wed Feb  4 23:53:08 2015
 from PIL import Image
 from os import path
 
-for i in range(13300):
+pf = '_'
+
+for i in range(12800):
     
-    
+    si = "%06i_input.png" % i
     s1 = "%06i_img1.png" % i
     s2 = "%06i_img2.png" % i
     s31 = "%06i_img3.png" % i
@@ -38,22 +40,28 @@ for i in range(13300):
     else:
         skip = True
 
+
+    ii = Image.open(si)
+    ii = ii.crop([172, 62, 477+172, 477+62])
+    ii.save(pf+si)
+
     i1 = Image.open(s1)
-    i1 = i1.crop([55, 20, 207, 172])
-    i1.save(s1)
+    i1 = i1.crop([172, 62, 477+172, 477+62])
+    i1.save(pf+s1)
+
 
     i2 = Image.open(s2)
     if isnew:
-        i2 = i2.crop([55, 20, 207, 172])
+        i2 = i2.crop([172, 62, 477+172, 477+62])
     else:
         i2 = i2.crop([38, 20, 190, 172])
-    i2.save(s2)
+    i2.save(pf+s2)
 
 
     if not skip:
         i3 = Image.open(s3)
-        i3 = i3.crop([55, 20, 207, 172])
-        i3.save(s3)
+        i3 = i3.crop([172, 62, 477+172, 477+62])
+        i3.save(pf+s3)
         
     
     
