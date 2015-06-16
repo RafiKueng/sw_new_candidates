@@ -8,91 +8,18 @@ import os
 import cPickle as pickle
 import numpy as np
 import matplotlib as mpl
+
+mpl.rc('font', family='sans-serif')
+mpl.rc('text', usetex=True)
+
 import matplotlib.pyplot as plt
 
 import candidates
 from stelmass.stelpops2 import get_stellar_masses
 
+
+
 pickle_name = 'all_data.pickle'
-
-#
-#
-#
-#def load_all_models():
-#    models_asw = {}
-#    models_sw = {}
-#    all_models_asw = {}
-#    all_models_sw = {}
-#    
-#    with open('all_candidates_data.csv') as f:
-#        for line in f.readlines():
-#            tkns = line[:-1].split(',')
-#            
-#            #skip header
-#            try:
-#                i = int(tkns[0])
-#            except:
-#                continue
-#            
-#            asw = tkns[2]
-#            swid = tkns[3]
-#            
-#            #this only uses the latest model
-#            models_asw[asw] = tkns
-#            models_sw[swid] = tkns
-#            
-#            # this uses all models
-#            if al_models_asw.has_key(asw):
-#                all_models_asw[asw].append(tkns)
-#                all_models_sw[swid].append(tkns)
-#            else:
-#                all_models_asw[asw] = [tkns,]
-#                all_models_sw[swid] = [tkns,]
-#            
-#           
-#    #return models_asw, models_sw
-#    return all_models_asw, all_models_sw
-#
-
-
-
-#
-#data_asw, data_sw = get_stellar_masses('stelmass/Rafael_salp.dat')
-#models_asw, models_sw = load_all_models()
-#
-#coll_data = []
-#
-#x1 = []
-#x2 = []
-#y = []
-#
-#for swid, vals in data_sw.items():
-#
-#    if vals[0] == 0:
-#        continue
-#    
-#    stel_mass1 = vals[0]
-#    stel_mass2 = vals[1]
-#
-#    for model in models_sw[swid]:
-#        try:
-#            tot_mass = model[9]
-#            tot_mass_lo = 
-#        except KeyError:
-#            continue
-#        
-#        
-
-#    try:
-#        tot_mass = models_sw[swid][9]
-#        stel_mass1 = vals[0]
-#        stel_mass2 = vals[1]
-#    except KeyError:
-#        continue
-#    x1.append(stel_mass1)
-#    x2.append(stel_mass2)
-#    y.append(tot_mass)
-
 
 
 all_models = {}
@@ -172,28 +99,29 @@ y = np.array(y)
 y_lo = np.array(y_lo)
 y_hi = np.array(y_hi)
 
-fig = plt.figure(figsize=(6,6), dpi=200)
+fig = plt.figure(figsize=(4,4), dpi=200)
 ax = fig.add_subplot(111)
 
 ax.plot([1e7,1e15],[1e7,1e15],'k:')
 
 ax.errorbar(x, y, yerr=[y_lo, y_hi], xerr=[x_lo, x_hi],
-            fmt='o', ecolor='g', capthick=1)
+            fmt='.', ecolor='g', capthick=1)
 
 #axis limits
 amin = 2e8
 amax = 2e13
 
 plt.title("Stellar vs Lensing Mass")
-ax.set_xlabel('Stellar Mass $m_{stel}$')
-ax.set_ylabel('Lensing Mass $m_{lens}$')
+ax.set_xlabel('Stellar Mass $\mathsf{M_{\odot}}$')
+ax.set_ylabel('Lensing Mass $\mathsf{M_{lens}}$')
 
 ax.set_xscale("log", nonposx='clip')
 ax.set_yscale("log", nonposy='clip')
 ax.set_ylim(ymin=amin, ymax=amax)
 ax.set_xlim(xmin=amin, xmax=amax)
 
-fig.savefig('plot.png')
+plt.tight_layout()
+fig.savefig('plot.png', dpi=1200)
 #plt.show()
     
 
