@@ -9,7 +9,7 @@ import cPickle as pickle
 import numpy as np
 import matplotlib as mpl
 
-mpl.rc('font', family='sans-serif')
+mpl.rc('font', family='serif')
 mpl.rc('text', usetex=True)
 
 import matplotlib.pyplot as plt
@@ -99,21 +99,21 @@ y = np.array(y)
 y_lo = np.array(y_lo)
 y_hi = np.array(y_hi)
 
-fig = plt.figure(figsize=(4,4), dpi=200)
+fig = plt.figure(figsize=(4.5,4), dpi=200)
 ax = fig.add_subplot(111)
 
 ax.plot([1e7,1e15],[1e7,1e15],'k:')
 
-ax.errorbar(x, y, yerr=[y_lo, y_hi], xerr=[x_lo, x_hi],
-            fmt='.', ecolor='g', capthick=1)
+ax.errorbar(x, y, yerr=[y_lo, y_hi], color='b', xerr=[x_lo, x_hi],
+            fmt='.', ecolor='r', capthick=1)
 
 #axis limits
 amin = 2e8
 amax = 2e13
 
 plt.title("Stellar vs Lensing Mass")
-ax.set_xlabel('Stellar Mass $\mathsf{M_{\odot}}$')
-ax.set_ylabel('Lensing Mass $\mathsf{M_{lens}}$')
+ax.set_xlabel('Stellar Mass $\mathrm{M_{\odot}}$')
+ax.set_ylabel('Lensing Mass $\mathrm{M_{lens}}$')
 
 ax.set_xscale("log", nonposx='clip')
 ax.set_yscale("log", nonposy='clip')
