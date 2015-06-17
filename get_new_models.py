@@ -137,6 +137,7 @@ data = {}
 
 def main():
     fetch_talk()
+    get_from_labs()
     save_csv()
     save_pickle()
     
