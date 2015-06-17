@@ -90,6 +90,21 @@ def fetch_talk():
 
 
 
+def get_from_labs():
+    print "get_new_models: get from labs"
+
+    r1 = rq.get('http://swlabs:8080/db/spaghetti/_design/isfinal/_view/isfinal')
+    rows = r1.json()['rows']
+    for row in rows:
+        mid = row['id']
+        lensid = row['value']['lens_id']
+        r2 = rq.get('http://swlabs:8080/db/lenses/'+lensid)
+        asw = r2.json()['metadata']['zooniverse_id']
+
+        print '    got: ', mid, asw
+        _models.append([mid, asw, '', ''])
+
+
 def save_csv():
     print "get_new_models: save_csv"
     with open('tmp_new_models.csv', 'w') as f:
