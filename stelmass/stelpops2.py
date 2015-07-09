@@ -58,7 +58,7 @@ def get_stellar_masses(fnn = 'Rafael_salp.dat'):
             a = 0
             b = 0
 
-        v = (a * b)**0.5
+        v = (a * b)**0.5#geom.
         v_err_lo = v - a
         v_err_hi = b - v
 

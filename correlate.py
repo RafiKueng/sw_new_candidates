@@ -103,6 +103,7 @@ fig = plt.figure(figsize=(4.5,4), dpi=200)
 ax = fig.add_subplot(111)
 
 ax.plot([1e7,1e15],[1e7,1e15],'k:')
+ax.plot([1e7,1e15],[1e7,1e15],'k:')
 
 ax.errorbar(x, y, yerr=[y_lo, y_hi], color='b', xerr=[x_lo, x_hi],
             fmt='.', ecolor='r', capthick=1)
