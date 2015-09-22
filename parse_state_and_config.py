@@ -287,7 +287,7 @@ def save_csv():
 def save_pickle():
     print "parse_state_and_config: save_pickle"
     
-    with open(pickle_name, 'w') as f:
+    with open(pickle_name, 'wb') as f:
         pickle.dump(all_models, f, -1)
 
 
@@ -312,7 +312,7 @@ if __name__ == "__main__":
 else:
     if os.path.isfile(pickle_name):
         print "parse_state_and_config: loaded all data from pickle"
-        with open(pickle_name) as f:
+        with open(pickle_name, 'rb') as f:
             all_models = pickle.load(f)
     else:
         all_models = get_all_models.data

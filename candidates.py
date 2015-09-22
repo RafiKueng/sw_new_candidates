@@ -75,12 +75,12 @@ def load_tex():
 
 def save_pickle():
     print 'candidates.py: save_pickle'
-    with open('candidates.pickle', 'w') as f:
+    with open('candidates.pickle', 'wb') as f:
         pickle.dump(candidates, f, -1)
         
 def load_pickle():
     print 'candidates.py: load_pickle'
-    with open('candidates.pickle') as f:
+    with open('candidates.pickle', 'rb') as f:
         return pickle.load(f)
 
 def save_csv():

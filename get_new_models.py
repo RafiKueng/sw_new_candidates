@@ -96,10 +96,15 @@ def get_from_labs():
     r1 = rq.get('http://swlabs:8080/db/spaghetti/_design/isfinal/_view/isfinal')
     rows = r1.json()['rows']
     for row in rows:
-        mid = row['id']
-        lensid = row['value']['lens_id']
-        r2 = rq.get('http://swlabs:8080/db/lenses/'+lensid)
-        asw = r2.json()['metadata']['zooniverse_id']
+        try:
+            mid = row['id']
+            lensid = row['value']['lens_id']
+            r2 = rq.get('http://swlabs:8080/db/lenses/'+lensid)
+            asw = r2.json()['metadata']['zooniverse_id']
+        except KeyError:
+            print '    FAILED: ', mid
+            continue
+            
 
         print '    got: ', mid, asw
         _models.append([mid, asw, '', ''])
@@ -127,7 +132,7 @@ def save_pickle():
             'mid'  : mid
         }
             
-    with open(picklename, 'w') as f:
+    with open(picklename, 'wb') as f:
         pickle.dump(data, f, -1)
         
 
@@ -148,7 +153,7 @@ if __name__ == "__main__":
 else:
     if os.path.isfile(picklename):
         print "loaded new models from temp pickle"
-        with open(picklename) as f:
+        with open(picklename, 'rb') as f:
             data = pickle.load(f)
     else:
         main()

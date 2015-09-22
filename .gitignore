@@ -2,3 +2,5 @@
 *#
 .spyderproject
 output/
+
+all_plts/*/*.png

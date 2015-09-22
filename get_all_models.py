@@ -81,7 +81,7 @@ def save_csv():
 def save_pickle():
     print "get_all_models: save_pickle"
     
-    with open(picklename, 'w') as f:
+    with open(picklename, 'wb') as f:
         pickle.dump(data, f, -1)
 
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 else:
     if os.path.isfile(picklename):
         print "loaded new models from temp pickle"
-        with open(picklename) as f:
+        with open(picklename, 'rb') as f:
             data = pickle.load(f)
     else:
         main()

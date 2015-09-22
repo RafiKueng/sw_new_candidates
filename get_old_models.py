@@ -1003,7 +1003,7 @@ def writeModelsToPickleFile():
             'z_src_used'   : float(D.models[_]['redshift_source']),
         }
             
-    with open(picklename, 'w') as f:
+    with open(picklename, 'wb') as f:
         pickle.dump(data, f, -1)
         
     return data
@@ -1046,7 +1046,7 @@ if __name__ == "__main__":
     
 else:
     if isfile(picklename):
-        with open(picklename) as f:
+        with open(picklename, 'rb') as f:
             data = pickle.load(f)
         print "loaded old models from temp pickle"
             
