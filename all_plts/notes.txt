@@ -25,7 +25,7 @@ ASW0005ma2 doubtful; disk and two blobs
 ASW0005rnb unclear; two blobs
 ASW000619d plausible; image+counter arc
 ASW0006a07 plausible/convincing; needs Masses!
-ASW0006e0o unclear, two blobs
+ASW0006e0o unclear; two blobs
 ASW0006jh5 plausible; more modelling needed
 ASW00070vl doubtful; M_L>>M_S
 ASW0007e08 unclear; group with misterious arcs; needs Masses!
