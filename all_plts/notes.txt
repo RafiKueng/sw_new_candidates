@@ -1,6 +1,6 @@
 ASW000096t plausible; arc+counter image
 ASW0001c3j plausible; image+counter arc
-ASW0001ld7 ; c-like arc; M_L>>M_S
+ASW0001ld7 unclear; c-like arc; M_L>>M_S
 ASW00021r0 plausible; M_L>>M_S
 ASW00024id plausible; synth image poor
 ASW00024q6 plausible; arc+counter image
@@ -24,7 +24,7 @@ ASW00051ld doubtful; disk and blobs
 ASW0005ma2 doubtful; disk and two blobs
 ASW0005rnb unclear; two blobs
 ASW000619d plausible; image+counter arc
-ASW0006a07 plausible/convincing; needs Masses!
+ASW0006a07 plausible; needs Masses!
 ASW0006e0o unclear; two blobs
 ASW0006jh5 plausible; more modelling needed
 ASW00070vl doubtful; M_L>>M_S
