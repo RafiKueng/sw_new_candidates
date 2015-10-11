@@ -14,7 +14,7 @@ ASW0003r6c unclear; one long arc; M_L>>M_S
 ASW0003s0m plausible; arc+counter image; unclear arc
 ASW0003wsu plausible; arc+counter image
 ASW00047ae unclear; one arc
-ASW0004dv8 coll.modelling
+ASW0004dv8 plausible; coll.modelling
 ASW0004iye unclear; two galaxies
 ASW0004m3x plausible; group lens; interessting
 ASW0004nan unclear; just one arc
