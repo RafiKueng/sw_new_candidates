@@ -216,7 +216,7 @@ for jj, mid in enumerate(mids):
 #    plt.tight_layout()
 #    
 #    
-    dirr = "all_plts/" + str(asws[jj])
+    dirr = "all_plts2/" + str(asws[jj])
     if not os.path.exists(dirr):
         os.makedirs(dirr)
 #    fig.savefig(dirr+'/%s.png' % str(mid), dpi=200)

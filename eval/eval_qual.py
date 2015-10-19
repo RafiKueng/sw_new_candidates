@@ -8,10 +8,13 @@ with open('candidates.pickle', 'rb') as f:
 
 
 data = {}
+no_swid = []
+
+print "\nreading cat_qual.txt"            
  
 with open("cat_qual.txt") as f:
     for i, l in enumerate(f.readlines()):
-        print "line",i,
+        print "line %02i" % i,
         l = l.strip()
         try:
             swid  = l[0:4]
@@ -20,9 +23,9 @@ with open("cat_qual.txt") as f:
             qua   = l[29:30]
             txt   = l[31:]
         except IndexError:
-            print "skipping"
+            print "[invalid line, SKIPPING]", "!"*10
             continue
-        print swid, asw, mid, qua, txt
+        print swid, asw, '%10s'%mid, qua, txt,
                 
         
         if not swid == "----" and qua in ['+','-','?']:
@@ -30,7 +33,27 @@ with open("cat_qual.txt") as f:
             d = {'c1': (qua, txt), 'asw':asw,'swid':swid}
             #data[asw] = d
             data[swid] = d
-            
+            print "[saved]"
+        
+        else:
+            no_swid.append(asw)
+            print "[no swid or no qualifier, SKIPPED]"
+
+
+print "\ncheck if skipped really don't have swid"
+for asw in no_swid:
+    try:
+        # this should usually fail..
+        swid = candidates['asw'][asw]['swid']
+        print "-> %s - %s" % (asw, swid)
+    except KeyError:
+        # all is fine, go on
+        continue
+
+
+
+print '-'*80
+print "\nreading notes.txt"            
             
 with open("notes.txt") as f:
     for i, l in enumerate(f.readlines()):
@@ -60,6 +83,7 @@ with open("notes.txt") as f:
         else:
             data[swid].update(dd)
             
+print '-'*80
 
 # check which are missing
 print "\n\nchecking completeness"
@@ -71,6 +95,7 @@ for cswid in candidates['swid'].keys():
         missing.append((cswid, candidates['swid'][cswid]['asw']))
     
     
+print '-'*80
     
     
 # check if we agree, just for fun, use second rating anyways
@@ -144,6 +169,22 @@ for k,v in data.items():
                         flags.append(flag)
     
     nicedata[swid] = {'rating':rat, 'tags':tags, 'asw': asw, 'flags': flags}
+
+
+
+print '-'*80
+
+
+# general check for completeness
+print "\ngeneral check for completness\n"
+for swid in ['SW%02i'%i for i in range(1,60)]:
+    if not swid in nicedata.keys():
+        print " - missing:",swid
+
+print '-'*80
+
+
+#creating nice latex output
 
 ttl = r"\subsection{%s}"
 pre = r"\begin{itemize}"
