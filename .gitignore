@@ -1,11 +1,10 @@
 *.pyc
 *#
+
 .spyderproject
-output/
+
 backup/
 
-all_plts/*/*.png
-loadimg/outp/*
-
-*.cfg
-*.state
+output/
+cache/
+temp/

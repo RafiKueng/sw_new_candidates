@@ -9,14 +9,14 @@ settings = {
 
 # setup directories
     'asset_dir': 'assets', # use for external, static files that should not change (downloads)
-    'cache_dir': 'cache',  # use for internal, possibly changing files
+    'cache_dir': 'cache',  # use for internal, possibly changing files (pickles)
     'input_dir': 'input', # input / data files generated manually, used here
     'output_dir': 'output', # where the calculated data is stored
     'temp_dir': 'temp', # use this dir to create temp files, like csv versions of pickle files for checking
-    
+
+
+
     
 }
 
-
-_ = settings
 

@@ -39,7 +39,7 @@ _c_list = []
 
 def load_tex():
     print I, 'load_tex'
-
+    
     candidates['asw'] = {}
     candidates['swid'] = {}
 
@@ -85,12 +85,12 @@ def load_tex():
 
 
 def save_pickle():
-    print I, 'save_pickle'
+    print I, 'save data to cache (pickle)'
     with open(pickle_fn, 'wb') as f:
         pickle.dump(candidates, f, -1)
         
 def load_pickle():
-    print I, 'load_pickle'
+    print I, 'load cached data from pickle'
     with open(pickle_fn, 'rb') as f:
         return pickle.load(f)
 
