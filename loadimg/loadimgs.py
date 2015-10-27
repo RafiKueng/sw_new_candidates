@@ -105,7 +105,42 @@ for asw,v in nicedata['asw'].items():
             print "cut,",
         print 'done'
 
-      
+
+
+
+with open(join(imgdir, 'list.tex'), 'w') as tex:
+    for asw,v in nicedata['asw'].items():
+        swid = v['swid']
+        try:
+            mid = by_asw[asw]['mid']
+        except:
+            print swid, asw, "has no mid assigned!!!"
+            continue
+        typ = by_asw[asw]['type']
+        
+        t  = swid + '\n'
+        t += r"\begin{figure}[p]" + '\n'
+        
+        tex.write(t)
+
+        for img in ['input.png', 'img3_ipol.png', 'img1.png', 'img2.png']:
+            path = join(imgdir, "%s_%s_%s" % (swid, mid, img))
+            fact = 0.23
+            
+            t = "  \includegraphics[width=%s\linewidth]{%s}\n" % (fact, path)
+            
+            tex.write(t)
+            
+        t += r"\end{figure}" + '\n\n'
+        
+        tex.write(t)
+        
+    
+    
+
+
+
+
      
 #crop = {
 #    'input.png': [55, 20, 207, 172],
