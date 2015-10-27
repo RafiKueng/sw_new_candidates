@@ -82,6 +82,38 @@ with open("notes.txt") as f:
             data[swid] = dd
         else:
             data[swid].update(dd)
+
+
+
+print '-'*80
+print "\nreading manually.txt"            
+            
+with open("manually.txt") as f:
+    for i, l in enumerate(f.readlines()):
+        print "line",i,
+        l = l.strip()
+        prts = l.split()
+        swid = prts[0]
+        qua = int(prts[1])
+        try:
+            tags = [prts[2]]
+        except IndexError:
+            tags = []
+
+        asw = candidates['swid'][swid]['asw']
+        print asw, swid, qua, tags
+        dd = {'c3': (qua, tags),'asw':asw,'swid':swid}
+        
+        
+        if not data.has_key(swid):
+            print "  !! new one"
+            #data[asw] = d
+            data[swid] = dd
+        else:
+            data[swid].update(dd)
+
+
+
             
 print '-'*80
 
@@ -126,23 +158,27 @@ flags_lut = {
 }
 
 
-for k,v in data.items():
+for k,v in sorted(data.items()):
     swid = v['swid']
     asw = v['asw']
     flags = []
     print " >",k,asw,
     
     c1 = v.get('c1',('XX',''))
-    c2 = v['c2']
+    c2 = v.get('c2',('XX',[]))
+    c3 = v.get('c3',('XX',[]))
     
     r1 = c1[0]
     r2 = c2[0]
+    r3 = c3[0]
     
-    tags = c2[1]
     tag = c1[1]
+    tags = c2[1]
+    tags3 = c3[1]
     
     if not tag == '':
         tags.append(tag)
+    tags.extend(tags3)
     
     if lut.has_key(r2):
         rat = lut[r2]
@@ -157,7 +193,15 @@ for k,v in data.items():
     if not lut[r1] == lut[r2]:
         print "(missmatch here:", r2, 'vs', r1, ')',
     
-    print ""
+    if rat == None:
+        if not r3=="XX":
+            print " !man override! ",
+            rat = r3
+        else:
+            print "no rating available",
+    
+    
+    print "  [%s]" % rat
     
     #scan for flags:
     for flag, kws in flags_lut.items():
@@ -205,8 +249,12 @@ for n in sorted(missing):
     print fmt % n
 print pst
     
-    
-    
+
+import cPickle as pickle
+pickle_filename = 'nicedata.pickle'
+print 'eval.py: save_pickle'
+with open(pickle_filename, 'wb') as f:
+    pickle.dump(candidates, f, -1)
     
     
 
