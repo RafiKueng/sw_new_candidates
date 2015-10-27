@@ -18,21 +18,32 @@ Created on Mon Jun  8 02:38:54 2015
 """
 
 import os
+from os.path import join
+import sys
 import cPickle as pickle
 
-pickle_filename = 'candidates.pickle'
-csv_filename = 'candidates.csv'
+from settings import settings as S
+
+NAME = os.path.basename(sys.argv[0])
+I = NAME + ":"
+
+
+input_fn  = join(S['input_dir'], 'candidates.tex')
+pickle_fn = join(S['cache_dir'], 'candidates.pickle')
+csv_fn    = join(S['temp_dir'],  'candidates.csv')
+
 
 candidates = {}
 _c_list = []
 
+
 def load_tex():
-    print 'candidates.py: load_tex'
+    print I, 'load_tex'
 
     candidates['asw'] = {}
     candidates['swid'] = {}
 
-    with open('candidates.tex') as f:
+    with open(input_fn) as f:
         lns = f.readlines()
         
     for line in lns:
@@ -74,25 +85,25 @@ def load_tex():
 
 
 def save_pickle():
-    print 'candidates.py: save_pickle'
-    with open('candidates.pickle', 'wb') as f:
+    print I, 'save_pickle'
+    with open(pickle_fn, 'wb') as f:
         pickle.dump(candidates, f, -1)
         
 def load_pickle():
-    print 'candidates.py: load_pickle'
-    with open('candidates.pickle', 'rb') as f:
+    print I, 'load_pickle'
+    with open(pickle_fn, 'rb') as f:
         return pickle.load(f)
 
 def save_csv():
-    print 'candidates.py: save_csv'
+    print I, 'save_csv'
 
-    with open('candidates.csv', 'w') as f:
+    with open(csv_fn, 'w') as f:
         for tkns in _c_list:
             f.write(','.join(tkns)+'\n')
 
 ### MAIN #####################################################################
 
-if os.path.isfile(pickle_filename):
+if os.path.isfile(pickle_fn):
     candidates = load_pickle()
     
 else:
