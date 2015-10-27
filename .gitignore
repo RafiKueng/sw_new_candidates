@@ -4,3 +4,7 @@
 output/
 
 all_plts/*/*.png
+loadimg/outp/*
+
+*.cfg
+*.state

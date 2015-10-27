@@ -106,37 +106,65 @@ for asw,v in nicedata['asw'].items():
         print 'done'
 
 
-
+j = 0
 
 with open(join(imgdir, 'list.tex'), 'w') as tex:
-    for asw,v in nicedata['asw'].items():
-        swid = v['swid']
+
+    t = r"""    
+\documentclass[a4paper]{article}
+
+\usepackage{graphicx}
+\usepackage{placeins}
+\begin{document} 
+   
+"""
+    tex.write(t)
+ 
+    for swid,v in sorted(nicedata['swid'].items()):
+        asw = v['asw']
         try:
             mid = by_asw[asw]['mid']
         except:
             print swid, asw, "has no mid assigned!!!"
             continue
+#        try:
+#            mid = "%6i" % int(mid)
+#        except:
+#            pass
         typ = by_asw[asw]['type']
         
-        t  = swid + '\n'
-        t += r"\begin{figure}[p]" + '\n'
+        t  = '\n' + swid + '\n'
+        t += r"\begin{figure}[h]" + '\n'
         
         tex.write(t)
 
-        for img in ['input.png', 'img3_ipol.png', 'img1.png', 'img2.png']:
-            path = join(imgdir, "%s_%s_%s" % (swid, mid, img))
-            fact = 0.23
+        for i, img in enumerate(['input.png', 'img3_ipol.png', 'img1.png', 'img2.png']):
+            #print i
+            #path = join('panels', "%s_%s_%s" % (swid, mid, img))
+            path = "%s_%s_%s" % (swid, mid, img)
+            fact = 0.19
             
             t = "  \includegraphics[width=%s\linewidth]{%s}\n" % (fact, path)
             
             tex.write(t)
-            
-        t += r"\end{figure}" + '\n\n'
+        
+        path = join("massplts", asw, "%s.png" % mid)
+        t  = "  \includegraphics[width=%s\linewidth]{%s}\n" % (fact, path)
+        t += r"\end{figure}\FloatBarrier" + '\n'
+        
+        if j>3:
+            t += r'\newpage' +'\n'
+            j = 0
+        else:
+            j += 1
         
         tex.write(t)
         
     
-    
+    t = r"""    
+\end{document}    
+"""
+    tex.write(t)    
 
 
 
