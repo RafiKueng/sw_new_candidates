@@ -10,8 +10,8 @@ import os
 
 import requests as rq
 
-from os.path import join
 from settings import settings as S
+from settings import state_path, state_fn, cfg_path, cfg_fn
 
 from filter_models import filt_models as models
 
@@ -19,12 +19,10 @@ NAME = os.path.basename(__file__)
 I = NAME + ":"
 
 
-state_path = join(S['asset_dir'], 'models')
-state_fn = "%s.state"
-
-cfg_path = join(S['asset_dir'], 'models')
-cfg_fn = "%s.cfg"
-
+if not os.path.exists(state_path):
+    os.makedirs(state_path)
+if not os.path.exists(cfg_path):
+    os.makedirs(cfg_path)
 
 #all_models = get_all_models.data
       

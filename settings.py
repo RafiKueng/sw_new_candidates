@@ -6,6 +6,7 @@ Created on Tue Oct 27 23:04:17 2015
 """
 
 import os
+from os.path import join
 
 settings = {
 
@@ -20,6 +21,17 @@ settings = {
 
     
 }
+
+_=settings
+
+# where to store all the state and config files (uses gigabytes!)
+state_path = join(_['asset_dir'], 'models')
+cfg_path = join(_['asset_dir'], 'models')
+
+# how to name the config and state files..
+state_fn = "%s.state"
+cfg_fn = "%s.cfg"
+
 
 
 # make sure the folders exist
