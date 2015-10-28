@@ -5,6 +5,8 @@ Created on Tue Oct 27 23:04:17 2015
 @author: rafik
 """
 
+import os
+
 settings = {
 
 # setup directories
@@ -20,3 +22,7 @@ settings = {
 }
 
 
+# make sure the folders exist
+for k,v in settings.items():
+    if k.endswith('_dir') and not os.path.exists(v):
+        os.makedirs(v)
