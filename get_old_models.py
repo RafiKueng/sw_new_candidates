@@ -92,7 +92,8 @@ def parse_row(row):
     
     data = {
         'asw': row['model_name'],
-        'asw_oid':int(row['model_id'])
+        'lensid':'%05i' % int(row['model_id']),
+        'type': 'old'
     }    
     
     return (mid, data)
@@ -114,7 +115,7 @@ def save_csv():
 
     with open(csv_fn, 'w') as f:
         for mid, v in old_models.items():
-            f.write(mid + ',' + ','.join(v)+'\n')
+            f.write(mid + ',' + ','.join(v.values())+'\n')
 
 ### MAIN #####################################################################
 
