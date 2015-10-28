@@ -7,18 +7,16 @@ Created on Wed Oct 28 00:53:28 2015
 
 
 import sys, os
-import csv
 
 import requests as rq
 import cPickle as pickle
 
 from os.path import join
-from StringIO import StringIO
-
 
 from settings import settings as S
 
-NAME = os.path.basename(sys.argv[0])
+
+NAME = os.path.basename(__file__)
 I = NAME + ":"
 
 

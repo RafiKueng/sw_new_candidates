@@ -17,7 +17,7 @@ from StringIO import StringIO
 
 from settings import settings as S
 
-NAME = os.path.basename(sys.argv[0])
+NAME = os.path.basename(__file__)
 I = NAME + ":"
 
 

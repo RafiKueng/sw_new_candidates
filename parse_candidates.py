@@ -19,12 +19,11 @@ Created on Mon Jun  8 02:38:54 2015
 
 import os
 from os.path import join
-import sys
 import cPickle as pickle
 
 from settings import settings as S
 
-NAME = os.path.basename(sys.argv[0])
+NAME = os.path.basename(__file__)
 I = NAME + ":"
 
 
