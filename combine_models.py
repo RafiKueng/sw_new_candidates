@@ -30,9 +30,9 @@ comb_models = {}
 
 
 def combine():
-    for mid, data in gom.old_models.items():
+    for mid, data in gom.DATA.items():
         comb_models[mid] = data
-    for mid, data in gnm.new_models.items():
+    for mid, data in gnm.DATA.items():
         comb_models[mid] = data
         
 

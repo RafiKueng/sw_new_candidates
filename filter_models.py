@@ -40,7 +40,7 @@ def filter_models():
         asw = data['asw']
         print "   ", mid, asw, 
         
-        if asw in cands.get_swid.keys():
+        if asw in cands.MAP.keys():
             filt_models[mid] = data
             print 'taken'
         else:

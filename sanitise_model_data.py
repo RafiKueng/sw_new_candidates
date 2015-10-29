@@ -63,7 +63,7 @@ def collect_data(mid):
 
     asw = fimo.filt_models[mid]['asw']
     data['asw'] = asw
-    data['z_lens_meassured'] = paca.by['asw'][asw]['z_lens']
+    data['z_lens_meassured'] = paca.DATA[asw]['z_lens']
     
     print INT*2,"(",
     for k,v in data.items():
