@@ -5,7 +5,7 @@ Created on Wed Oct 28 01:13:26 2015
 @author: rafik
 """
 
-import os
+import os, sys
 
 import cPickle as pickle
 
@@ -56,6 +56,16 @@ def save_csv():
             f.write(mid + ',' + ','.join(v.values())+'\n')
 
 ### MAIN #####################################################################
+
+if len(sys.argv)>1:
+
+    if '-d' in sys.argv:
+        print I,"deleting cache and quitting"
+        try:
+            os.remove(pickle_fn)
+        except OSError:
+            pass
+
 
 if os.path.isfile(pickle_fn):
     comb_models = load_pickle()

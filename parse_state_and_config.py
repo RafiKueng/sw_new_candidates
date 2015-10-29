@@ -25,8 +25,7 @@ Created on Wed Oct 28 15:07:18 2015
 
 
 
-import sys, os
-import csv
+import sys, os, shutil
 import glob
 import json
 
@@ -104,7 +103,7 @@ def parse_state(mid):
     since this takes a long time, this step will be cached as well
     '''
     
-    print INT,'parsing state %010s ...' % mid,
+    print INT,'parsing state  %010s ...' % mid,
     sys.stdout.flush()
     
     cpath = join(stateconf_cache_path, state_fn%mid + '.pickle')
@@ -189,17 +188,18 @@ def parse_cfg(mid):
     with open(path) as f:
         lines = f.readlines()
         
-    
+    # init default values
     _ = {
-        'gls_ver': 1,
-        'lmt_ver': '',
-        'pxscale': 0.0,
-        'pixrad': 0,
-        'n_models': 0,
+        'gls_ver'    : 1,
+        'lmt_ver'    : '',
+        'pxscale'    : 0.0,
+        'pixrad'     : 0,
+        'n_models'   : 0,
         'z_lens_used': 0.0,
-        'z_src_used': 0.0,
-        'user': '',
-        'type': tp,
+        'z_src_used' : 0.0,
+        'user'       : '',
+        'type'       : tp,
+        'created_on' : None,
     }
     
     
@@ -281,11 +281,59 @@ def parse_cfg(mid):
 
 
 
+def save_pickle():
+    print I, 'save data to cache (pickle)'
+    with open(pickle_fn, 'wb') as f:
+        pickle.dump(stateconf_data, f, -1)
+        
+def load_pickle():
+    print I, 'load cached data from pickle'
+    with open(pickle_fn, 'rb') as f:
+        return pickle.load(f)
+
+def save_csv():
+    print I, 'save_csv'
+
+    with open(csv_fn, 'w') as f:
+        f.write('mid,' + ','.join(stateconf_data.values()[0].keys())+'\n')
+        for mid, v in stateconf_data.items():
+            f.write(mid + ',' + ','.join([str(_) for _ in v.values()])+'\n')
+
+### MAIN #####################################################################
+
+if len(sys.argv)>1:
+
+    if '-d' in sys.argv:
+        print I,"deleting cache and quitting (leaves the small pickles from models in place)"
+        try:
+            os.remove(pickle_fn)
+        except OSError:
+            pass
+
+    if '-D' in sys.argv:
+        print I,"deleting cache and quitting (really everything)"
+        try:
+            os.remove(pickle_fn)
+            shutil.rmtree(stateconf_cache_path)
+        except OSError:
+            pass
+        
+    sys.exit()
+        
+
+if os.path.isfile(pickle_fn):
+    stateconf_data = load_pickle()
+    save_csv()
+    
+else:
+    parse_mainloop()
+    save_pickle()
+    save_csv()
 
 
 
 
-parse_mainloop()
+
 
 
 

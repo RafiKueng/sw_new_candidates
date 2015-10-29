@@ -17,7 +17,7 @@ Created on Mon Jun  8 02:38:54 2015
 @author: rafik
 """
 
-import os
+import os, sys
 from os.path import join
 import cPickle as pickle
 
@@ -101,6 +101,16 @@ def save_csv():
             f.write(','.join(tkns)+'\n')
 
 ### MAIN #####################################################################
+
+if len(sys.argv)>1:
+
+    if '-d' in sys.argv:
+        print I,"deleting cache and quitting"
+        try:
+            os.remove(pickle_fn)
+        except OSError:
+            pass
+
 
 if os.path.isfile(pickle_fn):
     candidates = load_pickle()
