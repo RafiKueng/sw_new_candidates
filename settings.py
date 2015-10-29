@@ -50,4 +50,5 @@ for p in [
     if not os.path.exists(p):
         os.makedirs(p)
 
-
+# cosmetics
+INT = '    ' # default 1 level intentsion

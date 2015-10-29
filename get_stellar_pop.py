@@ -3,21 +3,20 @@
 import os, sys, csv
 import cPickle as pickle
 
-import numpy as np
+#import numpy as np
 from numpy import ndarray, log10
 from scipy.interpolate import interp1d
-import matplotlib.pyplot as pl
+#import matplotlib.pyplot as pl
 
 from os.path import join
 
-from settings import settings as S
+from settings import settings as S, INT
 
-import parse_candidates as candidates
+from parse_candidates import DATA as candidates
 
 
 NAME = os.path.basename(__file__)
 I = NAME + ":"
-INT = '    '
 
 
 pickle_fn  = join(S['cache_dir'], 'stellar_masses.pickle')
@@ -54,7 +53,7 @@ def get_stellar_masses(input_fn=input_fn):
     magsr = interp1d(z,sr)
     
     
-    for asw, lensdata in sorted(candidates.by['asw'].items()):
+    for asw, lensdata in sorted(candidates['asw'].items()):
         swid = lensdata['swid']
         zp = lensdata['z_lens']
         mag = lensdata['m_i']
@@ -146,7 +145,7 @@ if len(sys.argv)>1:
         
 
 if os.path.isfile(pickle_fn):
-    data = load_pickle()
+    DATA = load_pickle()
     save_csv()
     
 else:
