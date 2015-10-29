@@ -296,6 +296,8 @@ def save_csv():
 
 ### MAIN #####################################################################
 
+print I, "START\n"
+
 if len(sys.argv)>1:
 
     if '-d' in sys.argv:

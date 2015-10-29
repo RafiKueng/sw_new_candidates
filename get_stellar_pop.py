@@ -20,30 +20,29 @@ I = NAME + ":"
 INT = '    '
 
 
-pickle_fn  = join(S['cache_dir'], 'sane_data.pickle')
-csv_fn     = join(S['temp_dir'],  'sane_data.csv')
+pickle_fn  = join(S['cache_dir'], 'stellar_masses.pickle')
+csv_fn     = join(S['temp_dir'],  'stellar_masses.csv')
+
+input_fn   = join(S['input_dir'], 'Rafael_salp.dat')
 
 
-
-
+DATA = {}
 
 zl = []
 msjr = []
 mssr = []
 
-dataa = {}
-
-def get_stellar_masses(fnn = 'Rafael_salp.dat'):
+def get_stellar_masses(input_fn=input_fn):
     
     print I,'generating stellar masses'
 
-    data_asw = {}
-    data_sw = {}
-    fil = open(join(S['input_dir'],fnn))
-    lyst = fil.readlines()[13:]
+    with open(input_fn) as fil:
+        lyst = fil.readlines()[13:]
+
     z = ndarray(shape=len(lyst))
     jr = 0*z
     sr = 0*z
+
     for i in range(len(lyst)):
         v = lyst[i].split()
         v = [float(s) for s in v]
@@ -54,101 +53,84 @@ def get_stellar_masses(fnn = 'Rafael_salp.dat'):
     magjr = interp1d(z,jr)
     magsr = interp1d(z,sr)
     
-#    with open('candidates.csv') as f:
-#        lyst = f.readlines()
     
-    for asw, data in candidates.by['asw'].items():
-        swid = data['swid']
-        zp = data['z_lens']
-        mag = data['m_i']
+    for asw, lensdata in sorted(candidates.by['asw'].items()):
+        swid = lensdata['swid']
+        zp = lensdata['z_lens']
+        mag = lensdata['m_i']
         
-#    for lyne in lyst:
-#        v = lyne.strip().split('\t')
-#        id = v[0]
-#        zp = float(v[4])
-#        mag = float(v[5])
-#        asw = v[8]
         print INT,"%10s (%s):   " % (asw,swid),
+
         if zp !=0 and mag != 0:
             zl.append(zp)
             logm = (magjr(zp)-mag)*0.4
-            msjr.append(10**(logm))
+            msjr = 10**(logm)
             logm = (magsr(zp)-mag)*0.4
-            mssr.append(10**(logm))
-            #print '%9.2e %9.2e' % (msjr[-1],mssr[-1])
-            a = msjr[-1]
-            b = mssr[-1]
+            mssr = 10**(logm)
+
         else:
-            #print
-            a = 0
-            b = 0
+            print "SKIP (missing values; zlens:%8.2e mag:%8.2e)" % (zp,mag)
+            continue
 
-        v = (a * b)**0.5#geom.
-        v_err_lo = v - a
-        v_err_hi = b - v
+        v = (msjr * mssr)**0.5 # geom.mean
 
-        d = (v, v_err_lo, v_err_hi, a, b)        
-        
-        asw = asw.strip()
-        data_asw[asw] = d
-        data_sw[swid] = d
-        
-        dataa[asw] = {
-            'v': v,
-            'v_err_lo': v_err_lo,
-            'v_err_hi': v_err_hi,
-            'm_s_jr'  : a,
-            'm_s_sr'  : b,        
+        DATA[asw] = {
+            'm_s_geom': v,
+            'm_s_jr'  : msjr,
+            'm_s_sr'  : mssr,        
         }
         
         print "DONE",
-        print '(%9.2e %9.2e)' % (a,b)
+        print '(%9.2e %9.2e)' % (msjr,mssr)
         
-    return data_asw, data_sw
+    print I,"got %i lenses" % len(DATA.keys())
+        
+    return
         
         
-
-def do_plot():
-    # plot(z,magjr(z))
-    # plot(z,magsr(z))
-    pl.scatter(zl,msjr,c='g')
-    pl.scatter(zl,mssr,c='r')
-    pl.axes().set_yscale('log')
-    pl.xlabel('redshift')
-    pl.ylabel('stellar mass in $M_\odot$')
-    pl.show()
-
-
-
 
 
 ##############################################################################
 
+
 def save_pickle():
-    print I, 'save data to cache (pickle)'
+    print I, 'save data to cache (pickle)',
     with open(pickle_fn, 'wb') as f:
-        pickle.dump(dataa, f, -1)
+        pickle.dump(DATA, f, -1)
+    print "DONE"
         
 def load_pickle():
-    print I, 'load cached data from pickle'
+    print I, 'load cached data from pickle',
     with open(pickle_fn, 'rb') as f:
-        return pickle.load(f)
+        p = pickle.load(f)
+    print "DONE"
+    return p
 
-def save_csv():
-    print I, 'save_csv'
+def save_csv(pkey_n = 'asw'):
+    print I, 'save_csv',
 
     with open(csv_fn, 'w') as f:
-
-        fieldnames = ['mid',] + dataa.values()[0].keys()
-
-        csvw = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
-        csvw.writeheader()
         
-        for mid, v in dataa.items():
-            csvw.write(v.update({'mid':mid}))
+        # get all available keys
+        keys = set([pkey_n])
+        for v in DATA.values():
+            keys.update(v.keys())
+
+        # write output
+        csvw = csv.DictWriter(f, fieldnames=keys, extrasaction='ignore')
+        csvw.writeheader()
+        for pkey, v in DATA.items():
+            d=dict()
+            d.update({pkey_n:pkey})
+            d.update(v)
+            csvw.writerow(d)
+
+    print "DONE"
 
 
 ### MAIN #####################################################################
+
+print I, "START\n"
 
 if len(sys.argv)>1:
 
@@ -159,18 +141,18 @@ if len(sys.argv)>1:
         except OSError:
             pass
 
-       
+    print I,"DONE"
     sys.exit()
         
 
-#if os.path.isfile(pickle_fn):
-#    sane_data = load_pickle()
-#    save_csv()
-#    
-#else:
-#    sanitise()
-#    save_pickle()
-#    save_csv()
+if os.path.isfile(pickle_fn):
+    data = load_pickle()
+    save_csv()
+    
+else:
+    get_stellar_masses()
+    save_pickle()
+    save_csv()
 
-get_stellar_masses()
+print '\n',I, "FINISHED\n\n" + '-'*80 + '\n'
 
