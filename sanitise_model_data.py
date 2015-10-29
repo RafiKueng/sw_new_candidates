@@ -26,7 +26,7 @@ import parse_state_and_config as psac
 
 NAME = os.path.basename(__file__)
 I = NAME + ":"
-INT = '       '
+INT = '    '
 
 
 pickle_fn  = join(S['cache_dir'], 'sane_data.pickle')
@@ -35,15 +35,84 @@ rawdata_fn = join(S['cache_dir'], 'parsed_state_and_config_files.pickle')
 
 
 sane_data = {'0000':{'a':1}}
+sane_data = {}
 rawdata = {}
 
 
 def sanitise():
     print I, "main start"
     
-    rawdata.update(psac.stateconf_data)
+    sane_data.update(psac.stateconf_data)
     
+    for mid in sane_data.keys():
+
+        print I, "working on %s" % mid
+                
+        correct_scaling(mid)
+        correct_mass(mid)
+    
+    
+    
+
+    
+scale_fact = 440./500*0.187
+def correct_scaling(mid):
+    
+
+    # version 3 and higher have correct scaling already applied
+    if sane_data[mid]['gls_ver'] < 3 and sane_data[mid]['gls_ver'] >= 0:
+        f = ( (scale_fact*100)**2 )
+    else:
+        f = 1
+
+    print INT,'- correcting scaling f=%5.2f' % f
         
+    sane_data[mid]['Mtot_ave'] = sane_data[mid]['Mtot_ave_uncorrected'] * f
+    sane_data[mid]['Mtot_min'] = sane_data[mid]['Mtot_min_uncorrected'] * f
+    sane_data[mid]['Mtot_max'] = sane_data[mid]['Mtot_max_uncorrected'] * f
+        
+  
+        
+from stelmass.angdiam import sig_factor
+
+def correct_mass(mid):
+
+    print '   correcting mass for differen redshifts'
+    
+    model = all_models[mid]
+    
+    zl_actual = model['z_lens_actual']
+    zs_actual = 2.0                 #!!!!!!!!! source redshifts not yet available, using estimate
+    zl_used = model['z_lens_used']
+    zs_used = model['z_src_used']
+    
+    # we trust claude.. he looks up stuff, if we don't have any data, and if he didn't used default values
+    if zl_actual == 0.0 and model['user']=='c_cld' and not zl_used == 0.5 and not zs_used == 1.0:
+        print '!!!   trusting claudes values ',
+        print "( zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f )" % (zl_actual,zl_used,zs_actual,zs_used)
+        zl_actual = zl_used
+        zs_actual = zs_used
+        
+    f_act = sig_factor(zl_actual,zs_actual)
+    f_use = sig_factor(zl_used,zs_used)
+    
+    print "      zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
+        zl_actual,zl_used,zs_actual,zs_used,
+        f_act, f_use
+    )
+
+    keys = ['Mtot_ens_ave', 'Mtot_min', 'Mtot_max']
+    
+    for k in keys:
+        if zl_actual * zs_actual * zl_used * zs_used > 0:
+            org_mass = model[k]
+            corr_mass = org_mass * f_act / f_use
+            model[k+'_z_corrected'] = corr_mass
+            print '      m: %e -> %e' % (model[k], model[k+'_z_corrected'])
+        else:
+            model[k+'_z_corrected'] = 0.0
+            print '      no data available'
+
     
 
 
