@@ -13,15 +13,17 @@ Created on Thu Oct 29 11:30:31 2015
 
 
 import sys, os, csv
-
 import cPickle as pickle
 
 from os.path import join
 
 from settings import settings as S
 
-# make sure this if first run in glass env..
-import parse_state_and_config as psac
+import parse_state_and_config as psac     # make sure this if first run in glass env..
+import filter_models as fimo
+import parse_candidates as paca
+
+from stelmass.angdiam import sig_factor
 
 
 NAME = os.path.basename(__file__)
@@ -47,9 +49,30 @@ def sanitise():
     for mid in sane_data.keys():
 
         print I, "working on %s" % mid
-                
+        
+        collect_data(mid)
         correct_scaling(mid)
         correct_mass(mid)
+    
+
+    
+def collect_data(mid):
+    print INT,'- collecting addidtional data',
+
+    data = {}
+
+    asw = fimo.filt_models[mid]['asw']
+    data['asw'] = asw
+    data['z_lens_meassured'] = paca.by['asw'][asw]['z_lens']
+    
+    print INT*2,"(",
+    for k,v in data.items():
+        print '%s: %s;' % (str(k), str(v)),
+    print ')',
+    
+    sane_data[mid].update(data)
+    print "DONE"
+    
     
     
     
@@ -67,51 +90,51 @@ def correct_scaling(mid):
 
     print INT,'- correcting scaling f=%5.2f' % f
         
-    sane_data[mid]['Mtot_ave'] = sane_data[mid]['Mtot_ave_uncorrected'] * f
-    sane_data[mid]['Mtot_min'] = sane_data[mid]['Mtot_min_uncorrected'] * f
-    sane_data[mid]['Mtot_max'] = sane_data[mid]['Mtot_max_uncorrected'] * f
+    sane_data[mid]['Mtot_ave_scaled'] = sane_data[mid]['Mtot_ave_uncorrected'] * f
+    sane_data[mid]['Mtot_min_scaled'] = sane_data[mid]['Mtot_min_uncorrected'] * f
+    sane_data[mid]['Mtot_max_scaled'] = sane_data[mid]['Mtot_max_uncorrected'] * f
         
   
-        
-from stelmass.angdiam import sig_factor
 
+model = {}
 def correct_mass(mid):
-
-    print '   correcting mass for differen redshifts'
+    global model
+    print INT,'- correcting mass for r'
     
-    model = all_models[mid]
+    model = sane_data[mid]  # this is a "pointer", updates should change the orginal as well
     
-    zl_actual = model['z_lens_actual']
+#    try:
+    zl_actual = model['z_lens_meassured']
     zs_actual = 2.0                 #!!!!!!!!! source redshifts not yet available, using estimate
     zl_used = model['z_lens_used']
     zs_used = model['z_src_used']
+
+#    except KeyError:
+#        print INT*2,"!!! redshifts not available !!!"
+#        return
+#        sys.exit(1)
     
-    # we trust claude.. he looks up stuff, if we don't have any data, and if he didn't used default values
-    if zl_actual == 0.0 and model['user']=='c_cld' and not zl_used == 0.5 and not zs_used == 1.0:
-        print '!!!   trusting claudes values ',
-        print "( zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f )" % (zl_actual,zl_used,zs_actual,zs_used)
-        zl_actual = zl_used
-        zs_actual = zs_used
-        
+       
     f_act = sig_factor(zl_actual,zs_actual)
     f_use = sig_factor(zl_used,zs_used)
     
-    print "      zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
+    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
         zl_actual,zl_used,zs_actual,zs_used,
         f_act, f_use
     )
 
-    keys = ['Mtot_ens_ave', 'Mtot_min', 'Mtot_max']
+    keys = ['Mtot_ave', 'Mtot_min', 'Mtot_max']
     
-    for k in keys:
-        if zl_actual * zs_actual * zl_used * zs_used > 0:
-            org_mass = model[k]
+    if zl_actual * zs_actual * zl_used * zs_used > 0:
+        for k in keys:
+            org_mass = model[k+'_scaled']
             corr_mass = org_mass * f_act / f_use
             model[k+'_z_corrected'] = corr_mass
-            print '      m: %e -> %e' % (model[k], model[k+'_z_corrected'])
-        else:
-            model[k+'_z_corrected'] = 0.0
-            print '      no data available'
+            print INT*2,'> %s: %e -> %e' % (k,model[k+'_scaled'], model[k+'_z_corrected'])
+    else:
+        for k in keys:
+            model[k+'_z_corrected'] = None
+        print INT*2,'> no data available!!'
 
     
 
