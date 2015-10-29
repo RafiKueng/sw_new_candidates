@@ -28,6 +28,9 @@ _=settings
 state_path = join(_['asset_dir'], 'models')
 cfg_path = join(_['asset_dir'], 'models')
 
+# where to store the processed state file pickles
+stateconf_cache_path = join(_['cache_dir'], 'stateconf')
+
 # how to name the config and state files..
 state_fn = "%s.state"
 cfg_fn = "%s.cfg"
@@ -38,3 +41,13 @@ cfg_fn = "%s.cfg"
 for k,v in settings.items():
     if k.endswith('_dir') and not os.path.exists(v):
         os.makedirs(v)
+
+for p in [
+        state_path,
+        cfg_path,
+        stateconf_cache_path
+    ]:
+    if not os.path.exists(p):
+        os.makedirs(p)
+
+

@@ -23,6 +23,7 @@ Created on Wed Oct 28 15:07:18 2015
 import sys, os
 import csv
 import glob
+import json
 
 import cPickle as pickle
 
@@ -30,10 +31,12 @@ from os.path import join
 
 
 from settings import settings as S
-from settings import state_path, state_fn, cfg_path, cfg_fn
+from settings import state_path, state_fn, cfg_path, cfg_fn, stateconf_cache_path
 
 NAME = os.path.basename(__file__)
 I = NAME + ":"
+INT = '       '
+
 
 
 
@@ -73,8 +76,11 @@ def parse_mainloop():
         
         stateconf_data[mid] = {}
         
-        parse_state(mid)        
-#        parse_cfg(mid)
+        data1 = parse_state(mid)
+        stateconf_data[mid].update(data1)
+
+        data2 = parse_cfg(mid)
+        stateconf_data[mid].update(data2)
        
 #        asw = all_models[mid]['asw']
 #        try:
@@ -86,21 +92,31 @@ def parse_mainloop():
 
 
 def parse_state(mid):
+    '''
+    since this takes a long time, this step will be cached as well
+    '''
     
-    INT = '       '
-    print INT,'parsing state', mid
+    print INT,'parsing state %010s ...' % mid,
+    sys.stdout.flush()
     
-    path = os.path.join(state_path, state_fn % mid)
+    cpath = join(stateconf_cache_path, state_fn%mid + '.pickle')
+    if os.path.isfile(cpath):
+        with open(cpath, 'rb') as f:
+            data = pickle.load(f)
+            print "DONE, found cached (%s)" % cpath
+            return data
+    
+    path = join(state_path, state_fn % mid)
 
     state = None
 
     try:
         state = loadstate(path)
     except IOError:
-        print INT,"!! error reading state %s, skipping" % mid
+        print "!! error reading state %s, skipping" % mid + " "*10 + "!!!"
         return
     except NameError:
-        print INT,"!! you didn't run this inside a glass env.. read the docu. ABORT"
+        print "!! you didn't run this inside a glass env.. read the docu. ABORT"
         sys.exit()     
         
 
@@ -117,12 +133,114 @@ def parse_state(mid):
         if M < M_min: M_min = M 
         if M > M_max: M_max = M
 
+    data = {
+        'Mtot_ens_ave': M_ens_ave,
+        'Mtot_min': M_min,
+        'Mtot_max': M_max,
+    }
     
-    stateconf_data[mid]['Mtot_ens_ave'] = M_ens_ave
-    stateconf_data[mid]['Mtot_min'] = M_min
-    stateconf_data[mid]['Mtot_max'] = M_max
+    print 'DONE -> %8.2e (%8.2e ... %8.2e)' % (M_ens_ave, M_min, M_max)
+
+    # cache the result
+    with open(cpath, 'wb') as f:
+        pickle.dump(data, f, -1)
+
+    return data
+
+
+
+
+
+def parse_cfg(mid):
     
-    print INT,'    %9.2e (%9.2e ... %9.2e)' % (M_ens_ave, M_min, M_max)
+    print INT,'parsing config %010s ...' % mid,
+    sys.stdout.flush()
+    
+    #determine the type of config file
+    
+    if len(mid)==6:
+        tp = 'old'
+    elif len(mid)==10:
+        tp = 'new'
+    else:
+        print "ERROR, some problem here, cant estimate the type    !!!"
+        sys.exit()
+
+    print tp,
+    sys.stdout.flush()
+        
+    path = join(cfg_path, cfg_fn % mid)
+
+    with open(path) as f:
+        lines = f.readlines()
+        
+    
+    glsv = 1
+    lmtv = ''
+    pxscale = 0.0
+    pixrad = 0
+    nmodel = 0
+    zlens = 0.0
+    zsrc = 0.0
+    user = ''
+    
+    
+    if tp=='old':
+        for l in lines:
+            if l.startswith("# LMT_GLS_v"):
+                glsv = l[11:12]
+            if l.startswith("# LMT_v"):
+                lmtv = l[7:-1]
+            if l.startswith(" 'pxScale'"):
+                pxscale = l.split(':')[1].strip()[:-1]
+            if l.startswith('pixrad('):
+                pixrad = l.split('(')[1].split(')')[0]
+            if l.startswith('model('):
+                nmodel = l.split('(')[1].split(')')[0]
+            if l.startswith('zlens('):
+                zlens = l.split('(')[1].split(')')[0]
+            if l.startswith('source('):
+                zsrc = l.split('(')[1].split(',')[0]
+            if l.startswith('meta(author='):
+                user = l.split("'")[1]
+#        created_on = oldtabledate[mid][:19]
+                
+    else:
+        try:
+            jcfg = json.loads(''.join(lines))
+        except:
+            "      !! error could not load json file", mid
+            return ['',]*6
+        
+        glsv = '5'
+        lmtv = '2.0.0'
+        pxscale = jcfg['obj']['pxScale']
+        pixrad = jcfg['obj']['pixrad']
+        nmodel = jcfg['obj']['n_models']
+        zlens = jcfg['obj']['z_lens']
+        zsrc = jcfg['obj']['z_src']
+        user = jcfg['obj']['author']
+        ddd = jcfg['created_at']
+        created_on = ddd[:10]+' '+ddd[11:-1]
+        
+    print "DONE", 
+            
+    #return (glsv, lmtv, pxscale, pixrad, nmodel, zlens, zsrc)
+    
+    data = {
+        'gls_ver'     : int(     glsv    ),
+        'lmt_ver'     : str(     lmtv    ),
+        'pixscale'    : float(   pxscale ),
+        'user'        : unicode( user    ).strip(),
+        'pixrad'      : int(     pixrad  ),
+        'n_models'    : int(     nmodel  ),
+        'z_src_used'  : float(   zsrc    ),
+        'z_lens_used' : float(   zlens   ),
+        'created_on'  : str(     created_on)
+    }
+    
+    return data
+    
 
 
 
