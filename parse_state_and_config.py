@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-
 execute this file in an interactive glass ipython shell
+
+Does double cache the stuff..
+creates per element pickles and a total pickle as all the other scripts do
 
 cd .
 ../glass/interactive_glass
 
 %run <this_file.py>
 
-thats why is't not good to use this as an import package..
-(even if the code to do so is there..)
-instead, just load the pickle
+
+If cached files exist, glass is not needed.
+So this file can be imported as usual..
+
+Idea. Run on it's own inside glass env first time
+afterwards you can just run the rest of the chain
 
 
 Created on Wed Oct 28 15:07:18 2015
@@ -37,6 +42,9 @@ NAME = os.path.basename(__file__)
 I = NAME + ":"
 INT = '       '
 
+
+pickle_fn = join(S['cache_dir'], 'parsed_state_and_config_files.pickle')
+csv_fn    = join(S['temp_dir'],  'parsed_state_and_config_files.csv')
 
 
 
@@ -155,9 +163,16 @@ def parse_cfg(mid):
     
     print INT,'parsing config %010s ...' % mid,
     sys.stdout.flush()
+
+
+    cpath = join(stateconf_cache_path, cfg_fn%mid + '.pickle')
+    if os.path.isfile(cpath):
+        with open(cpath, 'rb') as f:
+            data = pickle.load(f)
+            print "DONE, found cached (%s)" % cpath
+            return data
     
     #determine the type of config file
-    
     if len(mid)==6:
         tp = 'old'
     elif len(mid)==10:
@@ -175,34 +190,37 @@ def parse_cfg(mid):
         lines = f.readlines()
         
     
-    glsv = 1
-    lmtv = ''
-    pxscale = 0.0
-    pixrad = 0
-    nmodel = 0
-    zlens = 0.0
-    zsrc = 0.0
-    user = ''
+    _ = {
+        'gls_ver': 1,
+        'lmt_ver': '',
+        'pxscale': 0.0,
+        'pixrad': 0,
+        'n_models': 0,
+        'z_lens_used': 0.0,
+        'z_src_used': 0.0,
+        'user': '',
+        'type': tp,
+    }
     
     
     if tp=='old':
         for l in lines:
             if l.startswith("# LMT_GLS_v"):
-                glsv = l[11:12]
+                _['gls_ver'] = l[11:12]
             if l.startswith("# LMT_v"):
-                lmtv = l[7:-1]
+                _['lmt_ver'] = l[7:-1]
             if l.startswith(" 'pxScale'"):
-                pxscale = l.split(':')[1].strip()[:-1]
+                _['pxscale'] = l.split(':')[1].strip()[:-1]
             if l.startswith('pixrad('):
-                pixrad = l.split('(')[1].split(')')[0]
+                _['pixrad'] = l.split('(')[1].split(')')[0]
             if l.startswith('model('):
-                nmodel = l.split('(')[1].split(')')[0]
+                _['n_models'] = l.split('(')[1].split(')')[0]
             if l.startswith('zlens('):
-                zlens = l.split('(')[1].split(')')[0]
+                _['z_lens_used'] = l.split('(')[1].split(')')[0]
             if l.startswith('source('):
-                zsrc = l.split('(')[1].split(',')[0]
+                _['z_src_used'] = l.split('(')[1].split(',')[0]
             if l.startswith('meta(author='):
-                user = l.split("'")[1]
+                _['user'] = l.split("'")[1]
 #        created_on = oldtabledate[mid][:19]
                 
     else:
@@ -212,33 +230,51 @@ def parse_cfg(mid):
             "      !! error could not load json file", mid
             return ['',]*6
         
-        glsv = '5'
-        lmtv = '2.0.0'
-        pxscale = jcfg['obj']['pxScale']
-        pixrad = jcfg['obj']['pixrad']
-        nmodel = jcfg['obj']['n_models']
-        zlens = jcfg['obj']['z_lens']
-        zsrc = jcfg['obj']['z_src']
-        user = jcfg['obj']['author']
+        _['gls_ver']     = '5'
+        _['lmt_ver']     = '2.0.0'
+        _['pxscale']     = jcfg['obj']['pxScale']
+        _['pixrad']      = jcfg['obj']['pixrad']
+        _['n_models']    = jcfg['obj']['n_models']
+        _['z_lens_used'] = jcfg['obj']['z_lens']
+        _['z_src_used']  = jcfg['obj']['z_src']
+        _['user']        = jcfg['obj']['author']
         ddd = jcfg['created_at']
-        created_on = ddd[:10]+' '+ddd[11:-1]
+        _['created_on'] = ddd[:10]+' '+ddd[11:-1]
         
-    print "DONE", 
-            
-    #return (glsv, lmtv, pxscale, pixrad, nmodel, zlens, zsrc)
-    
-    data = {
-        'gls_ver'     : int(     glsv    ),
-        'lmt_ver'     : str(     lmtv    ),
-        'pixscale'    : float(   pxscale ),
-        'user'        : unicode( user    ).strip(),
-        'pixrad'      : int(     pixrad  ),
-        'n_models'    : int(     nmodel  ),
-        'z_src_used'  : float(   zsrc    ),
-        'z_lens_used' : float(   zlens   ),
-        'created_on'  : str(     created_on)
+    # convert to proper datatype MAKE SURE all are listed here!
+    cast = {
+        'gls_ver'     : int,
+        'lmt_ver'     : str,
+        'pxscale'     : float,
+        'user'        : (lambda x: unicode(x).strip()),
+        'pixrad'      : int,
+        'n_models'    : int,
+        'z_src_used'  : float,
+        'z_lens_used' : float,
+        'created_on'  : str,
+        'type'        : str,
     }
     
+    data = {}
+    
+    print "(",
+    for k,v in _.items():
+        try:
+            dd = cast[k](v)
+        except KeyError:
+            print "ERROR with casting..", k, v, cast[k]
+            sys.exit(1)
+        data[k] = dd
+        print '%s:%s; ' % (k,dd),
+
+    print ")",
+        
+    # cache the result
+    with open(cpath, 'wb') as f:
+        pickle.dump(data, f, -1)
+    
+    print "DONE"
+
     return data
     
 
