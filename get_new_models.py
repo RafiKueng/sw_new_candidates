@@ -6,7 +6,7 @@ Created on Wed Oct 28 00:53:28 2015
 """
 
 
-import sys, os
+import sys, os, csv
 
 import requests as rq
 import cPickle as pickle
@@ -24,7 +24,7 @@ pickle_fn = join(S['cache_dir'], 'new_models.pickle')
 csv_fn    = join(S['temp_dir'],  'new_models.csv')
 
 
-new_models = {}
+DATA = {}
 
 
 def get_from_labs():
@@ -49,36 +49,76 @@ def get_from_labs():
         }    
 
         print '    got: ', mid, asw
-        new_models[mid] = data
+        DATA[mid] = data
 
 
 
+
+
+
+##############################################################################
 
 
 def save_pickle():
-    print I, 'save data to cache (pickle)'
+    print I, 'save data to cache (pickle)',
     with open(pickle_fn, 'wb') as f:
-        pickle.dump(new_models, f, -1)
+        pickle.dump(DATA, f, -1)
+    print "DONE"
         
 def load_pickle():
-    print I, 'load cached data from pickle'
+    print I, 'load cached data from pickle',
     with open(pickle_fn, 'rb') as f:
-        return pickle.load(f)
+        p = pickle.load(f)
+    print "DONE"
+    return p
 
-def save_csv():
-    print I, 'save_csv'
+def save_csv(pkey_n = 'mid'):
+    print I, 'save_csv',
 
     with open(csv_fn, 'w') as f:
-        for mid, v in new_models.items():
-            f.write(mid + ',' + ','.join(v.values())+'\n')
+        
+        # get all available keys
+        keys = set([pkey_n])
+        for v in DATA.values():
+            keys.update(v.keys())
+
+        # write output
+        csvw = csv.DictWriter(f, fieldnames=keys, extrasaction='ignore')
+        csvw.writeheader()
+        for pkey, v in DATA.items():
+            d=dict()
+            d.update({pkey_n:pkey})
+            d.update(v)
+            csvw.writerow(d)
+
+    print "DONE"
+
 
 ### MAIN #####################################################################
 
+print I, "START\n"
+
+if len(sys.argv)>1:
+
+    if '-d' in sys.argv:
+        print I,"deleting cache and quitting"
+        try:
+            os.remove(pickle_fn)
+        except OSError:
+            pass
+
+    print I,"DONE"
+    sys.exit()
+        
+
 if os.path.isfile(pickle_fn):
-    new_models = load_pickle()
+    DATA = load_pickle()
     save_csv()
     
 else:
     get_from_labs()
     save_pickle()
     save_csv()
+
+print '\n',I, "FINISHED\n\n" + '-'*80 + '\n'
+
