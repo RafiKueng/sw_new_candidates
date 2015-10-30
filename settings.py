@@ -51,4 +51,4 @@ for p in [
         os.makedirs(p)
 
 # cosmetics
-INT = '    ' # default 1 level intentsion
+INT = ' '*4 # default 1 level intentsion

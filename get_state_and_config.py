@@ -11,7 +11,7 @@ import os
 import requests as rq
 
 from settings import settings as S
-from settings import state_path, state_fn, cfg_path, cfg_fn
+from settings import INT, state_path, state_fn, cfg_path, cfg_fn
 
 from filter_models import filt_models as models
 
@@ -29,7 +29,7 @@ if not os.path.exists(cfg_path):
 
 def get_states():
     for i, mid in enumerate(models.keys()):
-        print "%5.1f%% getting state %12s " % (100.0/len(models.keys())*i, mid),
+        print INT,"%5.1f%% getting state %12s " % (100.0/len(models.keys())*i, mid),
         get_single_state(mid)
 
 
@@ -72,7 +72,7 @@ def stream_get(url, filepath):
 
 def get_configs():
     for i, mid in enumerate(models.keys()):
-        print "%5.1f%% getting config %12s" % (100.0/len(models.keys())*i, mid),
+        print INT,"%5.1f%% getting config %12s" % (100.0/len(models.keys())*i, mid),
         get_single_config_file(mid)
     
 
@@ -96,8 +96,13 @@ def get_single_config_file(mid):
 
 
 
-### MAIN ####################################################################
+### MAIN #####################################################################
+
+print I, "START\n"
 
 get_states()
 get_configs()
+
+print '\n',I, "FINISHED\n\n" + '-'*80 + '\n'
+
 

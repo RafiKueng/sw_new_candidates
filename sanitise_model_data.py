@@ -19,9 +19,11 @@ from os.path import join
 
 from settings import settings as S
 
-import parse_state_and_config as psac     # make sure this if first run in glass env..
 import filter_models as fimo
 import parse_candidates as paca
+import parse_state_and_config as psac       # make sure:
+                                            # 1) this if first run in glass env..
+                                            # 2) load this last of all modules
 
 from stelmass.angdiam import sig_factor
 
@@ -36,17 +38,16 @@ csv_fn     = join(S['temp_dir'],  'sane_data.csv')
 rawdata_fn = join(S['cache_dir'], 'parsed_state_and_config_files.pickle')
 
 
-sane_data = {'0000':{'a':1}}
-sane_data = {}
+DATA = {}
 rawdata = {}
 
 
 def sanitise():
     print I, "main start"
     
-    sane_data.update(psac.DATA)
+    DATA.update(psac.DATA)
     
-    for mid in sane_data.keys():
+    for mid in DATA.keys():
 
         print I, "working on %s" % mid
         
@@ -70,7 +71,7 @@ def collect_data(mid):
         print '%s: %s;' % (str(k), str(v)),
     print ')',
     
-    sane_data[mid].update(data)
+    DATA[mid].update(data)
     print "DONE"
     
     
@@ -83,16 +84,16 @@ def correct_scaling(mid):
     
 
     # version 3 and higher have correct scaling already applied
-    if sane_data[mid]['gls_ver'] < 3 and sane_data[mid]['gls_ver'] >= 0:
+    if DATA[mid]['gls_ver'] < 3 and DATA[mid]['gls_ver'] >= 0:
         f = ( (scale_fact*100)**2 )
     else:
         f = 1
 
     print INT,'- correcting scaling f=%5.2f' % f
         
-    sane_data[mid]['Mtot_ave_scaled'] = sane_data[mid]['Mtot_ave_uncorrected'] * f
-    sane_data[mid]['Mtot_min_scaled'] = sane_data[mid]['Mtot_min_uncorrected'] * f
-    sane_data[mid]['Mtot_max_scaled'] = sane_data[mid]['Mtot_max_uncorrected'] * f
+    DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f
+    DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f
+    DATA[mid]['Mtot_max_scaled'] = DATA[mid]['Mtot_max_uncorrected'] * f
         
   
 
@@ -101,7 +102,7 @@ def correct_mass(mid):
     global model
     print INT,'- correcting mass for r'
     
-    model = sane_data[mid]  # this is a "pointer", updates should change the orginal as well
+    model = DATA[mid]  # this is a "pointer", updates should change the orginal as well
     
 #    try:
     zl_actual = model['z_lens_meassured']
@@ -143,27 +144,38 @@ def correct_mass(mid):
 ##############################################################################
 
 def save_pickle():
-    print I, 'save data to cache (pickle)'
+    print I, 'save data to cache (pickle)',
     with open(pickle_fn, 'wb') as f:
-        pickle.dump(sane_data, f, -1)
+        pickle.dump(DATA, f, -1)
+    print "DONE"
         
 def load_pickle():
-    print I, 'load cached data from pickle'
+    print I, 'load cached data from pickle',
     with open(pickle_fn, 'rb') as f:
-        return pickle.load(f)
+        p = pickle.load(f)
+    print "DONE"
+    return p
 
-def save_csv():
-    print I, 'save_csv'
+def save_csv(pkey_n = 'mid'):
+    print I, 'save_csv',
 
     with open(csv_fn, 'w') as f:
-
-        fieldnames = ['mid',] + sane_data.values()[0].keys()
-
-        csvw = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
-        csvw.writeheader()
         
-        for mid, v in sane_data.items():
-            csvw.write(v.update({'mid':mid}))
+        # get all available keys
+        keys = set([pkey_n])
+        for v in DATA.values():
+            keys.update(v.keys())
+
+        # write output
+        csvw = csv.DictWriter(f, fieldnames=keys, extrasaction='ignore')
+        csvw.writeheader()
+        for pkey, v in DATA.items():
+            d=dict()
+            d.update({pkey_n:pkey})
+            d.update(v)
+            csvw.writerow(d)
+
+    print "DONE"
 
 
 ### MAIN #####################################################################
@@ -181,15 +193,14 @@ if len(sys.argv)>1:
     sys.exit()
         
 
-#if os.path.isfile(pickle_fn):
-#    sane_data = load_pickle()
-#    save_csv()
-#    
-#else:
-#    sanitise()
-#    save_pickle()
-#    save_csv()
+if os.path.isfile(pickle_fn):
+    DATA = load_pickle()
+    save_csv()
+    
+else:
+    sanitise()
+    save_pickle()
+    save_csv()
 
-sanitise()
 
 
