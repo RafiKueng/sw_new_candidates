@@ -38,7 +38,7 @@ from settings import settings as S
 from settings import state_path, state_fn, cfg_path, cfg_fn, stateconf_cache_path
 
 import get_state_and_config as gsac # indirect import.. this file loads stuff genrerated by this module, so even if not used directly we need it to run prior
-gsac.I
+gsac.I # do this such that the gsac import lookes used ;)
 
 NAME = os.path.basename(__file__)
 I = NAME + ":"
