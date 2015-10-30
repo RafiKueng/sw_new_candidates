@@ -12,7 +12,7 @@ from os.path import join
 
 from settings import settings as S, INT
 
-from parse_candidates import DATA as candidates
+import parse_candidates as paca
 
 
 NAME = os.path.basename(__file__)
@@ -53,7 +53,7 @@ def get_stellar_masses(input_fn=input_fn):
     magsr = interp1d(z,sr)
     
     
-    for asw, lensdata in sorted(candidates['asw'].items()):
+    for asw, lensdata in sorted(paca.DATA.items()):
         swid = lensdata['swid']
         zp = lensdata['z_lens']
         mag = lensdata['m_i']

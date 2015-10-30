@@ -44,7 +44,7 @@ rawdata = {}
 def sanitise():
     print I, "main start"
     
-    sane_data.update(psac.stateconf_data)
+    sane_data.update(psac.DATA)
     
     for mid in sane_data.keys():
 

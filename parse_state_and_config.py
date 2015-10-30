@@ -25,7 +25,7 @@ Created on Wed Oct 28 15:07:18 2015
 
 
 
-import sys, os, shutil
+import sys, os, csv, shutil
 import glob
 import json
 
@@ -47,7 +47,7 @@ csv_fn    = join(S['temp_dir'],  'parsed_state_and_config_files.csv')
 
 
 
-stateconf_data = {}
+DATA = {}
 
 
 def parse_mainloop():
@@ -66,28 +66,34 @@ def parse_mainloop():
     all_mids = list(cfgmids & statemids)
     n_mids = len(all_mids)
     
-    print "status:"
-    print " - config files:", len(cfgmids)
-    print " - state  files:", len(statemids)
-    print " - both   files:", n_mids
-    print "-------"
-    print "we are missing:"
+    print INT,"status:"
+    print INT,"- config files:", len(cfgmids)
+    print INT,"- state  files:", len(statemids)
+    print INT,"- both   files:", n_mids
+    print INT,"-"*40
+    print INT,"we are missing:"
     for mid in sorted(list(cfgmids ^ statemids)): # symmetric_difference https://docs.python.org/2/library/sets.html
-        print " *", mid
-    print "-------\n"
+        print INT," *", mid
+    print INT,"-"*40+"\n"
+    
+    # saveguard
+    if not n_mids > 0:
+        print INT,"!!! ERROR: NO MODEL AND CONFIG FILES FOUND. ABORTING"
+        print INT,"make sure you run 'get_state_and_config' first!"
+        sys.exit(1)
     
     
     for i, mid in enumerate(sorted(all_mids)):
     
         print "%5.1f%% (% 3i/% 3i) working on %10s ..." % (100.0/n_mids*i, i, n_mids, mid)
         
-        stateconf_data[mid] = {}
+        DATA[mid] = {}
         
         data1 = parse_state(mid)
-        stateconf_data[mid].update(data1)
+        DATA[mid].update(data1)
 
         data2 = parse_cfg(mid)
-        stateconf_data[mid].update(data2)
+        DATA[mid].update(data2)
        
 
 
@@ -250,7 +256,7 @@ def parse_cfg(mid):
         'type'        : str,
     }
     
-    data = {}
+    dat = {}
     
     print "(",
     for k,v in _.items():
@@ -259,40 +265,56 @@ def parse_cfg(mid):
         except KeyError:
             print "ERROR with casting..", k, v, cast[k]
             sys.exit(1)
-        data[k] = dd
+        dat[k] = dd
         print '%s:%s; ' % (k,dd),
 
     print ")",
         
     # cache the result
     with open(cpath, 'wb') as f:
-        pickle.dump(data, f, -1)
+        pickle.dump(dat, f, -1)
     
     print "DONE"
 
-    return data
+    return dat
     
 
 
 
 
 def save_pickle():
-    print I, 'save data to cache (pickle)'
+    print I, 'save data to cache (pickle)',
     with open(pickle_fn, 'wb') as f:
-        pickle.dump(stateconf_data, f, -1)
+        pickle.dump(DATA, f, -1)
+    print "DONE"
         
 def load_pickle():
-    print I, 'load cached data from pickle'
+    print I, 'load cached data from pickle',
     with open(pickle_fn, 'rb') as f:
-        return pickle.load(f)
+        p = pickle.load(f)
+    print "DONE"
+    return p
 
-def save_csv():
-    print I, 'save_csv'
+def save_csv(pkey_n = 'asw'):
+    print I, 'save_csv',
 
     with open(csv_fn, 'w') as f:
-        f.write('mid,' + ','.join(stateconf_data.values()[0].keys())+'\n')
-        for mid, v in stateconf_data.items():
-            f.write(mid + ',' + ','.join([str(_) for _ in v.values()])+'\n')
+        
+        # get all available keys
+        keys = set([pkey_n])
+        for v in DATA.values():
+            keys.update(v.keys())
+
+        # write output
+        csvw = csv.DictWriter(f, fieldnames=keys, extrasaction='ignore')
+        csvw.writeheader()
+        for pkey, v in DATA.items():
+            d=dict()
+            d.update({pkey_n:pkey})
+            d.update(v)
+            csvw.writerow(d)
+
+    print "DONE"
 
 ### MAIN #####################################################################
 
@@ -321,7 +343,7 @@ if len(sys.argv)>1:
         
 
 if os.path.isfile(pickle_fn):
-    stateconf_data = load_pickle()
+    DATA = load_pickle()
     save_csv()
     
 else:
