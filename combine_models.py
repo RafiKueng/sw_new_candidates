@@ -6,72 +6,48 @@ Created on Wed Oct 28 01:13:26 2015
 """
 
 import os, sys
-
-import cPickle as pickle
-
 from os.path import join
 
-from settings import settings as S
+from settings import settings as S, INT, save_pickle, load_pickle, save_csv
+from settings import print_first_line, print_last_line, getI, del_cache
 
-import get_new_models as gnm
-import get_old_models as gom
-
-
-
-NAME = os.path.basename(__file__)
-I = NAME + ":"
+import get_new_models as GNMO
+import get_old_models as GOMO
 
 
-pickle_fn = join(S['cache_dir'], 'comb_models.pickle')
-csv_fn    = join(S['temp_dir'],  'comb_models.csv')
-
-
-comb_models = {}
+DATA = {}
 
 
 def combine():
-    for mid, data in gom.DATA.items():
-        comb_models[mid] = data
-    for mid, data in gnm.DATA.items():
-        comb_models[mid] = data
+
+    for mid, data in GOMO.DATA.items():
+        DATA[mid] = data
+    for mid, data in GNMO.DATA.items():
+        DATA[mid] = data
         
 
 
-
-def save_pickle():
-    print I, 'save data to cache (pickle)'
-    with open(pickle_fn, 'wb') as f:
-        pickle.dump(comb_models, f, -1)
-        
-def load_pickle():
-    print I, 'load cached data from pickle'
-    with open(pickle_fn, 'rb') as f:
-        return pickle.load(f)
-
-def save_csv():
-    print I, 'save_csv'
-
-    with open(csv_fn, 'w') as f:
-        for mid, v in comb_models.items():
-            f.write(mid + ',' + ','.join(v.values())+'\n')
 
 ### MAIN #####################################################################
 
+I = getI(__file__)
+print_first_line(I)
+
+pickle_fn = join(S['cache_dir'], 'combined_models.pickle')
+csv_fn    = join(S['temp_dir'],  'combined_models.csv')
+
 if len(sys.argv)>1:
-
-    if '-d' in sys.argv:
-        print I,"deleting cache and quitting"
-        try:
-            os.remove(pickle_fn)
-        except OSError:
-            pass
-
+    if '-d' in sys.argv: del_cache(I,pickle_fn)
+    print I,"DONE"
+    sys.exit()
+        
 
 if os.path.isfile(pickle_fn):
-    comb_models = load_pickle()
-    save_csv()
-    
+    DATA = load_pickle(I, pickle_fn)
 else:
     combine()
-    save_pickle()
-    save_csv()
+    save_pickle(I, pickle_fn, DATA)
+
+save_csv(I, csv_fn, DATA, 'mid')
+    
+print_last_line(I,DATA)

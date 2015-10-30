@@ -4,6 +4,9 @@ This corrects various things that are wrong in the raw data extracted
 from the models / config files in `parse_state_and_config.py`
 
 
+data basis is what was parsed from the config files
+additions should be made from other data sources
+
 
 Created on Thu Oct 29 11:30:31 2015
 
@@ -12,64 +15,69 @@ Created on Thu Oct 29 11:30:31 2015
 
 
 
-import sys, os, csv
-import cPickle as pickle
-
+import sys, os
 from os.path import join
 
-from settings import settings as S
+from settings import settings as S, INT, save_pickle, load_pickle, save_csv
+from settings import print_first_line, print_last_line, getI, del_cache
 
-import filter_models as fimo
-import parse_candidates as paca
-import parse_state_and_config as psac       # make sure:
+import filter_models as FIMO
+import parse_candidates as PACA
+import parse_state_and_config as PSAC       # make sure:
                                             # 1) this if first run in glass env..
                                             # 2) load this last of all modules
 
 from stelmass.angdiam import sig_factor
 
 
-NAME = os.path.basename(__file__)
-I = NAME + ":"
-INT = '    '
-
-
-pickle_fn  = join(S['cache_dir'], 'sane_data.pickle')
-csv_fn     = join(S['temp_dir'],  'sane_data.csv')
-rawdata_fn = join(S['cache_dir'], 'parsed_state_and_config_files.pickle')
-
-
 DATA = {}
-rawdata = {}
 
 
 def sanitise():
-    print I, "main start"
+    print I,"main start"
     
-    DATA.update(psac.DATA)
+    DATA.update(PSAC.DATA)
     
     for mid in DATA.keys():
 
-        print I, "working on %s" % mid
+        print INT,"working on %s" % mid
         
         collect_data(mid)
         correct_scaling(mid)
         correct_mass(mid)
-    
+ 
+
 
     
 def collect_data(mid):
-    print INT,'- collecting addidtional data',
+    '''
+    add data collected from other sources
+    (like the model listings from the server, aka gom and gnm aka FIMO)
+    '''
+    print INT*2,'- collecting addidtional data',
 
     data = {}
 
-    asw = fimo.filt_models[mid]['asw']
+    # add the mid.. sometimes it's useful if youo know your name ;)
+    data['mid'] = mid
+
+    # add the asw id from FIMO
+    asw = FIMO.DATA[mid]['asw']
     data['asw'] = asw
-    data['z_lens_meassured'] = paca.DATA[asw]['z_lens']
     
-    print INT*2,"(",
-    for k,v in data.items():
-        print '%s: %s;' % (str(k), str(v)),
-    print ')',
+    # add the real/messured redshift of the lens from PACA (candidates.tex)
+    data['z_lens_meassured'] = PACA.DATA[asw]['z_lens']
+    
+    # add the created_on time for old models from the server (it's not in the
+    # config, and thus not in PSAC)
+    if not DATA[mid]['created_on']: # of None
+        data['created_on'] = FIMO.DATA[mid]['created_on']
+    
+    if False:
+        print INT*3,"(",
+        for k,v in data.items():
+            print '%s: %s;' % (str(k), str(v)),
+        print ')',
     
     DATA[mid].update(data)
     print "DONE"
@@ -89,7 +97,7 @@ def correct_scaling(mid):
     else:
         f = 1
 
-    print INT,'- correcting scaling f=%5.2f' % f
+    print INT*2,'- correcting scaling f=%5.2f' % f
         
     DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f
     DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f
@@ -100,107 +108,67 @@ def correct_scaling(mid):
 model = {}
 def correct_mass(mid):
     global model
-    print INT,'- correcting mass for r'
+    print INT*2,'- correcting mass for redshifts',
     
     model = DATA[mid]  # this is a "pointer", updates should change the orginal as well
     
-#    try:
+
     zl_actual = model['z_lens_meassured']
     zs_actual = 2.0                 #!!!!!!!!! source redshifts not yet available, using estimate
     zl_used = model['z_lens_used']
     zs_used = model['z_src_used']
 
-#    except KeyError:
-#        print INT*2,"!!! redshifts not available !!!"
-#        return
-#        sys.exit(1)
-    
+   
        
     f_act = sig_factor(zl_actual,zs_actual)
     f_use = sig_factor(zl_used,zs_used)
+    fact = f_act / f_use
     
-    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
-        zl_actual,zl_used,zs_actual,zs_used,
-        f_act, f_use
-    )
+#    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
+#        zl_actual,zl_used,zs_actual,zs_used,
+#        f_act, f_use
+#    )
 
     keys = ['Mtot_ave', 'Mtot_min', 'Mtot_max']
     
     if zl_actual * zs_actual * zl_used * zs_used > 0:
         for k in keys:
             org_mass = model[k+'_scaled']
-            corr_mass = org_mass * f_act / f_use
+            corr_mass = org_mass * fact
             model[k+'_z_corrected'] = corr_mass
-            print INT*2,'> %s: %e -> %e' % (k,model[k+'_scaled'], model[k+'_z_corrected'])
+            #print INT*2,'> %s: %e -> %e' % (k,model[k+'_scaled'], model[k+'_z_corrected'])
     else:
         for k in keys:
             model[k+'_z_corrected'] = None
-        print INT*2,'> no data available!!'
+        #print INT*2,'> no data available!!'
+    print 'DONE (f=%.3f)' % fact
 
     
 
 
-
-##############################################################################
-
-def save_pickle():
-    print I, 'save data to cache (pickle)',
-    with open(pickle_fn, 'wb') as f:
-        pickle.dump(DATA, f, -1)
-    print "DONE"
-        
-def load_pickle():
-    print I, 'load cached data from pickle',
-    with open(pickle_fn, 'rb') as f:
-        p = pickle.load(f)
-    print "DONE"
-    return p
-
-def save_csv(pkey_n = 'mid'):
-    print I, 'save_csv',
-
-    with open(csv_fn, 'w') as f:
-        
-        # get all available keys
-        keys = set([pkey_n])
-        for v in DATA.values():
-            keys.update(v.keys())
-
-        # write output
-        csvw = csv.DictWriter(f, fieldnames=keys, extrasaction='ignore')
-        csvw.writeheader()
-        for pkey, v in DATA.items():
-            d=dict()
-            d.update({pkey_n:pkey})
-            d.update(v)
-            csvw.writerow(d)
-
-    print "DONE"
 
 
 ### MAIN #####################################################################
 
+I = getI(__file__)
+print_first_line(I)
+
+pickle_fn  = join(S['cache_dir'], 'sane_data.pickle')
+csv_fn     = join(S['temp_dir'],  'sane_data.csv')
+
 if len(sys.argv)>1:
-
-    if '-d' in sys.argv:
-        print I,"deleting cache and quitting"
-        try:
-            os.remove(pickle_fn)
-        except OSError:
-            pass
-
-       
+    if '-d' in sys.argv: del_cache(I,pickle_fn)
+    print I,"DONE"
     sys.exit()
         
 
 if os.path.isfile(pickle_fn):
-    DATA = load_pickle()
-    save_csv()
-    
+    DATA = load_pickle(I, pickle_fn)
 else:
     sanitise()
-    save_pickle()
-    save_csv()
+    save_pickle(I, pickle_fn, DATA)
 
-
+save_csv(I, csv_fn, DATA, 'mid')
+    
+print_last_line(I,DATA)
 

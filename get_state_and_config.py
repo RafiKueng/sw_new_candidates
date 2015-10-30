@@ -10,31 +10,28 @@ import os
 
 import requests as rq
 
-from settings import settings as S
-from settings import INT, state_path, state_fn, cfg_path, cfg_fn
+from settings import settings as S, INT
+from settings import print_first_line, print_last_line, getI, del_cache
+from settings import state_path, state_fn, cfg_path, cfg_fn
 
-from filter_models import filt_models as models
+import filter_models as FIMO
 
-NAME = os.path.basename(__file__)
-I = NAME + ":"
-
-
+# safeguard
 if not os.path.exists(state_path):
     os.makedirs(state_path)
 if not os.path.exists(cfg_path):
     os.makedirs(cfg_path)
 
-#all_models = get_all_models.data
       
 
 def get_states():
-    for i, mid in enumerate(models.keys()):
-        print INT,"%5.1f%% getting state %12s " % (100.0/len(models.keys())*i, mid),
+    for i, mid in enumerate(FIMO.DATA.keys()):
+        print INT,"%5.1f%% | getting state %12s " % (100.0/len(FIMO.DATA.keys())*i, mid),
         get_single_state(mid)
 
 
 def get_single_state(mid):
-    if models[mid]['type']=='old':
+    if FIMO.DATA[mid]['type']=='old':
         url = 'http://mite.physik.uzh.ch/result/%s/state.txt' % mid    
     else:
         p1 = mid[:2]
@@ -62,7 +59,7 @@ def stream_get(url, filepath):
         return
 
     if 'content-type' in r.headers and 'json' in r.headers['content-type']:
-        print 'ERROR while getting %s (%s)' % (filepath, url)
+        print 'ERROR while getting %s (%s)' % (filepath, url),
         return
 
     with open(filepath, 'w') as f:
@@ -71,14 +68,14 @@ def stream_get(url, filepath):
     
 
 def get_configs():
-    for i, mid in enumerate(models.keys()):
-        print INT,"%5.1f%% getting config %12s" % (100.0/len(models.keys())*i, mid),
+    for i, mid in enumerate(FIMO.DATA.keys()):
+        print INT,"%5.1f%% | getting config %12s" % (100.0/len(FIMO.DATA.keys())*i, mid),
         get_single_config_file(mid)
     
 
 def get_single_config_file(mid):
     
-    if models[mid]['type']=='old':
+    if FIMO.DATA[mid]['type']=='old':
         url = 'http://mite.physik.uzh.ch/result/%s/cfg.gls' % mid
     else:
         url = 'http://labs.spacewarps.org:8080/db/spaghetti/%s' % mid
@@ -98,11 +95,12 @@ def get_single_config_file(mid):
 
 ### MAIN #####################################################################
 
-print I, "START\n"
+I = getI(__file__)
+print_first_line(I)
 
 get_states()
 get_configs()
 
-print '\n',I, "FINISHED\n\n" + '-'*80 + '\n'
+print_last_line(I,FIMO.DATA)
 
 

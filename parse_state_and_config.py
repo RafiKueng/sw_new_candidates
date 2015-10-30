@@ -25,29 +25,17 @@ Created on Wed Oct 28 15:07:18 2015
 
 
 
-import sys, os, csv, shutil
-import glob
-import json
+import sys, os, csv, shutil, glob, json
+from os.path import join
 
 import cPickle as pickle
 
-from os.path import join
-
-
-from settings import settings as S
+from settings import settings as S, INT, save_pickle, load_pickle, save_csv
+from settings import print_first_line, print_last_line, getI, del_cache
 from settings import state_path, state_fn, cfg_path, cfg_fn, stateconf_cache_path
 
 import get_state_and_config as gsac # indirect import.. this file loads stuff genrerated by this module, so even if not used directly we need it to run prior
 gsac.I # do this such that the gsac import lookes used ;)
-
-NAME = os.path.basename(__file__)
-I = NAME + ":"
-INT = '       '
-
-
-pickle_fn = join(S['cache_dir'], 'parsed_state_and_config_files.pickle')
-csv_fn    = join(S['temp_dir'],  'parsed_state_and_config_files.csv')
-
 
 
 DATA = {}
@@ -88,7 +76,7 @@ def parse_mainloop():
     
     for i, mid in enumerate(sorted(all_mids)):
     
-        print "%5.1f%% (% 3i/% 3i) working on %10s ..." % (100.0/n_mids*i, i, n_mids, mid)
+        print INT,"%5.1f%% (% 3i/% 3i) working on %10s ..." % (100.0/n_mids*i, i, n_mids, mid)
         
         DATA[mid] = {}
         
@@ -97,7 +85,8 @@ def parse_mainloop():
 
         data2 = parse_cfg(mid)
         DATA[mid].update(data2)
-       
+        
+        print "DONE"
 
 
 
@@ -149,7 +138,7 @@ def parse_state(mid):
         'Mtot_max_uncorrected': M_max,
     }
     
-    print 'DONE -> %8.2e (%8.2e ... %8.2e)' % (M_ens_ave, M_min, M_max)
+    print 'DONE (M_lens=%8.2e [%8.2e ... %8.2e])' % (M_ens_ave, M_min, M_max)
 
     # cache the result
     with open(cpath, 'wb') as f:
@@ -183,7 +172,7 @@ def parse_cfg(mid):
         print "ERROR, some problem here, cant estimate the type    !!!"
         sys.exit()
 
-    print tp,
+    #print tp,
     sys.stdout.flush()
         
     path = join(cfg_path, cfg_fn % mid)
@@ -261,7 +250,7 @@ def parse_cfg(mid):
     
     dat = {}
     
-    print "(",
+    #print "(",
     for k,v in _.items():
         try:
             dd = cast[k](v)
@@ -269,68 +258,33 @@ def parse_cfg(mid):
             print "ERROR with casting..", k, v, cast[k]
             sys.exit(1)
         dat[k] = dd
-        print '%s:%s; ' % (k,dd),
+        #print '%s:%s; ' % (k,dd),
 
-    print ")",
+    #print ")",
         
     # cache the result
     with open(cpath, 'wb') as f:
         pickle.dump(dat, f, -1)
     
-    print "DONE"
+    print "DONE (pixrad:%i; z=%.1f/%.1f; user:%s)" % (
+        dat['pixrad'], dat['z_lens_used'], dat['z_src_used'], dat['user'])
 
     return dat
     
 
 
-
-
-def save_pickle():
-    print I, 'save data to cache (pickle)',
-    with open(pickle_fn, 'wb') as f:
-        pickle.dump(DATA, f, -1)
-    print "DONE"
-        
-def load_pickle():
-    print I, 'load cached data from pickle',
-    with open(pickle_fn, 'rb') as f:
-        p = pickle.load(f)
-    print "DONE"
-    return p
-
-def save_csv(pkey_n = 'asw'):
-    print I, 'save_csv',
-
-    with open(csv_fn, 'w') as f:
-        
-        # get all available keys
-        keys = set([pkey_n])
-        for v in DATA.values():
-            keys.update(v.keys())
-
-        # write output
-        csvw = csv.DictWriter(f, fieldnames=keys, extrasaction='ignore')
-        csvw.writeheader()
-        for pkey, v in DATA.items():
-            d=dict()
-            d.update({pkey_n:pkey})
-            d.update(v)
-            csvw.writerow(d)
-
-    print "DONE"
-
 ### MAIN #####################################################################
 
-print I, "START\n"
+I = getI(__file__)
+print_first_line(I)
+
+pickle_fn = join(S['cache_dir'], 'data_from_state_and_config_files.pickle')
+csv_fn    = join(S['temp_dir'],  'data_from_state_and_config_files.csv')
+
 
 if len(sys.argv)>1:
 
-    if '-d' in sys.argv:
-        print I,"deleting cache and quitting (leaves the small pickles from models in place)"
-        try:
-            os.remove(pickle_fn)
-        except OSError:
-            pass
+    if '-d' in sys.argv: del_cache(I,pickle_fn)
 
     if '-D' in sys.argv:
         print I,"deleting cache and quitting (really everything)"
@@ -342,18 +296,19 @@ if len(sys.argv)>1:
         if not os.path.exists(stateconf_cache_path):
             os.makedirs(stateconf_cache_path) #restore path again
         
+    print I,"DONE"
     sys.exit()
         
 
 if os.path.isfile(pickle_fn):
-    DATA = load_pickle()
-    save_csv()
-    
+    DATA = load_pickle(I, pickle_fn)
 else:
     parse_mainloop()
-    save_pickle()
-    save_csv()
+    save_pickle(I, pickle_fn, DATA)
 
+save_csv(I, csv_fn, DATA, 'mid')
+    
+print_last_line(I,DATA)
 
 
 

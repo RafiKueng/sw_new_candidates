@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-this will load all models and returns only the ones, that were in the candidates list
+this will load all models and returns only the ones, that were in the
+candidates list.
+
+We filter this early in the stage such that we don't download and process
+too much data
 
 
 Created on Wed Oct 28 01:19:01 2015
@@ -9,69 +13,54 @@ Created on Wed Oct 28 01:19:01 2015
 """
 
 
-import os
-
-import cPickle as pickle
-
+import os, sys
 from os.path import join
 
-from settings import settings as S
-
-import combine_models as cm
-import parse_candidates as cands
+from settings import settings as S, INT, save_pickle, load_pickle, save_csv
+from settings import print_first_line, print_last_line, getI, del_cache
 
 
-
-NAME = os.path.basename(__file__)
-I = NAME + ":"
-
-
-pickle_fn = join(S['cache_dir'], 'filt_models.pickle')
-csv_fn    = join(S['temp_dir'],  'filt_models.csv')
+import combine_models as COMO
+import parse_candidates as PACA
 
 
-filt_models = {}
+DATA = {}
 
 
 def filter_models():
-    print I, "filtering"
+    print I, "filtering... select:"
 
-    for mid, data in cm.comb_models.items():
-        asw = data['asw']
-        print "   ", mid, asw, 
+    for mid, dat in COMO.DATA.items():
+        asw = dat['asw']
         
-        if asw in cands.MAP.keys():
-            filt_models[mid] = data
-            print 'taken'
+        if asw in PACA.MAP.keys():
+            DATA[mid] = dat
+            #print INT, "%10s (%s)" % (mid, asw)
         else:
-            print "GONE"
+            #print "GONE"
+            pass
+    print I,"status: total: %i / selected: %i" % (len(COMO.DATA.keys()), len(DATA.keys()))
 
 
-
-def save_pickle():
-    print I, 'save data to cache (pickle)'
-    with open(pickle_fn, 'wb') as f:
-        pickle.dump(filt_models, f, -1)
-        
-def load_pickle():
-    print I, 'load cached data from pickle'
-    with open(pickle_fn, 'rb') as f:
-        return pickle.load(f)
-
-def save_csv():
-    print I, 'save_csv'
-
-    with open(csv_fn, 'w') as f:
-        for mid, v in filt_models.items():
-            f.write(mid + ',' + ','.join(v.values())+'\n')
 
 ### MAIN #####################################################################
 
+I = getI(__file__)
+print_first_line(I)
+pickle_fn = join(S['cache_dir'], 'filtered_models.pickle')
+csv_fn    = join(S['temp_dir'],  'filtered_models.csv')
+
+if len(sys.argv)>1:
+    if '-d' in sys.argv: del_cache(I,pickle_fn)
+    print I,"DONE"
+    sys.exit()
+        
+
 if os.path.isfile(pickle_fn):
-    filt_models = load_pickle()
-    save_csv()
-    
+    DATA = load_pickle(I, pickle_fn)
 else:
     filter_models()
-    save_pickle()
-    save_csv()
+    save_pickle(I, pickle_fn, DATA)
+save_csv(I, csv_fn, DATA, 'mid')
+    
+print_last_line(I,DATA)
