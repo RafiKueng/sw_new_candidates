@@ -24,6 +24,8 @@ mssr = []
 def get_stellar_masses(input_fn=input_fn):
     
     print I,'generating stellar masses'
+    
+    DATA.update(paca.DATA)
 
     with open(input_fn) as fil:
         lyst = fil.readlines()[13:]
@@ -63,11 +65,13 @@ def get_stellar_masses(input_fn=input_fn):
 
         v = (msjr * mssr)**0.5 # geom.mean
 
-        DATA[asw] = {
+        dd = {
             'm_s_geom': v,
             'm_s_jr'  : msjr,
             'm_s_sr'  : mssr,        
         }
+        
+        DATA[asw].update(dd)
         
         print "DONE",
         print '(%9.2e %9.2e)' % (msjr,mssr)

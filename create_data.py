@@ -15,6 +15,7 @@ from os.path import join
 from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
 
+import get_stellar_pop as gspo
 import parse_candidates as paca
 import sanitise_model_data as samd
 
@@ -67,7 +68,7 @@ LENS_CANDIDATES = {}
 
 def create_lens_candidates():
     print I,"candidate lenses",
-    LENS_CANDIDATES.update(paca.DATA)
+    LENS_CANDIDATES.update(gspo.DATA)
     print "DONE"
 
 

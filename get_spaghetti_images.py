@@ -19,6 +19,8 @@ from create_data import ALL_MODELS
 
 imgdir = join(S['output_dir'],'images','spaghetti')
 
+
+
 ### MAIN #####################################################################
 
 def main():
