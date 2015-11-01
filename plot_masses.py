@@ -24,7 +24,6 @@ filename = '{_[swid]}_{_[asw]}_{_[mid]}_mstel_vs_mtot.png'
 if not os.path.exists(path):
     os.makedirs(path)
 
-
 from create_data import ONLY_RECENT_MODELS as MODELS, LENS_CANDIDATES as LENSES
 from parse_candidates import MAP as ASW2SWID, MAP as SWID2ASW
 
@@ -95,7 +94,13 @@ for i, _ in enumerate(data.items()):
     m_stellar = _['m_stellar']
     m_lens = _['m_lens']
     
-    print INT,"(%3.0f%%) plotting %s..." % (100.0*i/len(data.keys()), label)
+    print INT,"(%3.0f%%) plotting %s..." % (100.0*i/len(data.keys()), label),
+    
+    # filename
+    ffn = join(path, filename.format(_=_))
+    if os.path.exists(ffn):
+        print "exists, skipping (%s)" % ffn
+        continue
     
     # setup plot
     fig = plt.figure(figsize=(4,4), dpi=200)
@@ -124,6 +129,14 @@ for i, _ in enumerate(data.items()):
     ax.set_yscale("log", nonposy='clip')
     
     plt.tight_layout()
-    fig.savefig(join(path, filename.format(_=_)), dpi=200)
+    fig.savefig(ffn, dpi=200)
     #plt.show()
     #break
+    plt.clf()
+    plt.close(fig)
+    
+    print "Done"
+plt.close('all')
+
+print I,"OVER AND OUT"
+
