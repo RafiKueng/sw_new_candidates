@@ -1,0 +1,7 @@
+usepackage[dvipdfmx]{graphicx}
+
+extractbb on the images..
+
+
+convert to genrate eps save
+

@@ -89,6 +89,7 @@ def get_images(data):
             else:
                 i1 = i1.crop([100, 0, 600+100, 600+0])
             i1.save(path)
+            #i1.save(path[:-3] + 'eps')
             print "cut,",
             print 'done'
             
