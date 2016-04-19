@@ -1,18 +1,44 @@
+# -*- coding: utf-8 -*-
+"""
+Created on some time ago
+
+@author: rafik
+"""
 
 import cPickle as pickle
 
+import parse_candidates as PACA
 
-print 'candidates, load_pickle'
-with open('candidates.pickle', 'rb') as f:
-    candidates = pickle.load(f)
+from settings import settings as S, INT, save_pickle, load_pickle, save_csv
+from settings import print_first_line, print_last_line, getI, del_cache
 
 
-data = {}
+file1 = "categorisation_of_quality.txt" # used to be cat_qual.txt
+file2 = "candidate_evaluation.txt" # used to be notes.txt
+file_manual = "manual_corrections.txt" # manual corrections, used to be manually.txt
+
+
+
+
+DATA = {}
 no_swid = []
 
-print "\nreading cat_qual.txt"            
+
+### MAIN #####################################################################
+
+I = getI(__file__)
+print_first_line(I)
+
+
+# print 'candidates, load_pickle'
+# with open('candidates.pickle', 'rb') as f:
+#     candidates = pickle.load(f)
+
+
+
+print I, "reading", file1
  
-with open("cat_qual.txt") as f:
+with open(file1) as f:
     for i, l in enumerate(f.readlines()):
         print "line %02i" % i,
         l = l.strip()
@@ -31,8 +57,8 @@ with open("cat_qual.txt") as f:
         if not swid == "----" and qua in ['+','-','?']:
             
             d = {'c1': (qua, txt), 'asw':asw,'swid':swid}
-            #data[asw] = d
-            data[swid] = d
+            #DATA[asw] = d
+            DATA[swid] = d
             print "[saved]"
         
         else:
@@ -53,9 +79,9 @@ for asw in no_swid:
 
 
 print '-'*80
-print "\nreading notes.txt"            
+print "\nreading", file2            
             
-with open("notes.txt") as f:
+with open(file2) as f:
     for i, l in enumerate(f.readlines()):
         print "line",i,
         l = l.strip()
@@ -73,15 +99,15 @@ with open("notes.txt") as f:
         print asw, swid, qua, tags
         dd = {'c2': (qua, tags),'asw':asw,'swid':swid}
         
-        if data.has_key(swid) and not data[swid]['asw'] == asw:
+        if DATA.has_key(swid) and not DATA[swid]['asw'] == asw:
             print "  !! paranoia alarm"
         
-        if not data.has_key(swid):
+        if not DATA.has_key(swid):
             print "  !! new one"
-            #data[asw] = d
-            data[swid] = dd
+            #DATA[asw] = d
+            DATA[swid] = dd
         else:
-            data[swid].update(dd)
+            DATA[swid].update(dd)
 
 
 
@@ -105,12 +131,12 @@ with open("manually.txt") as f:
         dd = {'c3': (qua, tags),'asw':asw,'swid':swid}
         
         
-        if not data.has_key(swid):
+        if not DATA.has_key(swid):
             print "  !! new one"
-            #data[asw] = d
-            data[swid] = dd
+            #DATA[asw] = d
+            DATA[swid] = dd
         else:
-            data[swid].update(dd)
+            DATA[swid].update(dd)
 
 
 
@@ -122,7 +148,7 @@ print "\n\nchecking completeness"
 
 missing = []
 for cswid in candidates['swid'].keys():
-    if cswid not in data.keys():
+    if cswid not in DATA.keys():
         print " > missing:", cswid, candidates['swid'][cswid]['asw']
         missing.append((cswid, candidates['swid'][cswid]['asw']))
     
@@ -133,7 +159,7 @@ print '-'*80
 # check if we agree, just for fun, use second rating anyways
 print "\n\nchecking ratings"
 
-nicedata = {}
+niceDATA = {}
 
 lut = {
 #  2  convincong
@@ -158,7 +184,7 @@ flags_lut = {
 }
 
 
-for k,v in sorted(data.items()):
+for k,v in sorted(DATA.items()):
     swid = v['swid']
     asw = v['asw']
     flags = []
@@ -212,7 +238,7 @@ for k,v in sorted(data.items()):
                     if flag not in flags:
                         flags.append(flag)
     
-    nicedata[swid] = {'rating':rat, 'tags':tags, 'asw': asw, 'flags': flags}
+    niceDATA[swid] = {'rating':rat, 'tags':tags, 'asw': asw, 'flags': flags}
 
 
 
@@ -222,7 +248,7 @@ print '-'*80
 # general check for completeness
 print "\ngeneral check for completness\n"
 for swid in ['SW%02i'%i for i in range(1,60)]:
-    if not swid in nicedata.keys():
+    if not swid in niceDATA.keys():
         print " - missing:",swid
 
 print '-'*80
@@ -239,7 +265,7 @@ pst = r"\end{itemize}"
 for wrd, rat in {'convincing' : 2,'plausible' : 1,'unclear' : 0,'doubtful': -1}.items():
     print "\n"+ ttl % wrd
     print pre
-    for n in sorted([(k, d['asw']) for k, d in nicedata.items() if d['rating']==rat]):
+    for n in sorted([(k, d['asw']) for k, d in niceDATA.items() if d['rating']==rat]):
         print fmt % n
     print pst
 
@@ -251,7 +277,7 @@ print pst
     
 
 import cPickle as pickle
-pickle_filename = 'nicedata.pickle'
+pickle_filename = 'niceDATA.pickle'
 print 'eval.py: save_pickle'
 with open(pickle_filename, 'wb') as f:
     pickle.dump(candidates, f, -1)
