@@ -29,6 +29,7 @@ _=settings
 # where to store all the state and config files (uses gigabytes!)
 state_path = join(_['asset_dir'], 'models')
 cfg_path = join(_['asset_dir'], 'models')
+sworg_path = join(_['asset_dir'], 'spacewarps_orginals')
 
 # where to store the processed state file pickles
 stateconf_cache_path = join(_['cache_dir'], 'stateconf')
@@ -47,6 +48,7 @@ for k,v in settings.items():
 for p in [
         state_path,
         cfg_path,
+        sworg_path,
         stateconf_cache_path
     ]:
     if not os.path.exists(p):
