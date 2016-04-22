@@ -30,6 +30,7 @@ from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
 
 
+
 log = logging.getLogger(__name__)
 if len(log.handlers) ==0:
     log.addHandler(logging.StreamHandler())
@@ -37,8 +38,9 @@ log.setLevel(logging.DEBUG)
 
 log.debug("init logging")
 
-CRDA.ONLY_RECENT_MODELS
-CRDA.ALL_MODELS
+
+#CRDA.ONLY_RECENT_MODELS
+#CRDA.ALL_MODELS
 
 _path = _S.sworg_path
 _fn = "%s.png" # placeholder is asw name, should be the same as in DORG!
@@ -133,18 +135,27 @@ class RectCoords(object):
         
 
 
-_rectspec_pos = {
+_rectspec = {
+    'edgecolor': None,
+    'facecolor': None,
+    'alpha' : 0.5,
+    'fill': False,
+    'linewidth': 3.0
+}
+_rectspec_pos = {}
+_rectspec_pos.update(_rectspec)
+_rectspec_pos.update({
     'edgecolor': 'g',
     'facecolor': None,
     'fill': False,
-    'linewidth': 3.0       
-}
-_rectspec_neg = {
+})
+_rectspec_neg = {}
+_rectspec_neg.update(_rectspec)
+_rectspec_neg.update({
     'edgecolor': 'r',
     'facecolor': "r",
-    'alpha' : 0.5,
-    'linewidth': 3.0       
-}
+    'fill'     : True
+})
 
 
 class RectMask(RectCoords):
@@ -159,7 +170,7 @@ class RectMask(RectCoords):
         
         if kind is None:
             kind = '+'
-        self._kind = kind # '+': inclusive, '-' exclusive
+        self.kind = kind # '+': inclusive, '-' exclusive
         
         # set the corrdinates, that also sets the patch
         self.xy0 = xy0
@@ -304,6 +315,7 @@ class MasksHandler(object):
             h()
 
     def selfupdate(self):
+        log.debug("redraw canvas")
         self.ax.figure.canvas.draw()
 
 
@@ -324,15 +336,15 @@ class MasksHandler(object):
     def add_mask(self, xy0, xy1=None):
         if xy1 is None:
             xy1 = (xy0[0]+1, xy0[1]+1)
-        log.debug("add mask xy0=%s xy1=%s", xy0, xy1)
+        log.debug("add mask %s xy0=%s xy1=%s", self.mode, xy0, xy1)
         
         mask = RectMask(xy0, xy1, self.mode)
         
         self.masks.append(mask)
         self.selected_mask = mask
-
         self.ax.add_patch(mask.patch)
-        self.ax.draw_artist(mask.patch)
+        
+        self.selfupdate()
 
 
     def remove_mask(self, i=None):
@@ -341,8 +353,7 @@ class MasksHandler(object):
         if i is None:
             mask = self.selected_mask
         else:
-            mask = self.masks[i]
-            
+            mask = self.masks[i]            
 
         self.masks.remove(mask)
         
@@ -354,6 +365,8 @@ class MasksHandler(object):
         else:
             self.selected_mask = None
             
+        self.selfupdate()
+            
             
     def set_center(self, xy):
         log.debug("set center %s", xy)
@@ -364,6 +377,8 @@ class MasksHandler(object):
         else:
             self.cxl.set_xdata(xy[0])
             self.cyl.set_ydata(xy[1])
+            
+        self.selfupdate()
 
 
     def switch_mode(self, mode):
@@ -379,6 +394,8 @@ class MasksHandler(object):
 
         elif mode==".":
             pass
+        
+        self.selfupdate()
         
 
 
@@ -422,6 +439,8 @@ class MasksHandler(object):
             elif event.button == 3:
                 self.set_center(e_xy)
                 pass
+        
+            self.selfupdate()
 
 
     def on_mouse_move(self, event):
@@ -437,14 +456,14 @@ class MasksHandler(object):
                     
                 self.selected_mask.x1 = event.xdata
                 self.selected_mask.y1 = event.ydata
-
-                self.ax.draw_artist(self.selected_mask.patch)
+                self.selfupdate()
 
 
     def on_mouse_release(self, event):
         log.debug( 'mouse btn release (%s %s %s)', event.inaxes, event.button, event.key)
 #        if event.inaxes == self.ax:
 #            self.update()
+        self.selfupdate()
 
 
     
@@ -461,7 +480,7 @@ class RectangleZoomSelector(object):
             drawtype='box',
             minspanx=None,
             minspany=None,
-            useblit=False,
+            useblit=True,
             lineprops=None,
             rectprops=None,
             spancoords='data',
@@ -482,8 +501,8 @@ class RectangleZoomSelector(object):
             
             
     def selfupdate(self):
-        #self.ax2.figure.canvas.draw()
-        pass
+        self.ax1.figure.canvas.draw()
+
 
     def on_select(self, e_start, e_end):
         log.debug("RectangleZoomSelector on_select")
@@ -503,8 +522,9 @@ class RectangleZoomSelector(object):
 
 class ROIDisplay(object):
     
-    def __init__(self, ax, size=[1,1], roi=None, masks=None):
+    def __init__(self, ax, img, size=[1,1], roi=None, masks=None):
         self.ax = ax
+        self.img = img
         self.size = size
         self.roi = roi
         self.masks = masks
@@ -535,21 +555,138 @@ class ROIDisplay(object):
         self.mask[:,:] = 0
         
         # make sure to first include, then exclude again
-        for masks, v in [(incl, 255),(excl, 128)]:
+        for masks, v in [(incl, 255),(excl, 64)]:
             for mask in masks:
                 log.debug("ROI drawing, %s %s", v, mask)
-                self.mask[mask.slice2D] = v
+
+                if v == 255:
+                    self.mask[mask.slice2D] = self.img[mask.slice2D]
+                else:
+                    self.mask[mask.slice2D] = v
+
+                    
                 
         self.imgObj.set_data(self.mask)
         self.ax.set_xlim(self.roi.xlim)
         self.ax.set_ylim(self.roi.ylim_r)
-        
+
+        self.ax.figure.canvas.draw()        
                 
     def on_key_release(self, event):
         if event.key==" ":
             log.debug("ROI key release") 
             self.selfupdate()
             
+
+
+
+class Analysis(object):
+
+    def __init__(self, orgimg, maskH, axSynthImg, axSrcImg=None, axSrcImgGray=None, axCount=None, axDiff=None):
+        
+        self.orgimg = orgimg
+        self.maskH = maskH
+        self.axSynthImg = axSynthImg
+        self.axSrcImg = axSrcImg
+        self.axSrcImgGray = axSrcImgGray
+        self.axCount = axCount
+        self.axDiff = axDiff
+        
+        self.mask = None #TODO
+        self.center = None #TODO
+
+        self.synimg = orgimg * 0
+
+
+    def px2arcs(self, coords, center, pxsize = 0.187):
+    
+        x = coords[1]
+        y = -coords[0]
+    
+        cx, cy = self.center
+    
+        x = ( x-cx ) * pxsize
+        y = ( y-cy ) * pxsize
+        
+        return x+1j*y
+
+        
+    def run(self):
+        
+        glass_basis('glass.basis.pixels', solver=None)
+        exclude_all_priors()
+        
+        state = loadstate('012402.state')
+        state.make_ensemble_average()
+        
+        model = state.ensemble_average
+        
+        obj_index = 0
+        obj, ps = model['obj,data'][obj_index]
+
+        src_index = 0
+        src = ps['src'][src_index]
+
+        zcap = obj.sources[src_index].zcap
+        
+        def delta_beta(theta):
+            return src - theta + obj.basis.deflect(theta, ps) / zcap
+        
+        pixel = np.where(self.mask==True)
+        
+        theta = [self.px2arcs(p) for p in pixel]
+        d_source = np.array(map(delta_beta, theta))
+        
+        # range of grid on sourceplane
+        r = max(np.max(np.abs(d_source.real)), np.max(np.abs(d_source.imag)))
+        
+        # number of gridpoints on sourceplane (2M+1)
+        M = 20
+        
+        X = np.int32(np.floor(M*(1+d_source.real/r)+.5))
+        Y = np.int32(np.floor(M*(1+d_source.imag/r)+.5))
+        
+        pxllist = np.zeros((2*M+1,2*M+1), dtype=list)
+        srcimg  = np.zeros((2*M+1,2*M+1,3), dtype=np.uint8)
+        srcimg_gray = np.zeros((2*M+1,2*M+1), dtype=np.uint8)
+        cntimg  = np.zeros((2*M+1,2*M+1), dtype=np.uint8)
+        
+        for (x,y), value in np.ndenumerate(pxllist):
+            pxllist[x,y] = []
+            
+        for i, pnt in enumerate(d_source):
+            x,y = (X[i], Y[i])
+            pxllist[x,y].append(i)
+        
+        
+        self.synimg = self.orgimg * 0
+        
+        for (x,y), lst in np.ndenumerate(pxllist):
+            n = len(lst)    
+            if n>0:
+                summ = np.array([0,0,0], dtype=np.int32)
+                for i in lst:
+                    ix,iy = pixel[i]
+                    summ += self.orgimg[ix,iy]
+                pxlave = np.uint8(np.clip((summ / n), 0, 255))
+        
+                srcimg[x,y] = pxlave
+                srcimg_gray[x,y] = np.average(pxlave)
+        
+                cntimg[x,y] = n
+                
+                for i in lst:
+                    ix,iy = pixel[i]
+                    self.synimg[ix,iy] = pxlave
+        
+        
+        
+    def on_key_release(self, event):
+        log.debug("analysis key release, %s", event.key)
+
+        if event.key=="enter":
+            self.run()
+
             
     
 
@@ -562,9 +699,10 @@ for asw in data:
     orgimg = sp.misc.imread(orgimg_path)
     
     fig = plt.figure()
-    ax1 = fig.add_subplot(1, 3, 1)
-    ax2 = fig.add_subplot(1, 3, 2)
-    ax3 = fig.add_subplot(1, 3, 3)
+    ax1 = fig.add_subplot(1, 4, 1)
+    ax2 = fig.add_subplot(1, 4, 2)
+    ax3 = fig.add_subplot(1, 4, 3)
+    ax4 = fig.add_subplot(1, 4, 4)
 
     mpl_img1 = ax1.imshow(orgimg, interpolation="none", origin='upper')
     mpl_img2 = ax2.imshow(orgimg, interpolation="none", origin='upper')
@@ -581,16 +719,18 @@ for asw in data:
         ax2.xaxis.set_visible(False)
         ax2.yaxis.set_visible(False)
     
-    hotkeys = GlobalHotkeyHandler(fig)
-    h_c = mpl.widgets.MultiCursor(fig.canvas, (ax1, ax2, ax3), color='r', lw=1, horizOn=True, vertOn=True,useblit=False)
+    hotkeysHandle = GlobalHotkeyHandler(fig)
+    multiCursorHandle = mpl.widgets.MultiCursor(fig.canvas, (ax1, ax2, ax3), color='r', lw=1, horizOn=True, vertOn=True,useblit=True)
 
     #h_z = ZoomHandler(ax1,ax2)
-    zoomsel = RectangleZoomSelector(ax1,ax2)
-    masksel = MasksHandler(ax2)
-    maskshow = ROIDisplay(ax3, orgimg.shape, zoomsel.c, masksel.masks)
+    zoomH = RectangleZoomSelector(ax1,ax2)
+    maskH = MasksHandler(ax2)
+    roiH  = ROIDisplay(ax3, orgimg, orgimg.shape, zoomH.c, maskH.masks)
+    analH = Analysis(orgimg, roiH, ax4)
 
-    zoomsel.register(masksel.update)
-    #masksel.register(maskshow.update)
+    # tell the next step in the pipeline to update automatically
+    zoomH.register(maskH.update)
+    
     
     
     fig.show()
