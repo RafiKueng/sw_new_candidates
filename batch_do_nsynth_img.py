@@ -8,12 +8,13 @@ Created on Tue Apr 19 20:37:05 2016
 import os
 import sys
 import logging
+import cPickle as pickle
 
 import numpy as np
 import scipy as sp
 import scipy.misc
 import matplotlib as mpl
-mpl.use('Qt4Agg') 
+mpl.use('Qt4Agg') # the default Qt5Agg is really buggy at the moment
 import matplotlib.pyplot as plt
 import matplotlib.widgets
 
@@ -38,6 +39,7 @@ log.setLevel(logging.DEBUG)
 
 log.debug("init logging")
 
+plt.ioff()
 
 #CRDA.ONLY_RECENT_MODELS
 #CRDA.ALL_MODELS
@@ -48,7 +50,18 @@ _fn = "%s.png" # placeholder is asw name, should be the same as in DORG!
 
 data = ['ASW0007k4r']
 
+swid2asw = dict((v['swid'], k) for k, v in PACA.DATA.items())
+swid2model = dict(((m['swid'], k) for k,m in CRDA.ONLY_RECENT_MODELS.items()))
+asw2model = dict(((m['asw'], k) for k,m in CRDA.ALL_MODELS.items() if m.get('asw')))
 
+swidAswMid = [(swid, asw, asw2model[asw]) for swid, asw in swid2asw.items() if asw2model.get(asw)]
+
+# this would be a one to many..
+#rawasw = sorted([(m['asw'], k) for k,m in CRDA.ALL_MODELS.items() if m.get('asw')])
+#asw2model = {}
+#for asw,mid in rawasw:
+#    asw2model.setdefault(asw, []).append(mid)
+    
 
 
 class RectCoords(object):
@@ -61,7 +74,29 @@ class RectCoords(object):
         
     def __str__(self):
         return "RectCoords((%4i/%4i) to (%4i/%4i))" % (self.x0, self.y0, self.x1, self.y1)
+
+    @property
+    def xy0(self):
+        return (self.x0, self.y0)
+
+    @property
+    def xy1(self):
+        return (self.x1, self.y1)
+
+    @xy0.setter
+    def xy0(self, v):
+        self.x0 = v[0]
+        self.y0 = v[1]
+
+    @xy1.setter
+    def xy1(self, v):
+        self.x1 = v[0]
+        self.y1 = v[1]
         
+    @property
+    def tuple(self):
+        return (self.xy0, self.xy1)
+
     @property
     def as_array(self):
         return np.array([self.x0, self.y0, self.x1, self.y1])
@@ -221,24 +256,6 @@ class RectMask(RectCoords):
         self.update()
 
     @property
-    def xy0(self):
-        return (self.x0, self.y0)
-
-    @property
-    def xy1(self):
-        return (self.x1, self.y1)
-
-    @xy0.setter
-    def xy0(self, v):
-        self.x0 = v[0]
-        self.y0 = v[1]
-
-    @xy1.setter
-    def xy1(self, v):
-        self.x1 = v[0]
-        self.y1 = v[1]
-
-    @property
     def kind(self):
         return self._kind
 
@@ -250,7 +267,10 @@ class RectMask(RectCoords):
         elif v == '-':
             self._kind = '-'
             self.patch.set(**_rectspec_neg)
-        
+    @property
+    def tuple(self):
+        return (self.xy0, self.xy1, self.kind)
+
     def update(self):
         pass
     
@@ -284,9 +304,12 @@ class GlobalHotkeyHandler(object):
 
 class MasksHandler(object):
     
-    def __init__(self, ax=None):
+    def __init__(self, ax=None, image=None, zoomH=None):
 
         self.ax = ax if ax is not None else plt.gca()
+        self.image = image        
+        self.zoomH = zoomH
+        
         self.update_handler = []
         self.register(self.selfupdate)
         self.mode = '+' # are we masking in [+], masking out [-] or setting the center[.]
@@ -333,12 +356,16 @@ class MasksHandler(object):
         self.selfupdate()
             
 
-    def add_mask(self, xy0, xy1=None):
+    def add_mask(self, xy0, xy1=None, mode=None):
+        
+        if mode is None:
+            mode = self.mode # can be over wridden for automatic loading
+            
         if xy1 is None:
             xy1 = (xy0[0]+1, xy0[1]+1)
-        log.debug("add mask %s xy0=%s xy1=%s", self.mode, xy0, xy1)
+        log.debug("add mask %s xy0=%s xy1=%s", mode, xy0, xy1)
         
-        mask = RectMask(xy0, xy1, self.mode)
+        mask = RectMask(xy0, xy1, mode)
         
         self.masks.append(mask)
         self.selected_mask = mask
@@ -379,7 +406,21 @@ class MasksHandler(object):
             self.cyl.set_ydata(xy[1])
             
         self.selfupdate()
-
+        
+        
+    def find_center(self):
+        # only consider red and green channel
+        l=list(self.zoomH.c.slice3D)
+        l[2] = np.s_[0:3]
+        rg = np.sum(self.image[l],axis=2)
+        rg = sp.ndimage.gaussian_filter(rg,3)
+        ox, oy = np.unravel_index(np.argmax(rg),rg.shape)
+        xx = ox+zoomH.c.x0
+        yy = ox+zoomH.c.y0
+        xy = (xx,yy)
+        log.debug("found center in %s", xy)
+        self.set_center(xy)
+        
 
     def switch_mode(self, mode):
         log.debug("switching mode to %s", mode)
@@ -393,7 +434,7 @@ class MasksHandler(object):
             self.selected_mask.kind = '-'
 
         elif mode==".":
-            pass
+            self.find_center()
         
         self.selfupdate()
         
@@ -481,12 +522,12 @@ class RectangleZoomSelector(object):
             minspanx=None,
             minspany=None,
             useblit=True,
-            lineprops=None,
-            rectprops=None,
+            #lineprops=None,
+            #rectprops=None,
             spancoords='data',
             button=None,
             maxdist=10,
-            marker_props=None,
+            #marker_props=None,
             interactive=True,
             #state_modifier_keys=None
         )
@@ -502,21 +543,22 @@ class RectangleZoomSelector(object):
             
     def selfupdate(self):
         self.ax1.figure.canvas.draw()
-
-
-    def on_select(self, e_start, e_end):
-        log.debug("RectangleZoomSelector on_select")
-        self.c.x0 = e_start.xdata
-        self.c.y0 = e_start.ydata
-        self.c.x1 = e_end.xdata
-        self.c.y1 = e_end.ydata
-        print self.c
-        print self.c.xlim
-        print self.c.ylim
+        
+    def set_zoom(self, xy0, xy1):
+        self.c.x0 = xy0[0]
+        self.c.y0 = xy0[1]
+        self.c.x1 = xy1[0]
+        self.c.y1 = xy1[1]
     
         self.ax2.set_xlim(self.c.xlim)
         self.ax2.set_ylim(self.c.ylim_r)
         self.update()
+        
+
+
+    def on_select(self, e_start, e_end):
+        log.debug("RectangleZoomSelector on_select")
+        self.set_zoom((e_start.xdata, e_start.ydata),(e_end.xdata, e_end.ydata))
     
 
 
@@ -525,15 +567,22 @@ class ROIDisplay(object):
     def __init__(self, ax, img, size=[1,1], roi=None, masks=None):
         self.ax = ax
         self.img = img
+        if len(size)==3:
+            size = size[0:2]
         self.size = size
         self.roi = roi
         self.masks = masks
-        self.mask = np.zeros(size, dtype=np.uint8)
+        self.maskimg = np.zeros(size+(3,), dtype=np.uint8)
+        self.binary_mask = np.zeros(size, dtype=np.bool)
         
-        self.imgObj = ax.imshow(self.mask, cmap='gray', interpolation="none")
+        self.imgObj = ax.imshow(self.maskimg, cmap='gray', interpolation="none")
  
         self.ax.figure.canvas.mpl_connect('key_release_event', self.on_key_release)
-       
+
+        
+    def register(self, fnc):
+        pass
+    
     def update(self):
         log.debug("ROI update")
         self.selfupdate()
@@ -552,21 +601,23 @@ class ROIDisplay(object):
         print incl
         print excl
         
-        self.mask[:,:] = 0
+        self.maskimg[:,:] = 0
         
         # make sure to first include, then exclude again
-        for masks, v in [(incl, 255),(excl, 64)]:
+        for masks, v in [(incl, True),(excl, False)]:
             for mask in masks:
                 log.debug("ROI drawing, %s %s", v, mask)
 
-                if v == 255:
-                    self.mask[mask.slice2D] = self.img[mask.slice2D]
+                if v:
+                    self.maskimg[mask.slice2D] = self.img[mask.slice2D]
+                    self.binary_mask[mask.slice2D] = True
                 else:
-                    self.mask[mask.slice2D] = v
+                    self.maskimg[mask.slice2D] = 64
+                    self.binary_mask[mask.slice2D] = False
 
                     
                 
-        self.imgObj.set_data(self.mask)
+        self.imgObj.set_data(self.maskimg)
         self.ax.set_xlim(self.roi.xlim)
         self.ax.set_ylim(self.roi.ylim_r)
 
@@ -579,26 +630,34 @@ class ROIDisplay(object):
             
 
 
+glass_basis('glass.basis.pixels', solver=None)
+exclude_all_priors()
 
 class Analysis(object):
 
-    def __init__(self, orgimg, maskH, axSynthImg, axSrcImg=None, axSrcImgGray=None, axCount=None, axDiff=None):
+    def __init__(self, orgimg, state_fn, zoomH, maskH, roiH, axSynthImg, axSrcImg=None, axSrcImgGray=None, axCount=None, axDiff=None):
         
         self.orgimg = orgimg
-        self.maskH = maskH
+        self.state_fn = state_fn
+        
+        self.zoomH = zoomH
+        self.maskH = maskH # yea thats not good coding, but a lot faster than fixing all the things..
+        self.roiH = roiH
+        
         self.axSynthImg = axSynthImg
         self.axSrcImg = axSrcImg
         self.axSrcImgGray = axSrcImgGray
         self.axCount = axCount
         self.axDiff = axDiff
         
-        self.mask = None #TODO
-        self.center = None #TODO
+        self.mask = None # just set it when we know its ready
+        self.center = None
 
         self.synimg = orgimg * 0
 
+        self.axSynthImg.figure.canvas.mpl_connect('key_release_event', self.on_key_release)
 
-    def px2arcs(self, coords, center, pxsize = 0.187):
+    def px2arcs(self, coords, pxsize = 0.187):
     
         x = coords[1]
         y = -coords[0]
@@ -610,13 +669,24 @@ class Analysis(object):
         
         return x+1j*y
 
+
+    def update(self):
+        s2d = self.zoomH.c.slice2D
+        s3d = self.zoomH.c.slice3D
+        
+        self.orgimg_c = self.orgimg[s3d]
+        self.mask = self.roiH.binary_mask[s2d]
+        self.center = self.maskH.center
+        if self.center is None:
+            log.warn("no center selected, aborting !!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            return
+        
+        self.run()
+
         
     def run(self):
         
-        glass_basis('glass.basis.pixels', solver=None)
-        exclude_all_priors()
-        
-        state = loadstate('012402.state')
+        state = loadstate(self.state_fn)
         state.make_ensemble_average()
         
         model = state.ensemble_average
@@ -632,7 +702,9 @@ class Analysis(object):
         def delta_beta(theta):
             return src - theta + obj.basis.deflect(theta, ps) / zcap
         
-        pixel = np.where(self.mask==True)
+        # get Pixel Indices in X/Y direction where mask is true
+        pix, piy = np.where(self.mask==True)
+        pixel = np.array((pix, piy)).T # merge the two lists and reformate
         
         theta = [self.px2arcs(p) for p in pixel]
         d_source = np.array(map(delta_beta, theta))
@@ -659,7 +731,7 @@ class Analysis(object):
             pxllist[x,y].append(i)
         
         
-        self.synimg = self.orgimg * 0
+        self.synimg = self.orgimg_c * 0
         
         for (x,y), lst in np.ndenumerate(pxllist):
             n = len(lst)    
@@ -667,7 +739,7 @@ class Analysis(object):
                 summ = np.array([0,0,0], dtype=np.int32)
                 for i in lst:
                     ix,iy = pixel[i]
-                    summ += self.orgimg[ix,iy]
+                    summ += self.orgimg_c[ix,iy]
                 pxlave = np.uint8(np.clip((summ / n), 0, 255))
         
                 srcimg[x,y] = pxlave
@@ -679,22 +751,30 @@ class Analysis(object):
                     ix,iy = pixel[i]
                     self.synimg[ix,iy] = pxlave
         
-        
+        log.debug("showing result of analysis")
+        self.axSynthImg.imshow(self.synimg)
+        #self.axSynthImg.set_xlim(self.roiH.ax.get_xlim())
+        #self.axSynthImg.set_ylim(self.roiH.ax.get_ylim())
+        self.axSynthImg.figure.canvas.draw()
         
     def on_key_release(self, event):
         log.debug("analysis key release, %s", event.key)
 
         if event.key=="enter":
-            self.run()
+            self.update()
 
             
-    
 
-for asw in data:
+swidAswMid = [("sw00", 'ASW0007k4r', "012402")]
+
+for swid, asw, mid in swidAswMid:
+    
+    log.info("working on %s %s %s", swid, asw, mid)
     
     orgimg_path = os.path.join(_path, _fn%asw)
     if not os.path.isfile(orgimg_path):
         DORG.download_from_spacewarps(asw)
+    state_path = os.path.join(_S.state_path, _S.state_fn%mid)
     
     orgimg = sp.misc.imread(orgimg_path)
     
@@ -709,8 +789,9 @@ for asw in data:
     tmp      = ax3.imshow(orgimg, interpolation="none", origin='upper')
 
     ax1.set_title("1. choose region of interest")
-    ax2.set_title("2. add + / rem - mask")
+    ax2.set_title("2. add + / rem - mask; right clk to set center")
     ax3.set_title("3. [space] to refresh pixel mask")
+    ax3.set_title("4. [enter] to get synth img")
     
 
     if False:
@@ -720,23 +801,45 @@ for asw in data:
         ax2.yaxis.set_visible(False)
     
     hotkeysHandle = GlobalHotkeyHandler(fig)
-    multiCursorHandle = mpl.widgets.MultiCursor(fig.canvas, (ax1, ax2, ax3), color='r', lw=1, horizOn=True, vertOn=True,useblit=True)
+    multiCursorHandle = mpl.widgets.MultiCursor(fig.canvas, (ax1, ax2, ax3, ax4), color='r', lw=1, horizOn=True, vertOn=True,useblit=True)
 
     #h_z = ZoomHandler(ax1,ax2)
     zoomH = RectangleZoomSelector(ax1,ax2)
-    maskH = MasksHandler(ax2)
+    maskH = MasksHandler(ax2, orgimg, zoomH)
     roiH  = ROIDisplay(ax3, orgimg, orgimg.shape, zoomH.c, maskH.masks)
-    analH = Analysis(orgimg, roiH, ax4)
+    analH = Analysis(orgimg, state_path, zoomH, maskH, roiH, ax4)
 
     # tell the next step in the pipeline to update automatically
     zoomH.register(maskH.update)
+    roiH.register(analH.update)
     
+    # load data if available
+    fn = '%s_%s_regions.pickle'%(asw,mid)
+    if os.path.isfile(fn):
+        with open(fn, 'rb') as f:
+            p = pickle.load(f)
+        
+        zoomH.set_zoom(*p['zoom'])
+        maskH.set_center(p['center'])
+        for m in p['masks']:
+            maskH.add_mask(*m)
+
+        p['masks']
+        
     
-    
-    fig.show()
+    #fig.show()
     
     #plt.show()
+    plt.close()
     
+    d = {
+        'zoom'  : zoomH.c.tuple,
+        'center': maskH.center,
+        'masks' : [m.tuple for m in maskH.masks]
+    }
+    if True:
+        with open(fn, 'wb') as f:
+            pickle.dump(d,f)
 
 
     #fig.close()
