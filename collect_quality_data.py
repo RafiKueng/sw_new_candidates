@@ -22,8 +22,8 @@ import parse_candidates as PACA
 #import plot_masses as PLMA
 import create_data as CRDA
 
-from settings import settings as S, INT, save_pickle, load_pickle, save_csv
-from settings import print_first_line, print_last_line, getI, del_cache
+from settings import settings as S, INT
+from settings import print_first_line, getI
 
 
 file1 = "categorisation_of_quality.txt" # used to be cat_qual.txt

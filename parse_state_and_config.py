@@ -25,10 +25,11 @@ Created on Wed Oct 28 15:07:18 2015
 
 
 
-import sys, os, csv, shutil, glob, json
+import sys, os, shutil, glob, json
 from os.path import join
 
 import cPickle as pickle
+import numpy as np
 
 from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
@@ -122,29 +123,95 @@ def parse_state(mid):
     state.make_ensemble_average()
     obj, data = state.ensemble_average['obj,data'][0]
     
+    # keys to save in the pickle
+    keys = ['M(<R)', 'kappa(R)', 'R', 'Rlens', 'Sigma(R)']
+
+    # init temp data storage to NaN
+    minmax_storage = {}
+    for k in keys:
+        minmax_storage[k] = np.empty((len(state.models),) + data[k].shape) * np.NaN
+    
     M_ens_ave = data['M(<R)'][-1]
 
     M_min = M_ens_ave
     M_max = M_ens_ave
-    for gmodel in state.models:
-        M = gmodel['obj,data'][0][1]['M(<R)'][-1]
+    for i, gmodel in enumerate(state.models):
+        mdata = gmodel['obj,data'][0][1]
+        
+        M = mdata['M(<R)'][-1]
+
+        for k in keys:
+            minmax_storage[k][i] = mdata[k]
         
         if M < M_min: M_min = M 
         if M > M_max: M_max = M
+    
+    # unwrap glass data type into native types for further processing
+#    mltr   = data['M(<R)']
+#    kappar = data['kappa(R)']
+#    r      = data['R']
+#    rlens  = data['Rlens']
+#    sigmar = data['Sigma(R)']
+    
+    # catch bug in glass or maybe problem with model? for example state 007242
+    try:
+        dt = data['time delays']
+    except TypeError:
+        dt = None
 
-    data = {
+    ddd = {
         'Mtot_ave_uncorrected': M_ens_ave,
         'Mtot_min_uncorrected': M_min,
         'Mtot_max_uncorrected': M_max,
+        
+        # simple datatypes
+        "H0"          : data['H0'],
+        "kappa"       : data['kappa'],
+        "time delays" : dt,
+        
+#        "M(<R)" : {
+#            'data':   np.array(mltr),
+#            'units':  mltr.units,
+#            'symbol': mltr.symbol
+#        },
+#        "kappa(R)" : {
+#            'data':   np.array(kappar),
+#            'units':  kappar.units,
+#            'symbol': kappar.symbol
+#        },
+#        "R" : {
+#            'data':   np.array(r),
+#            'units':  r.units,
+#            'symbol': r.symbol
+#        },
+#        "Rlens" : {
+#            'data':   np.array(rlens),
+#            'units':  rlens.units,
+#            'symbol': rlens.symbol
+#        },
+#        "Sigma(R)" : {
+#            'data':   np.array(sigmar),
+#            'units':  sigmar.units,
+#            'symbol': sigmar.symbol
+#        },
     }
+    
+    for k in keys:
+        ddd[k] = {
+            'data':   np.array(data[k]),
+            'min' :   np.min(minmax_storage[k], axis=0),
+            'max' :   np.max(minmax_storage[k], axis=0),
+            'units':  data[k].units,
+            'symbol': data[k].symbol
+        }
     
     print 'DONE (M_lens=%8.2e [%8.2e ... %8.2e])' % (M_ens_ave, M_min, M_max)
 
     # cache the result
     with open(cpath, 'wb') as f:
-        pickle.dump(data, f, -1)
+        pickle.dump(ddd, f, -1)
 
-    return data
+    return ddd
 
 
 

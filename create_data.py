@@ -16,7 +16,7 @@ from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
 
 import get_stellar_pop as gspo
-import parse_candidates as paca
+import parse_candidates as PACA
 import sanitise_model_data as samd
 
 
@@ -56,7 +56,7 @@ def create_recent_models():
             tmpp[asw] = adata
     
     for asw, data in tmpp.items():
-        data['swid'] = paca.MAP.get(asw, None)
+        data['swid'] = PACA.MAP.get(asw, None)
         ONLY_RECENT_MODELS[data['mid']] = data
     
     print "DONE"
@@ -74,25 +74,35 @@ def create_lens_candidates():
 
 
 
+MAPS = {}
+
+def create_maps():
+    print I,"create maps",
+    MAPS['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
+    MAPS['swid2model'] = dict(((m['swid'], k) for k,m in ONLY_RECENT_MODELS.items()))
+    MAPS['asw2model'] = dict(((m['asw'], k) for k,m in ALL_MODELS.items() if m.get('asw')))
+    print "DONE"
+
 
 ##############################################################################
 
 
 def define_datasets():
-    reg('all_models', ALL_MODELS, create_all_models, pkey='mid')
-    reg('only_recent_models', ONLY_RECENT_MODELS, create_recent_models,pkey='mid')
-    reg('lens_candidates', LENS_CANDIDATES, create_lens_candidates, pkey='asw')
+    reg(0, 'all_models', ALL_MODELS, create_all_models, pkey='mid')
+    reg(1,'only_recent_models', ONLY_RECENT_MODELS, create_recent_models,pkey='mid')
+    reg(2,'lens_candidates', LENS_CANDIDATES, create_lens_candidates, pkey='asw')
+    reg(3,'maps', MAPS, create_maps, pkey=None)
 
 
-def reg(name, data, fn, pkey):
+def reg(iD, name, data, fn, pkey):
     DATASETS[name] = {
+        'iD'        : iD, # defines the ordering
         'data'      : data,
         'fn'        : fn,
         'pkey'      : pkey,
 #        'pickle_fn' : join(S['cache_dir'], name+'.pickle'),
 #        'csv_fn'    : join(S['temp_dir'],  name+'.csv')
     }
-
 
 
 ### MAIN #####################################################################
@@ -117,7 +127,7 @@ if len(sys.argv)>1:
        
     sys.exit()
         
-for name, val in DATASETS.items():
+for iD, name, val in sorted([ (v['iD'], k, v) for k,v in DATASETS.items()]):
     data = val['data']
     fn = val['fn']
     pkey = val['pkey']
