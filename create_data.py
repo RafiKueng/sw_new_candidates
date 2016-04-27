@@ -79,8 +79,17 @@ MAPS = {}
 def create_maps():
     print I,"create maps",
     MAPS['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
+    MAPS['asw2swid'] = dict((k, v['swid']) for k, v in PACA.DATA.items())
+    
     MAPS['swid2model'] = dict(((m['swid'], k) for k,m in ONLY_RECENT_MODELS.items()))
-    MAPS['asw2model'] = dict(((m['asw'], k) for k,m in ALL_MODELS.items() if m.get('asw')))
+    MAPS['asw2model'] = dict(((m['asw'], k) for k,m in ONLY_RECENT_MODELS.items() if m.get('asw')))
+    
+    MAPS['asw2all_models'] = dict(((m['asw'], []) for k,m in ALL_MODELS.items() if m.get('asw')))
+    for k,m in ALL_MODELS.items():
+        if "asw" in m:
+            MAPS['asw2all_models'][m['asw']].append(k)
+
+    MAPS['swid2all_models'] = dict(((MAPS['asw2swid'][s], m) for s, m in MAPS['asw2all_models'].items()))
     print "DONE"
 
 

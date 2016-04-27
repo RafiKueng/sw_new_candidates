@@ -1,0 +1,1931 @@
+================================================================================
+GLASS version 0.1  Wed Apr 27 20:36:10 2016
+================================================================================
+================================================================================
+PIXEL BASIS for lensidddd
+================================================================================
+rmin=3.20094939042 rmax=5.31618180652 L=8
+Pixel basis
+    Pixel radius         = 8
+    Map radius           = 10.6324 [arcsec] Distance to center of outer pixel.
+    Map Extent           = 11.2969 [arcsec] Distance to outer edge of outer pixel.
+    top_level_cell_size  = 1.3290 [arcsec]
+    Map radius           = 64.1331 [kpc]    H0inv=13.7
+    Map Extent           = 68.1414 [kpc]    H0inv=13.7
+    top_level_cell       = 8.0166 [kpc]    H0inv=13.7
+    Number of rings      = 10
+    Number of pixels     = 233
+    Number of variables  = 238
+    Central pixel offset = 0
+Offsets        Start    End
+    pix            0    233
+    srcpos       233    235
+    H0           235
+    shear        236    238
+================================================================================
+COSMOLOGY
+================================================================================
+Omega Matter = 0.28                                                             
+Omega Lambda = 0.72                                                             
+H0inv        = (13.7, 13.7)                                                [Gyr]
+H0           = (71.37, 71.37)                                         [km/s/Mpc]
+H0inv ref    = 13.7                                                        [Gyr]
+filled_beam  = True                                                             
+
+================================================================================
+OBJECTS
+================================================================================
+1. lensidddd at z=0.5  Distance(Obs->Lens) = 0.2961                             
+    Map radius       = Not specified                                            
+    Critical density = 1.3364e+09 (H0inv=13.7)                      [Msun/kpc^2]
+
+    Source at z=1.0000 
+        Distance (Obs->Src)  = 0.3904                                   [arcsec]
+        Distance (Lens->Src) = 0.1684                                   [arcsec]
+        Dos/Dls              = 2.3189                                           
+        Image at ( 0.885, 5.242) : |*|= 5.316 angle=  80.417 parity=min 
+        Image at (-4.211,-2.383) : |*|= 4.839 angle=-150.495 parity=min 
+        Image at (-4.703,-0.266) : |*|= 4.711 angle=-176.763 parity=sad 
+        Image at ( 2.421,-2.094) : |*|= 3.201 angle= -40.858 parity=sad 
+
+================================================================================
+MISCELLANEOUS
+================================================================================
+Graphics enabled
+
+================================================================================
+SYSTEM
+================================================================================
+Number of CPUs detected = 4
+Number of CPUs used     = 1
+OpenMP supported. Compiling with "-O3 -fopenmp -DWITH_OMP -Wall -Wno-unused-variable -lgomp"
+
+Number of variables (nvars) = 122
+================================================================================
+PIXEL BASIS MODEL GENERATOR
+================================================================================
+Priors:
+           lens_eq
+           time_delay
+           hubble_constant
+[EXCLUDED] J1parity
+[EXCLUDED] L1parity
+           magnification
+[EXCLUDED] annular_density
+           external_shear
+[EXCLUDED] external_mass
+[EXCLUDED] profile_steepness2
+           profile_steepness
+[EXCLUDED] profile_steepnessXXX
+[EXCLUDED] PLprofile_steepness
+[EXCLUDED] gradient
+[EXCLUDED] Pgradient
+[EXCLUDED] J2gradient
+           J3gradient
+[EXCLUDED] central_pixel_as_maximum
+[EXCLUDED] central_pixel_max
+[EXCLUDED] central_pixel_min
+[EXCLUDED] ring_smoothness
+[EXCLUDED] PLsmoothness
+[EXCLUDED] PLsmoothness2
+           PLsmoothness3
+[EXCLUDED] PLsmoothnessExp
+[EXCLUDED] pixel_smoothness
+[EXCLUDED] JCsmoothness
+[EXCLUDED] smoothness
+           shared_h
+[EXCLUDED] max_kappa
+[EXCLUDED] min_kappa
+[EXCLUDED] min_annular_density
+[EXCLUDED] min_kappa_model
+[EXCLUDED] smoothness2
+[EXCLUDED] max_kappa
+[EXCLUDED] smooth_symmetry
+[EXCLUDED] extended_source_size
+[EXCLUDED] source_position
+[EXCLUDED] link_sources
+Applying Priors:
+array offset 0
+           Lens Equation
+                      Source 0,Image 0: (  0.8850,   5.2420)
+                      Source 0,Image 1: ( -4.2110,  -2.3830)
+                      Source 0,Image 2: ( -4.7030,  -0.2660)
+                      Source 0,Image 3: (  2.4210,  -2.0940)
+           Time Delay
+           Profile Steepness [0, None]
+                      # eqs = 9
+           J3Gradient (theta=45.00  size=None)
+Finding neighbors 3...
+                      gradient eqs = 464
+                      sn=0.707107
+           Magnification
+           Hubble Constant[ 3.10549271715328467636  3.10549271715328467636]
+           PLSmoothness3 (factor=2.0 include_central_pixel=False)
+Finding neighbors...
+                      # eqs = 232
+           External Shear
+[DISABLED] Shared h
+================================================================================
+Simplex Random Walk
+================================================================================
+    745 equations
+    >=     <=      =
+     0    736      9
+Using lpsolve glpk 4.47
+random seed = 0
+threads = 1
+acceptence rate = 0.25
+acceptence rate tolerance = 0.15
+dof = 113
+sample distance = max(100,1 * 113^2) = 12769
+starting twiddle = 2.4
+burn-in length = 1130
+Finding first inner point
+Estimating eigenvectors
+Getting solutions
+Thread 0 gets 200
+                                       STARTING rwalk_burnin THREAD 0
+                                    RB THREAD   0]  0/1130  79.3% accepted  ( 10131/  2638 Acc/Rej)  twiddle  2.40  time 0.032s
+                                    RB THREAD   0]  0/1130  77.4% accepted  (  9882/  2887 Acc/Rej)  twiddle  5.01  time 0.032s
+                                    RB THREAD   0]  0/1130  68.0% accepted  (  8689/  4080 Acc/Rej)  twiddle 10.26  time 0.032s
+                                    RB THREAD   0]  0/1130  60.2% accepted  (  7681/  5088 Acc/Rej)  twiddle 19.09  time 0.024s
+                                    RB THREAD   0]  0/1130  53.5% accepted  (  6835/  5934 Acc/Rej)  twiddle 32.51  time 0.028s
+                                    RB THREAD   0]  0/1130  49.0% accepted  (  6263/  6506 Acc/Rej)  twiddle 51.05  time 0.024s
+                                    RB THREAD   0]  0/1130  40.0% accepted  (  5108/  7661 Acc/Rej)  twiddle 75.61  time 0.020s
+                                     B THREAD   0]  0/1130  32.9% accepted  (  4200/  8569 Acc/Rej)  twiddle 98.29  time 0.020s
+                                     B THREAD   0]  1/1130  33.2% accepted  (  4237/  8532 Acc/Rej)  twiddle 98.29  time 0.020s
+                                     B THREAD   0]  2/1130  28.1% accepted  (  3582/  9187 Acc/Rej)  twiddle 114.38  time 0.016s
+                                     B THREAD   0]  3/1130  30.7% accepted  (  3920/  8849 Acc/Rej)  twiddle 114.38  time 0.016s
+                                     B THREAD   0]  4/1130  27.6% accepted  (  3523/  9246 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  5/1130  25.7% accepted  (  3282/  9487 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  6/1130  27.3% accepted  (  3486/  9283 Acc/Rej)  twiddle 127.41  time 0.020s
+                                     B THREAD   0]  7/1130  26.4% accepted  (  3369/  9400 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  8/1130  29.7% accepted  (  3793/  8976 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  9/1130  27.3% accepted  (  3492/  9277 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  10/1130  29.3% accepted  (  3745/  9024 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  11/1130  24.8% accepted  (  3173/  9596 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  12/1130  27.7% accepted  (  3533/  9236 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  13/1130  30.3% accepted  (  3875/  8894 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  14/1130  30.1% accepted  (  3841/  8928 Acc/Rej)  twiddle 127.41  time 0.016s
+                                     B THREAD   0]  15/1130  25.1% accepted  (  3210/  9559 Acc/Rej)  twiddle 140.36  time 0.012s
+                                     B THREAD   0]  16/1130  24.7% accepted  (  3152/  9617 Acc/Rej)  twiddle 140.36  time 0.016s
+                                     B THREAD   0]  17/1130  25.3% accepted  (  3230/  9539 Acc/Rej)  twiddle 140.36  time 0.012s
+                                     B THREAD   0]  18/1130  25.0% accepted  (  3198/  9571 Acc/Rej)  twiddle 140.36  time 0.016s
+                                     B THREAD   0]  19/1130  28.1% accepted  (  3583/  9186 Acc/Rej)  twiddle 140.36  time 0.016s
+                                     B THREAD   0]  20/1130  27.1% accepted  (  3464/  9305 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  21/1130  24.9% accepted  (  3179/  9590 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  22/1130  27.2% accepted  (  3467/  9302 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  23/1130  24.8% accepted  (  3164/  9605 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  24/1130  27.0% accepted  (  3449/  9320 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  25/1130  28.1% accepted  (  3583/  9186 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  26/1130  27.7% accepted  (  3539/  9230 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  27/1130  26.7% accepted  (  3406/  9363 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  28/1130  26.5% accepted  (  3390/  9379 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  29/1130  28.3% accepted  (  3616/  9153 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  30/1130  23.2% accepted  (  2958/  9811 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  31/1130  25.1% accepted  (  3202/  9567 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  32/1130  26.5% accepted  (  3386/  9383 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  33/1130  25.8% accepted  (  3300/  9469 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  34/1130  25.5% accepted  (  3251/  9518 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  35/1130  25.6% accepted  (  3272/  9497 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  36/1130  24.4% accepted  (  3116/  9653 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  37/1130  23.0% accepted  (  2941/  9828 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  38/1130  24.5% accepted  (  3132/  9637 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  39/1130  27.2% accepted  (  3475/  9294 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  40/1130  28.2% accepted  (  3606/  9163 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  41/1130  24.9% accepted  (  3185/  9584 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  42/1130  25.9% accepted  (  3302/  9467 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  43/1130  25.1% accepted  (  3203/  9566 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  44/1130  26.9% accepted  (  3435/  9334 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  45/1130  23.3% accepted  (  2981/  9788 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  46/1130  25.4% accepted  (  3239/  9530 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  47/1130  24.2% accepted  (  3094/  9675 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  48/1130  25.8% accepted  (  3290/  9479 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  49/1130  25.9% accepted  (  3308/  9461 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  50/1130  22.9% accepted  (  2922/  9847 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  51/1130  23.5% accepted  (  3003/  9766 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  52/1130  17.6% accepted  (  2248/ 10521 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  53/1130  20.3% accepted  (  2588/ 10181 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  54/1130  24.7% accepted  (  3150/  9619 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  55/1130  26.3% accepted  (  3358/  9411 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  56/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  57/1130  26.2% accepted  (  3343/  9426 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  58/1130  26.2% accepted  (  3346/  9423 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  59/1130  27.8% accepted  (  3549/  9220 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  60/1130  25.0% accepted  (  3192/  9577 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  61/1130  25.1% accepted  (  3209/  9560 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  62/1130  24.8% accepted  (  3170/  9599 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  63/1130  26.5% accepted  (  3387/  9382 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  64/1130  25.3% accepted  (  3225/  9544 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  65/1130  25.2% accepted  (  3220/  9549 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  66/1130  25.3% accepted  (  3233/  9536 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  67/1130  24.4% accepted  (  3113/  9656 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  68/1130  23.8% accepted  (  3040/  9729 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  69/1130  26.6% accepted  (  3394/  9375 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  70/1130  27.0% accepted  (  3446/  9323 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  71/1130  24.3% accepted  (  3104/  9665 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  72/1130  25.4% accepted  (  3244/  9525 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  73/1130  25.4% accepted  (  3243/  9526 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  74/1130  23.6% accepted  (  3009/  9760 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  75/1130  26.0% accepted  (  3320/  9449 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  76/1130  24.1% accepted  (  3078/  9691 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  77/1130  27.4% accepted  (  3502/  9267 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  78/1130  26.9% accepted  (  3438/  9331 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  79/1130  26.1% accepted  (  3339/  9430 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  80/1130  26.8% accepted  (  3416/  9353 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  81/1130  25.7% accepted  (  3283/  9486 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  82/1130  23.8% accepted  (  3037/  9732 Acc/Rej)  twiddle 148.95  time 0.012s
+                                     B THREAD   0]  83/1130  23.8% accepted  (  3041/  9728 Acc/Rej)  twiddle 148.95  time 0.016s
+                                     B THREAD   0]  84/1130  25.1% accepted  (  3205/  9564 Acc/Rej)  twiddle 145.42  time 0.016s
+                                     B THREAD   0]  85/1130  27.1% accepted  (  3466/  9303 Acc/Rej)  twiddle 145.42  time 0.016s
+                                     B THREAD   0]  86/1130  26.4% accepted  (  3365/  9404 Acc/Rej)  twiddle 145.42  time 0.012s
+                                     B THREAD   0]  87/1130  22.0% accepted  (  2815/  9954 Acc/Rej)  twiddle 145.42  time 0.016s
+                                     B THREAD   0]  88/1130  24.6% accepted  (  3143/  9626 Acc/Rej)  twiddle 145.42  time 0.012s
+                                     B THREAD   0]  89/1130  25.7% accepted  (  3280/  9489 Acc/Rej)  twiddle 145.42  time 0.012s
+                                     B THREAD   0]  90/1130  27.4% accepted  (  3503/  9266 Acc/Rej)  twiddle 145.42  time 0.016s
+                                     B THREAD   0]  91/1130  25.7% accepted  (  3282/  9487 Acc/Rej)  twiddle 145.42  time 0.016s
+                                     B THREAD   0]  92/1130  22.9% accepted  (  2918/  9851 Acc/Rej)  twiddle 145.42  time 0.012s
+                                     B THREAD   0]  93/1130  24.9% accepted  (  3184/  9585 Acc/Rej)  twiddle 145.42  time 0.016s
+                                     B THREAD   0]  94/1130  25.9% accepted  (  3309/  9460 Acc/Rej)  twiddle 145.42  time 0.012s
+                                     B THREAD   0]  95/1130  24.9% accepted  (  3174/  9595 Acc/Rej)  twiddle 145.42  time 0.016s
+                                     B THREAD   0]  96/1130  24.7% accepted  (  3149/  9620 Acc/Rej)  twiddle 145.42  time 0.012s
+                                     B THREAD   0]  97/1130  27.6% accepted  (  3521/  9248 Acc/Rej)  twiddle 145.42  time 0.012s
+                                     B THREAD   0]  98/1130  23.0% accepted  (  2943/  9826 Acc/Rej)  twiddle 152.91  time 0.016s
+                                     B THREAD   0]  99/1130  24.2% accepted  (  3088/  9681 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  100/1130  23.5% accepted  (  2998/  9771 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  101/1130  26.2% accepted  (  3343/  9426 Acc/Rej)  twiddle 152.91  time 0.016s
+                                     B THREAD   0]  102/1130  25.8% accepted  (  3299/  9470 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  103/1130  25.0% accepted  (  3192/  9577 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  104/1130  23.4% accepted  (  2993/  9776 Acc/Rej)  twiddle 152.91  time 0.016s
+                                     B THREAD   0]  105/1130  27.9% accepted  (  3564/  9205 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  106/1130  24.1% accepted  (  3083/  9686 Acc/Rej)  twiddle 152.91  time 0.016s
+                                     B THREAD   0]  107/1130  24.1% accepted  (  3075/  9694 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  108/1130  25.9% accepted  (  3302/  9467 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  109/1130  25.0% accepted  (  3191/  9578 Acc/Rej)  twiddle 152.91  time 0.016s
+                                     B THREAD   0]  110/1130  18.5% accepted  (  2358/ 10411 Acc/Rej)  twiddle 152.91  time 0.012s
+                                     B THREAD   0]  111/1130  23.0% accepted  (  2941/  9828 Acc/Rej)  twiddle 132.93  time 0.012s
+                                     B THREAD   0]  112/1130  29.8% accepted  (  3810/  8959 Acc/Rej)  twiddle 132.93  time 0.016s
+                                     B THREAD   0]  113/1130  28.9% accepted  (  3684/  9085 Acc/Rej)  twiddle 132.93  time 0.024s
+                                     B THREAD   0]  114/1130  29.4% accepted  (  3755/  9014 Acc/Rej)  twiddle 132.93  time 0.020s
+                                     B THREAD   0]  115/1130  26.2% accepted  (  3343/  9426 Acc/Rej)  twiddle 132.93  time 0.020s
+                                     B THREAD   0]  116/1130  25.2% accepted  (  3220/  9549 Acc/Rej)  twiddle 132.93  time 0.016s
+                                     B THREAD   0]  117/1130  30.7% accepted  (  3916/  8853 Acc/Rej)  twiddle 132.93  time 0.020s
+                                     B THREAD   0]  118/1130  31.1% accepted  (  3976/  8793 Acc/Rej)  twiddle 132.93  time 0.020s
+                                     B THREAD   0]  119/1130  23.0% accepted  (  2942/  9827 Acc/Rej)  twiddle 149.25  time 0.012s
+                                     B THREAD   0]  120/1130  26.1% accepted  (  3327/  9442 Acc/Rej)  twiddle 149.25  time 0.016s
+                                     B THREAD   0]  121/1130  25.4% accepted  (  3237/  9532 Acc/Rej)  twiddle 149.25  time 0.012s
+                                     B THREAD   0]  122/1130  23.6% accepted  (  3011/  9758 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  123/1130  27.2% accepted  (  3472/  9297 Acc/Rej)  twiddle 150.29  time 0.012s
+                                     B THREAD   0]  124/1130  25.3% accepted  (  3229/  9540 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  125/1130  25.8% accepted  (  3299/  9470 Acc/Rej)  twiddle 150.29  time 0.012s
+                                     B THREAD   0]  126/1130  27.0% accepted  (  3453/  9316 Acc/Rej)  twiddle 150.29  time 0.012s
+                                     B THREAD   0]  127/1130  27.1% accepted  (  3457/  9312 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  128/1130  27.3% accepted  (  3487/  9282 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  129/1130  25.7% accepted  (  3277/  9492 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  130/1130  26.0% accepted  (  3315/  9454 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  131/1130  27.5% accepted  (  3515/  9254 Acc/Rej)  twiddle 150.29  time 0.012s
+                                     B THREAD   0]  132/1130  27.9% accepted  (  3566/  9203 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  133/1130  23.6% accepted  (  3011/  9758 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  134/1130  23.6% accepted  (  3018/  9751 Acc/Rej)  twiddle 150.29  time 0.012s
+                                     B THREAD   0]  135/1130  22.5% accepted  (  2874/  9895 Acc/Rej)  twiddle 150.29  time 0.012s
+                                     B THREAD   0]  136/1130  24.6% accepted  (  3147/  9622 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  137/1130  28.1% accepted  (  3582/  9187 Acc/Rej)  twiddle 150.29  time 0.016s
+                                     B THREAD   0]  138/1130  22.8% accepted  (  2907/  9862 Acc/Rej)  twiddle 159.47  time 0.012s
+                                     B THREAD   0]  139/1130  23.1% accepted  (  2946/  9823 Acc/Rej)  twiddle 159.47  time 0.016s
+                                     B THREAD   0]  140/1130  22.0% accepted  (  2813/  9956 Acc/Rej)  twiddle 159.47  time 0.012s
+                                     B THREAD   0]  141/1130  26.3% accepted  (  3355/  9414 Acc/Rej)  twiddle 150.00  time 0.016s
+                                     B THREAD   0]  142/1130  25.8% accepted  (  3297/  9472 Acc/Rej)  twiddle 150.00  time 0.012s
+                                     B THREAD   0]  143/1130  22.7% accepted  (  2895/  9874 Acc/Rej)  twiddle 152.46  time 0.012s
+                                     B THREAD   0]  144/1130  23.3% accepted  (  2973/  9796 Acc/Rej)  twiddle 145.36  time 0.012s
+                                     B THREAD   0]  145/1130  25.5% accepted  (  3262/  9507 Acc/Rej)  twiddle 145.36  time 0.016s
+                                     B THREAD   0]  146/1130  28.0% accepted  (  3575/  9194 Acc/Rej)  twiddle 145.36  time 0.016s
+                                     B THREAD   0]  147/1130  27.9% accepted  (  3557/  9212 Acc/Rej)  twiddle 145.36  time 0.016s
+                                     B THREAD   0]  148/1130  23.8% accepted  (  3043/  9726 Acc/Rej)  twiddle 153.66  time 0.012s
+                                     B THREAD   0]  149/1130  23.1% accepted  (  2948/  9821 Acc/Rej)  twiddle 153.66  time 0.016s
+                                     B THREAD   0]  150/1130  26.7% accepted  (  3415/  9354 Acc/Rej)  twiddle 153.66  time 0.012s
+                                     B THREAD   0]  151/1130  26.3% accepted  (  3363/  9406 Acc/Rej)  twiddle 153.66  time 0.016s
+                                     B THREAD   0]  152/1130  23.1% accepted  (  2948/  9821 Acc/Rej)  twiddle 153.66  time 0.012s
+                                     B THREAD   0]  153/1130  23.5% accepted  (  2999/  9770 Acc/Rej)  twiddle 153.66  time 0.012s
+                                     B THREAD   0]  154/1130  24.4% accepted  (  3116/  9653 Acc/Rej)  twiddle 153.66  time 0.016s
+                                     B THREAD   0]  155/1130  24.2% accepted  (  3085/  9684 Acc/Rej)  twiddle 153.66  time 0.012s
+                                     B THREAD   0]  156/1130  28.1% accepted  (  3587/  9182 Acc/Rej)  twiddle 153.66  time 0.016s
+                                     B THREAD   0]  157/1130  26.0% accepted  (  3318/  9451 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  158/1130  24.1% accepted  (  3078/  9691 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  159/1130  24.6% accepted  (  3144/  9625 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  160/1130  25.5% accepted  (  3251/  9518 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  161/1130  22.7% accepted  (  2899/  9870 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  162/1130  21.1% accepted  (  2692/ 10077 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  163/1130  23.6% accepted  (  3011/  9758 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  164/1130  22.9% accepted  (  2923/  9846 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  165/1130  24.3% accepted  (  3109/  9660 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  166/1130  24.1% accepted  (  3075/  9694 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  167/1130  25.4% accepted  (  3243/  9526 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  168/1130  24.8% accepted  (  3166/  9603 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  169/1130  21.8% accepted  (  2779/  9990 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  170/1130  22.2% accepted  (  2832/  9937 Acc/Rej)  twiddle 163.16  time 0.016s
+                                     B THREAD   0]  171/1130  25.0% accepted  (  3195/  9574 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  172/1130  22.2% accepted  (  2841/  9928 Acc/Rej)  twiddle 163.16  time 0.012s
+                                     B THREAD   0]  173/1130  25.0% accepted  (  3195/  9574 Acc/Rej)  twiddle 154.19  time 0.012s
+                                     B THREAD   0]  174/1130  27.0% accepted  (  3450/  9319 Acc/Rej)  twiddle 154.19  time 0.016s
+                                     B THREAD   0]  175/1130  24.1% accepted  (  3072/  9697 Acc/Rej)  twiddle 154.19  time 0.012s
+                                     B THREAD   0]  176/1130  20.1% accepted  (  2565/ 10204 Acc/Rej)  twiddle 154.19  time 0.012s
+                                     B THREAD   0]  177/1130  23.1% accepted  (  2944/  9825 Acc/Rej)  twiddle 154.19  time 0.016s
+                                     B THREAD   0]  178/1130  23.8% accepted  (  3038/  9731 Acc/Rej)  twiddle 154.19  time 0.012s
+                                     B THREAD   0]  179/1130  23.1% accepted  (  2948/  9821 Acc/Rej)  twiddle 154.19  time 0.012s
+                                     B THREAD   0]  180/1130  26.2% accepted  (  3340/  9429 Acc/Rej)  twiddle 154.19  time 0.016s
+                                     B THREAD   0]  181/1130  27.7% accepted  (  3543/  9226 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  182/1130  26.2% accepted  (  3341/  9428 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  183/1130  25.0% accepted  (  3194/  9575 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  184/1130  26.0% accepted  (  3323/  9446 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  185/1130  25.4% accepted  (  3246/  9523 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  186/1130  27.2% accepted  (  3477/  9292 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  187/1130  22.8% accepted  (  2905/  9864 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  188/1130  24.7% accepted  (  3148/  9621 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  189/1130  24.3% accepted  (  3099/  9670 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  190/1130  25.3% accepted  (  3234/  9535 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  191/1130  19.4% accepted  (  2475/ 10294 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  192/1130  25.1% accepted  (  3201/  9568 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  193/1130  20.5% accepted  (  2616/ 10153 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  194/1130  24.5% accepted  (  3125/  9644 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  195/1130  26.0% accepted  (  3314/  9455 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  196/1130  23.3% accepted  (  2975/  9794 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  197/1130  25.3% accepted  (  3228/  9541 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  198/1130  25.0% accepted  (  3193/  9576 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  199/1130  24.1% accepted  (  3072/  9697 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  200/1130  25.9% accepted  (  3312/  9457 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  201/1130  24.1% accepted  (  3075/  9694 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  202/1130  23.5% accepted  (  2996/  9773 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  203/1130  24.3% accepted  (  3107/  9662 Acc/Rej)  twiddle 157.76  time 0.016s
+                                     B THREAD   0]  204/1130  26.0% accepted  (  3326/  9443 Acc/Rej)  twiddle 157.76  time 0.012s
+                                     B THREAD   0]  205/1130  22.6% accepted  (  2885/  9884 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  206/1130  23.0% accepted  (  2931/  9838 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  207/1130  23.2% accepted  (  2964/  9805 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  208/1130  23.9% accepted  (  3047/  9722 Acc/Rej)  twiddle 161.06  time 0.016s
+                                     B THREAD   0]  209/1130  23.9% accepted  (  3051/  9718 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  210/1130  26.0% accepted  (  3317/  9452 Acc/Rej)  twiddle 161.06  time 0.016s
+                                     B THREAD   0]  211/1130  24.0% accepted  (  3062/  9707 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  212/1130  24.0% accepted  (  3068/  9701 Acc/Rej)  twiddle 161.06  time 0.016s
+                                     B THREAD   0]  213/1130  25.8% accepted  (  3294/  9475 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  214/1130  23.1% accepted  (  2950/  9819 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  215/1130  23.9% accepted  (  3057/  9712 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  216/1130  23.8% accepted  (  3039/  9730 Acc/Rej)  twiddle 161.06  time 0.016s
+                                     B THREAD   0]  217/1130  23.4% accepted  (  2994/  9775 Acc/Rej)  twiddle 161.06  time 0.012s
+                                     B THREAD   0]  218/1130  25.1% accepted  (  3209/  9560 Acc/Rej)  twiddle 156.06  time 0.012s
+                                     B THREAD   0]  219/1130  25.0% accepted  (  3194/  9575 Acc/Rej)  twiddle 156.06  time 0.016s
+                                     B THREAD   0]  220/1130  26.6% accepted  (  3399/  9370 Acc/Rej)  twiddle 156.06  time 0.012s
+                                     B THREAD   0]  221/1130  26.3% accepted  (  3357/  9412 Acc/Rej)  twiddle 156.06  time 0.012s
+                                     B THREAD   0]  222/1130  25.8% accepted  (  3295/  9474 Acc/Rej)  twiddle 156.06  time 0.016s
+                                     B THREAD   0]  223/1130  24.5% accepted  (  3133/  9636 Acc/Rej)  twiddle 156.06  time 0.016s
+                                     B THREAD   0]  224/1130  24.3% accepted  (  3103/  9666 Acc/Rej)  twiddle 156.06  time 0.012s
+                                     B THREAD   0]  225/1130  26.1% accepted  (  3336/  9433 Acc/Rej)  twiddle 156.06  time 0.016s
+Computing eigenvalues... [226/1130]
+average store delta 15.7385974132
+New twiddle 156.059793
+                                    RB THREAD   0]  226/1130   0.9% accepted  (   117/ 12652 Acc/Rej)  twiddle 156.06  time 0.004s
+                                    RB THREAD   0]  226/1130   1.7% accepted  (   216/ 12553 Acc/Rej)  twiddle 80.89  time 0.004s
+                                    RB THREAD   0]  226/1130   3.1% accepted  (   391/ 12378 Acc/Rej)  twiddle 43.18  time 0.000s
+                                    RB THREAD   0]  226/1130   4.0% accepted  (   511/ 12258 Acc/Rej)  twiddle 24.24  time 0.004s
+                                    RB THREAD   0]  226/1130   8.7% accepted  (  1111/ 11658 Acc/Rej)  twiddle 14.06  time 0.004s
+                                     B THREAD   0]  226/1130  13.6% accepted  (  1732/ 11037 Acc/Rej)  twiddle  9.47  time 0.012s
+                                     B THREAD   0]  227/1130  11.8% accepted  (  1507/ 11262 Acc/Rej)  twiddle  7.31  time 0.008s
+                                     B THREAD   0]  228/1130  16.3% accepted  (  2082/ 10687 Acc/Rej)  twiddle  5.38  time 0.012s
+                                     B THREAD   0]  229/1130  20.6% accepted  (  2635/ 10134 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  230/1130  20.7% accepted  (  2646/ 10123 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  231/1130  24.0% accepted  (  3069/  9700 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  232/1130  24.2% accepted  (  3084/  9685 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  233/1130  21.9% accepted  (  2795/  9974 Acc/Rej)  twiddle  4.44  time 0.016s
+                                     B THREAD   0]  234/1130  17.7% accepted  (  2264/ 10505 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  235/1130  20.6% accepted  (  2629/ 10140 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  236/1130  19.1% accepted  (  2436/ 10333 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  237/1130  17.2% accepted  (  2198/ 10571 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  238/1130  19.3% accepted  (  2463/ 10306 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  239/1130  22.4% accepted  (  2859/  9910 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  240/1130  23.0% accepted  (  2942/  9827 Acc/Rej)  twiddle  4.44  time 0.016s
+                                     B THREAD   0]  241/1130  25.3% accepted  (  3231/  9538 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  242/1130  25.5% accepted  (  3250/  9519 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  243/1130  22.2% accepted  (  2837/  9932 Acc/Rej)  twiddle  4.44  time 0.016s
+                                     B THREAD   0]  244/1130  25.3% accepted  (  3232/  9537 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  245/1130  23.1% accepted  (  2951/  9818 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  246/1130  21.0% accepted  (  2685/ 10084 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  247/1130  23.8% accepted  (  3041/  9728 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  248/1130  23.4% accepted  (  2987/  9782 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  249/1130  23.8% accepted  (  3045/  9724 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  250/1130  26.3% accepted  (  3357/  9412 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  251/1130  22.7% accepted  (  2897/  9872 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  252/1130  23.0% accepted  (  2938/  9831 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  253/1130  24.0% accepted  (  3065/  9704 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  254/1130  24.7% accepted  (  3159/  9610 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  255/1130  26.0% accepted  (  3319/  9450 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  256/1130  23.4% accepted  (  2988/  9781 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  257/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  258/1130  24.1% accepted  (  3082/  9687 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  259/1130  26.1% accepted  (  3339/  9430 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  260/1130  27.2% accepted  (  3471/  9298 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  261/1130  20.8% accepted  (  2654/ 10115 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  262/1130  23.4% accepted  (  2993/  9776 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  263/1130  22.2% accepted  (  2834/  9935 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  264/1130  25.5% accepted  (  3251/  9518 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  265/1130  24.3% accepted  (  3102/  9667 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  266/1130  21.8% accepted  (  2785/  9984 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  267/1130  24.3% accepted  (  3098/  9671 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  268/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  269/1130  25.2% accepted  (  3221/  9548 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  270/1130  25.9% accepted  (  3311/  9458 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  271/1130  21.1% accepted  (  2697/ 10072 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  272/1130  23.5% accepted  (  2997/  9772 Acc/Rej)  twiddle  3.94  time 0.016s
+                                     B THREAD   0]  273/1130  29.5% accepted  (  3766/  9003 Acc/Rej)  twiddle  3.82  time 0.012s
+                                     B THREAD   0]  274/1130  25.7% accepted  (  3284/  9485 Acc/Rej)  twiddle  3.82  time 0.012s
+                                     B THREAD   0]  275/1130  26.0% accepted  (  3325/  9444 Acc/Rej)  twiddle  3.82  time 0.016s
+                                     B THREAD   0]  276/1130  28.3% accepted  (  3611/  9158 Acc/Rej)  twiddle  3.82  time 0.016s
+                                     B THREAD   0]  277/1130  22.1% accepted  (  2817/  9952 Acc/Rej)  twiddle  3.82  time 0.012s
+                                     B THREAD   0]  278/1130  26.9% accepted  (  3430/  9339 Acc/Rej)  twiddle  3.59  time 0.016s
+                                     B THREAD   0]  279/1130  27.0% accepted  (  3452/  9317 Acc/Rej)  twiddle  3.59  time 0.016s
+                                     B THREAD   0]  280/1130  25.5% accepted  (  3257/  9512 Acc/Rej)  twiddle  3.74  time 0.016s
+                                     B THREAD   0]  281/1130  25.8% accepted  (  3294/  9475 Acc/Rej)  twiddle  3.74  time 0.016s
+                                     B THREAD   0]  282/1130  27.6% accepted  (  3523/  9246 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  283/1130  27.5% accepted  (  3511/  9258 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  284/1130  22.7% accepted  (  2899/  9870 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  285/1130  27.8% accepted  (  3548/  9221 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  286/1130  23.5% accepted  (  3001/  9768 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  287/1130  26.5% accepted  (  3390/  9379 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  288/1130  26.0% accepted  (  3323/  9446 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  289/1130  28.6% accepted  (  3658/  9111 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  290/1130  23.9% accepted  (  3057/  9712 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  291/1130  27.4% accepted  (  3502/  9267 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  292/1130  27.1% accepted  (  3457/  9312 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  293/1130  24.3% accepted  (  3101/  9668 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  294/1130  28.9% accepted  (  3694/  9075 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  295/1130  26.0% accepted  (  3321/  9448 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  296/1130  27.4% accepted  (  3496/  9273 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  297/1130  27.4% accepted  (  3499/  9270 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  298/1130  25.8% accepted  (  3297/  9472 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  299/1130  24.0% accepted  (  3065/  9704 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  300/1130  29.1% accepted  (  3716/  9053 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  301/1130  23.4% accepted  (  2990/  9779 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  302/1130  24.2% accepted  (  3095/  9674 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  303/1130  23.4% accepted  (  2989/  9780 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  304/1130  27.3% accepted  (  3481/  9288 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  305/1130  30.0% accepted  (  3833/  8936 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  306/1130  27.1% accepted  (  3455/  9314 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  307/1130  27.6% accepted  (  3521/  9248 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  308/1130  24.4% accepted  (  3112/  9657 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  309/1130  26.3% accepted  (  3355/  9414 Acc/Rej)  twiddle  3.80  time 0.012s
+                                     B THREAD   0]  310/1130  28.0% accepted  (  3572/  9197 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  311/1130  26.5% accepted  (  3381/  9388 Acc/Rej)  twiddle  3.80  time 0.016s
+                                     B THREAD   0]  312/1130  28.4% accepted  (  3630/  9139 Acc/Rej)  twiddle  3.91  time 0.016s
+                                     B THREAD   0]  313/1130  29.4% accepted  (  3755/  9014 Acc/Rej)  twiddle  3.91  time 0.016s
+                                     B THREAD   0]  314/1130  25.4% accepted  (  3243/  9526 Acc/Rej)  twiddle  3.91  time 0.012s
+                                     B THREAD   0]  315/1130  21.7% accepted  (  2766/ 10003 Acc/Rej)  twiddle  3.91  time 0.012s
+                                     B THREAD   0]  316/1130  24.1% accepted  (  3076/  9693 Acc/Rej)  twiddle  3.65  time 0.012s
+                                     B THREAD   0]  317/1130  23.6% accepted  (  3016/  9753 Acc/Rej)  twiddle  3.65  time 0.012s
+                                     B THREAD   0]  318/1130  25.2% accepted  (  3214/  9555 Acc/Rej)  twiddle  3.65  time 0.016s
+                                     B THREAD   0]  319/1130  27.2% accepted  (  3476/  9293 Acc/Rej)  twiddle  3.65  time 0.012s
+                                     B THREAD   0]  320/1130  27.6% accepted  (  3522/  9247 Acc/Rej)  twiddle  3.65  time 0.012s
+                                     B THREAD   0]  321/1130  25.6% accepted  (  3264/  9505 Acc/Rej)  twiddle  3.65  time 0.016s
+                                     B THREAD   0]  322/1130  25.9% accepted  (  3301/  9468 Acc/Rej)  twiddle  3.65  time 0.016s
+                                     B THREAD   0]  323/1130  28.5% accepted  (  3644/  9125 Acc/Rej)  twiddle  3.65  time 0.016s
+                                     B THREAD   0]  324/1130  22.9% accepted  (  2928/  9841 Acc/Rej)  twiddle  3.91  time 0.012s
+                                     B THREAD   0]  325/1130  25.5% accepted  (  3261/  9508 Acc/Rej)  twiddle  3.91  time 0.016s
+                                     B THREAD   0]  326/1130  26.9% accepted  (  3441/  9328 Acc/Rej)  twiddle  3.91  time 0.012s
+                                     B THREAD   0]  327/1130  25.9% accepted  (  3311/  9458 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  328/1130  26.1% accepted  (  3327/  9442 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  329/1130  22.1% accepted  (  2816/  9953 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  330/1130  27.2% accepted  (  3470/  9299 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  331/1130  26.7% accepted  (  3408/  9361 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  332/1130  24.6% accepted  (  3147/  9622 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  333/1130  22.7% accepted  (  2895/  9874 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  334/1130  24.3% accepted  (  3099/  9670 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  335/1130  23.4% accepted  (  2985/  9784 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  336/1130  23.9% accepted  (  3056/  9713 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  337/1130  26.7% accepted  (  3410/  9359 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  338/1130  22.9% accepted  (  2923/  9846 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  339/1130  25.6% accepted  (  3263/  9506 Acc/Rej)  twiddle  4.06  time 0.016s
+Computing eigenvalues... [340/1130]
+average store delta 0.553289902638
+New twiddle 4.060585
+                                     B THREAD   0]  340/1130  28.1% accepted  (  3583/  9186 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  341/1130  28.0% accepted  (  3577/  9192 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  342/1130  24.7% accepted  (  3157/  9612 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  343/1130  24.5% accepted  (  3127/  9642 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  344/1130  25.6% accepted  (  3274/  9495 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  345/1130  27.3% accepted  (  3488/  9281 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  346/1130  29.5% accepted  (  3773/  8996 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  347/1130  26.1% accepted  (  3335/  9434 Acc/Rej)  twiddle  4.06  time 0.016s
+                                     B THREAD   0]  348/1130  23.9% accepted  (  3054/  9715 Acc/Rej)  twiddle  4.06  time 0.012s
+                                     B THREAD   0]  349/1130  23.9% accepted  (  3051/  9718 Acc/Rej)  twiddle  3.97  time 0.024s
+                                     B THREAD   0]  350/1130  25.5% accepted  (  3257/  9512 Acc/Rej)  twiddle  3.97  time 0.020s
+                                     B THREAD   0]  351/1130  28.7% accepted  (  3661/  9108 Acc/Rej)  twiddle  3.97  time 0.020s
+                                     B THREAD   0]  352/1130  26.0% accepted  (  3325/  9444 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  353/1130  24.2% accepted  (  3089/  9680 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  354/1130  24.9% accepted  (  3175/  9594 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  355/1130  25.0% accepted  (  3197/  9572 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  356/1130  25.1% accepted  (  3211/  9558 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  357/1130  22.0% accepted  (  2811/  9958 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  358/1130  25.9% accepted  (  3312/  9457 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  359/1130  25.0% accepted  (  3191/  9578 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  360/1130  24.1% accepted  (  3081/  9688 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  361/1130  27.6% accepted  (  3522/  9247 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  362/1130  27.0% accepted  (  3446/  9323 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  363/1130  28.0% accepted  (  3578/  9191 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  364/1130  28.7% accepted  (  3663/  9106 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  365/1130  23.4% accepted  (  2991/  9778 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  366/1130  23.6% accepted  (  3016/  9753 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  367/1130  22.8% accepted  (  2906/  9863 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  368/1130  24.8% accepted  (  3169/  9600 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  369/1130  26.3% accepted  (  3357/  9412 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  370/1130  27.0% accepted  (  3447/  9322 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  371/1130  27.6% accepted  (  3528/  9241 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  372/1130  24.8% accepted  (  3171/  9598 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  373/1130  21.5% accepted  (  2751/ 10018 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  374/1130  22.9% accepted  (  2924/  9845 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  375/1130  23.1% accepted  (  2945/  9824 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  376/1130  24.0% accepted  (  3065/  9704 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  377/1130  25.8% accepted  (  3296/  9473 Acc/Rej)  twiddle  4.02  time 0.012s
+                                     B THREAD   0]  378/1130  22.9% accepted  (  2927/  9842 Acc/Rej)  twiddle  4.02  time 0.012s
+                                     B THREAD   0]  379/1130  24.0% accepted  (  3069/  9700 Acc/Rej)  twiddle  4.02  time 0.012s
+                                     B THREAD   0]  380/1130  23.3% accepted  (  2973/  9796 Acc/Rej)  twiddle  4.02  time 0.012s
+                                     B THREAD   0]  381/1130  25.9% accepted  (  3305/  9464 Acc/Rej)  twiddle  3.88  time 0.012s
+                                     B THREAD   0]  382/1130  24.6% accepted  (  3138/  9631 Acc/Rej)  twiddle  3.88  time 0.012s
+                                     B THREAD   0]  383/1130  26.7% accepted  (  3413/  9356 Acc/Rej)  twiddle  3.88  time 0.012s
+                                     B THREAD   0]  384/1130  27.5% accepted  (  3513/  9256 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  385/1130  27.1% accepted  (  3462/  9307 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  386/1130  26.7% accepted  (  3403/  9366 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  387/1130  24.8% accepted  (  3172/  9597 Acc/Rej)  twiddle  3.88  time 0.012s
+                                     B THREAD   0]  388/1130  27.8% accepted  (  3553/  9216 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  389/1130  29.8% accepted  (  3808/  8961 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  390/1130  23.7% accepted  (  3021/  9748 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  391/1130  23.8% accepted  (  3039/  9730 Acc/Rej)  twiddle  3.88  time 0.012s
+                                     B THREAD   0]  392/1130  25.6% accepted  (  3274/  9495 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  393/1130  26.2% accepted  (  3341/  9428 Acc/Rej)  twiddle  3.88  time 0.012s
+                                     B THREAD   0]  394/1130  27.1% accepted  (  3458/  9311 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  395/1130  24.9% accepted  (  3181/  9588 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  396/1130  26.7% accepted  (  3403/  9366 Acc/Rej)  twiddle  3.88  time 0.012s
+                                     B THREAD   0]  397/1130  25.9% accepted  (  3307/  9462 Acc/Rej)  twiddle  3.88  time 0.016s
+                                     B THREAD   0]  398/1130  24.3% accepted  (  3099/  9670 Acc/Rej)  twiddle  3.95  time 0.012s
+                                     B THREAD   0]  399/1130  27.1% accepted  (  3461/  9308 Acc/Rej)  twiddle  3.95  time 0.020s
+                                     B THREAD   0]  400/1130  27.1% accepted  (  3455/  9314 Acc/Rej)  twiddle  3.95  time 0.020s
+                                     B THREAD   0]  401/1130  24.9% accepted  (  3177/  9592 Acc/Rej)  twiddle  3.95  time 0.016s
+                                     B THREAD   0]  402/1130  22.1% accepted  (  2824/  9945 Acc/Rej)  twiddle  3.95  time 0.012s
+                                     B THREAD   0]  403/1130  25.5% accepted  (  3251/  9518 Acc/Rej)  twiddle  3.95  time 0.012s
+                                     B THREAD   0]  404/1130  21.9% accepted  (  2793/  9976 Acc/Rej)  twiddle  3.95  time 0.012s
+                                     B THREAD   0]  405/1130  27.2% accepted  (  3477/  9292 Acc/Rej)  twiddle  3.70  time 0.012s
+                                     B THREAD   0]  406/1130  26.3% accepted  (  3357/  9412 Acc/Rej)  twiddle  3.70  time 0.016s
+                                     B THREAD   0]  407/1130  28.6% accepted  (  3654/  9115 Acc/Rej)  twiddle  3.70  time 0.016s
+                                     B THREAD   0]  408/1130  27.1% accepted  (  3456/  9313 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  409/1130  28.1% accepted  (  3590/  9179 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  410/1130  26.9% accepted  (  3439/  9330 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  411/1130  28.1% accepted  (  3586/  9183 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  412/1130  24.6% accepted  (  3138/  9631 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  413/1130  26.4% accepted  (  3369/  9400 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  414/1130  27.2% accepted  (  3475/  9294 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  415/1130  26.1% accepted  (  3333/  9436 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  416/1130  27.0% accepted  (  3443/  9326 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  417/1130  26.0% accepted  (  3322/  9447 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  418/1130  25.9% accepted  (  3311/  9458 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  419/1130  26.3% accepted  (  3364/  9405 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  420/1130  26.0% accepted  (  3323/  9446 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  421/1130  26.9% accepted  (  3432/  9337 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  422/1130  26.5% accepted  (  3390/  9379 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  423/1130  23.9% accepted  (  3047/  9722 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  424/1130  26.0% accepted  (  3326/  9443 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  425/1130  23.1% accepted  (  2956/  9813 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  426/1130  26.6% accepted  (  3392/  9377 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  427/1130  27.7% accepted  (  3537/  9232 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  428/1130  26.6% accepted  (  3395/  9374 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  429/1130  26.4% accepted  (  3377/  9392 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  430/1130  25.3% accepted  (  3231/  9538 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  431/1130  23.0% accepted  (  2941/  9828 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  432/1130  24.5% accepted  (  3127/  9642 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  433/1130  26.7% accepted  (  3414/  9355 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  434/1130  25.3% accepted  (  3230/  9539 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  435/1130  26.3% accepted  (  3363/  9406 Acc/Rej)  twiddle  4.09  time 0.012s
+                                     B THREAD   0]  436/1130  29.1% accepted  (  3711/  9058 Acc/Rej)  twiddle  4.09  time 0.016s
+                                     B THREAD   0]  437/1130  24.3% accepted  (  3107/  9662 Acc/Rej)  twiddle  4.43  time 0.016s
+                                     B THREAD   0]  438/1130  21.9% accepted  (  2798/  9971 Acc/Rej)  twiddle  4.43  time 0.012s
+                                     B THREAD   0]  439/1130  22.3% accepted  (  2843/  9926 Acc/Rej)  twiddle  4.43  time 0.016s
+                                     B THREAD   0]  440/1130  22.7% accepted  (  2898/  9871 Acc/Rej)  twiddle  4.43  time 0.012s
+                                     B THREAD   0]  441/1130  20.9% accepted  (  2672/ 10097 Acc/Rej)  twiddle  4.22  time 0.012s
+                                     B THREAD   0]  442/1130  24.8% accepted  (  3163/  9606 Acc/Rej)  twiddle  4.22  time 0.016s
+                                     B THREAD   0]  443/1130  23.8% accepted  (  3040/  9729 Acc/Rej)  twiddle  4.22  time 0.012s
+                                     B THREAD   0]  444/1130  23.0% accepted  (  2937/  9832 Acc/Rej)  twiddle  4.22  time 0.012s
+                                     B THREAD   0]  445/1130  22.8% accepted  (  2917/  9852 Acc/Rej)  twiddle  4.22  time 0.012s
+                                     B THREAD   0]  446/1130  26.5% accepted  (  3386/  9383 Acc/Rej)  twiddle  4.22  time 0.016s
+                                     B THREAD   0]  447/1130  25.9% accepted  (  3301/  9468 Acc/Rej)  twiddle  4.22  time 0.012s
+                                     B THREAD   0]  448/1130  22.1% accepted  (  2817/  9952 Acc/Rej)  twiddle  4.22  time 0.016s
+                                     B THREAD   0]  449/1130  23.2% accepted  (  2957/  9812 Acc/Rej)  twiddle  4.22  time 0.012s
+                                     B THREAD   0]  450/1130  24.1% accepted  (  3072/  9697 Acc/Rej)  twiddle  4.07  time 0.016s
+                                     B THREAD   0]  451/1130  26.8% accepted  (  3421/  9348 Acc/Rej)  twiddle  4.07  time 0.012s
+                                     B THREAD   0]  452/1130  22.7% accepted  (  2895/  9874 Acc/Rej)  twiddle  4.07  time 0.016s
+                                     B THREAD   0]  453/1130  26.9% accepted  (  3433/  9336 Acc/Rej)  twiddle  4.07  time 0.016s
+Computing eigenvalues... [454/1130]
+average store delta 0.43296377215
+New twiddle 4.067243
+                                     B THREAD   0]  454/1130  27.6% accepted  (  3518/  9251 Acc/Rej)  twiddle  4.07  time 0.012s
+                                     B THREAD   0]  455/1130  23.9% accepted  (  3054/  9715 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  456/1130  27.4% accepted  (  3495/  9274 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  457/1130  27.1% accepted  (  3465/  9304 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  458/1130  24.5% accepted  (  3131/  9638 Acc/Rej)  twiddle  4.27  time 0.012s
+                                     B THREAD   0]  459/1130  23.7% accepted  (  3027/  9742 Acc/Rej)  twiddle  4.27  time 0.016s
+                                     B THREAD   0]  460/1130  25.0% accepted  (  3197/  9572 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  461/1130  24.3% accepted  (  3100/  9669 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  462/1130  23.8% accepted  (  3043/  9726 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  463/1130  23.4% accepted  (  2983/  9786 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  464/1130  25.1% accepted  (  3207/  9562 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  465/1130  24.6% accepted  (  3143/  9626 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  466/1130  27.3% accepted  (  3481/  9288 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  467/1130  25.5% accepted  (  3250/  9519 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  468/1130  20.9% accepted  (  2675/ 10094 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  469/1130  22.9% accepted  (  2919/  9850 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  470/1130  24.3% accepted  (  3102/  9667 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  471/1130  24.6% accepted  (  3144/  9625 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  472/1130  25.3% accepted  (  3234/  9535 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  473/1130  24.3% accepted  (  3104/  9665 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  474/1130  25.5% accepted  (  3251/  9518 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  475/1130  23.9% accepted  (  3050/  9719 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  476/1130  25.1% accepted  (  3204/  9565 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  477/1130  26.2% accepted  (  3350/  9419 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  478/1130  24.7% accepted  (  3149/  9620 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  479/1130  24.2% accepted  (  3092/  9677 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  480/1130  23.3% accepted  (  2973/  9796 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  481/1130  26.6% accepted  (  3391/  9378 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  482/1130  19.1% accepted  (  2443/ 10326 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  483/1130  25.5% accepted  (  3258/  9511 Acc/Rej)  twiddle  4.16  time 0.020s
+                                     B THREAD   0]  484/1130  25.7% accepted  (  3277/  9492 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  485/1130  26.5% accepted  (  3388/  9381 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  486/1130  28.7% accepted  (  3669/  9100 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  487/1130  23.2% accepted  (  2960/  9809 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  488/1130  24.1% accepted  (  3076/  9693 Acc/Rej)  twiddle  4.16  time 0.024s
+                                     B THREAD   0]  489/1130  21.9% accepted  (  2793/  9976 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  490/1130  23.6% accepted  (  3008/  9761 Acc/Rej)  twiddle  4.16  time 0.024s
+                                     B THREAD   0]  491/1130  23.4% accepted  (  2994/  9775 Acc/Rej)  twiddle  4.16  time 0.020s
+                                     B THREAD   0]  492/1130  23.9% accepted  (  3056/  9713 Acc/Rej)  twiddle  4.16  time 0.020s
+                                     B THREAD   0]  493/1130  25.2% accepted  (  3216/  9553 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  494/1130  25.0% accepted  (  3197/  9572 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  495/1130  24.6% accepted  (  3138/  9631 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  496/1130  25.8% accepted  (  3298/  9471 Acc/Rej)  twiddle  4.16  time 0.012s
+                                     B THREAD   0]  497/1130  26.1% accepted  (  3331/  9438 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  498/1130  24.3% accepted  (  3100/  9669 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  499/1130  23.5% accepted  (  3001/  9768 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  500/1130  24.5% accepted  (  3127/  9642 Acc/Rej)  twiddle  4.11  time 0.016s
+                                     B THREAD   0]  501/1130  25.1% accepted  (  3211/  9558 Acc/Rej)  twiddle  4.11  time 0.012s
+                                     B THREAD   0]  502/1130  24.2% accepted  (  3096/  9673 Acc/Rej)  twiddle  4.11  time 0.020s
+                                     B THREAD   0]  503/1130  24.6% accepted  (  3137/  9632 Acc/Rej)  twiddle  4.11  time 0.016s
+                                     B THREAD   0]  504/1130  27.5% accepted  (  3513/  9256 Acc/Rej)  twiddle  4.11  time 0.016s
+                                     B THREAD   0]  505/1130  22.3% accepted  (  2849/  9920 Acc/Rej)  twiddle  4.31  time 0.016s
+                                     B THREAD   0]  506/1130  25.0% accepted  (  3194/  9575 Acc/Rej)  twiddle  4.08  time 0.020s
+                                     B THREAD   0]  507/1130  25.2% accepted  (  3220/  9549 Acc/Rej)  twiddle  4.08  time 0.016s
+                                     B THREAD   0]  508/1130  25.8% accepted  (  3295/  9474 Acc/Rej)  twiddle  4.08  time 0.016s
+                                     B THREAD   0]  509/1130  26.0% accepted  (  3315/  9454 Acc/Rej)  twiddle  4.08  time 0.016s
+                                     B THREAD   0]  510/1130  25.1% accepted  (  3208/  9561 Acc/Rej)  twiddle  4.08  time 0.016s
+                                     B THREAD   0]  511/1130  26.5% accepted  (  3382/  9387 Acc/Rej)  twiddle  4.08  time 0.012s
+                                     B THREAD   0]  512/1130  25.5% accepted  (  3257/  9512 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  513/1130  25.6% accepted  (  3263/  9506 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  514/1130  23.3% accepted  (  2972/  9797 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  515/1130  24.8% accepted  (  3161/  9608 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  516/1130  19.3% accepted  (  2470/ 10299 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  517/1130  23.2% accepted  (  2966/  9803 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  518/1130  28.0% accepted  (  3581/  9188 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  519/1130  24.0% accepted  (  3061/  9708 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  520/1130  22.8% accepted  (  2910/  9859 Acc/Rej)  twiddle  4.46  time 0.020s
+                                     B THREAD   0]  521/1130  21.5% accepted  (  2746/ 10023 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  522/1130  21.8% accepted  (  2789/  9980 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  523/1130  28.4% accepted  (  3626/  9143 Acc/Rej)  twiddle  4.46  time 0.020s
+                                     B THREAD   0]  524/1130  24.5% accepted  (  3124/  9645 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  525/1130  23.0% accepted  (  2934/  9835 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  526/1130  21.2% accepted  (  2708/ 10061 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  527/1130  21.6% accepted  (  2755/ 10014 Acc/Rej)  twiddle  4.46  time 0.020s
+                                     B THREAD   0]  528/1130  24.6% accepted  (  3136/  9633 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  529/1130  24.1% accepted  (  3073/  9696 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  530/1130  23.5% accepted  (  2999/  9770 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  531/1130  25.9% accepted  (  3313/  9456 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  532/1130  26.2% accepted  (  3341/  9428 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  533/1130  22.3% accepted  (  2850/  9919 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  534/1130  22.0% accepted  (  2803/  9966 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  535/1130  26.0% accepted  (  3319/  9450 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  536/1130  26.7% accepted  (  3408/  9361 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  537/1130  24.0% accepted  (  3069/  9700 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  538/1130  22.7% accepted  (  2897/  9872 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  539/1130  27.1% accepted  (  3458/  9311 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  540/1130  23.4% accepted  (  2994/  9775 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  541/1130  22.1% accepted  (  2822/  9947 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  542/1130  23.9% accepted  (  3047/  9722 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  543/1130  22.8% accepted  (  2916/  9853 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  544/1130  22.2% accepted  (  2831/  9938 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  545/1130  24.2% accepted  (  3089/  9680 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  546/1130  23.7% accepted  (  3021/  9748 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  547/1130  26.0% accepted  (  3320/  9449 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  548/1130  20.4% accepted  (  2607/ 10162 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  549/1130  25.9% accepted  (  3306/  9463 Acc/Rej)  twiddle  3.93  time 0.016s
+                                     B THREAD   0]  550/1130  25.5% accepted  (  3253/  9516 Acc/Rej)  twiddle  3.93  time 0.016s
+                                     B THREAD   0]  551/1130  24.6% accepted  (  3139/  9630 Acc/Rej)  twiddle  3.93  time 0.012s
+                                     B THREAD   0]  552/1130  27.3% accepted  (  3485/  9284 Acc/Rej)  twiddle  3.93  time 0.016s
+                                     B THREAD   0]  553/1130  24.1% accepted  (  3074/  9695 Acc/Rej)  twiddle  4.11  time 0.012s
+                                     B THREAD   0]  554/1130  22.6% accepted  (  2881/  9888 Acc/Rej)  twiddle  4.11  time 0.016s
+                                     B THREAD   0]  555/1130  24.5% accepted  (  3134/  9635 Acc/Rej)  twiddle  4.11  time 0.012s
+                                     B THREAD   0]  556/1130  27.3% accepted  (  3487/  9282 Acc/Rej)  twiddle  4.11  time 0.016s
+                                     B THREAD   0]  557/1130  26.3% accepted  (  3357/  9412 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  558/1130  23.1% accepted  (  2945/  9824 Acc/Rej)  twiddle  4.30  time 0.016s
+                                     B THREAD   0]  559/1130  23.8% accepted  (  3045/  9724 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  560/1130  25.0% accepted  (  3197/  9572 Acc/Rej)  twiddle  4.30  time 0.016s
+                                     B THREAD   0]  561/1130  24.1% accepted  (  3079/  9690 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  562/1130  23.3% accepted  (  2977/  9792 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  563/1130  24.1% accepted  (  3083/  9686 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  564/1130  24.8% accepted  (  3163/  9606 Acc/Rej)  twiddle  4.30  time 0.016s
+                                     B THREAD   0]  565/1130  25.3% accepted  (  3233/  9536 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  566/1130  22.9% accepted  (  2924/  9845 Acc/Rej)  twiddle  4.30  time 0.016s
+                                     B THREAD   0]  567/1130  20.2% accepted  (  2583/ 10186 Acc/Rej)  twiddle  4.30  time 0.012s
+Computing eigenvalues... [568/1130]
+average store delta 0.367187183316
+New twiddle 4.296302
+                                     B THREAD   0]  568/1130  27.0% accepted  (  3450/  9319 Acc/Rej)  twiddle  4.30  time 0.016s
+                                     B THREAD   0]  569/1130  22.7% accepted  (  2901/  9868 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  570/1130  23.7% accepted  (  3031/  9738 Acc/Rej)  twiddle  4.30  time 0.016s
+                                     B THREAD   0]  571/1130  23.1% accepted  (  2955/  9814 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  572/1130  23.6% accepted  (  3012/  9757 Acc/Rej)  twiddle  4.30  time 0.016s
+                                     B THREAD   0]  573/1130  21.4% accepted  (  2738/ 10031 Acc/Rej)  twiddle  4.30  time 0.012s
+                                     B THREAD   0]  574/1130  25.6% accepted  (  3266/  9503 Acc/Rej)  twiddle  3.99  time 0.016s
+                                     B THREAD   0]  575/1130  22.0% accepted  (  2805/  9964 Acc/Rej)  twiddle  3.99  time 0.012s
+                                     B THREAD   0]  576/1130  27.9% accepted  (  3561/  9208 Acc/Rej)  twiddle  3.99  time 0.016s
+                                     B THREAD   0]  577/1130  25.5% accepted  (  3252/  9517 Acc/Rej)  twiddle  3.99  time 0.012s
+                                     B THREAD   0]  578/1130  23.5% accepted  (  3005/  9764 Acc/Rej)  twiddle  3.99  time 0.012s
+                                     B THREAD   0]  579/1130  19.3% accepted  (  2459/ 10310 Acc/Rej)  twiddle  3.99  time 0.012s
+                                     B THREAD   0]  580/1130  27.4% accepted  (  3504/  9265 Acc/Rej)  twiddle  3.99  time 0.016s
+                                     B THREAD   0]  581/1130  28.7% accepted  (  3667/  9102 Acc/Rej)  twiddle  3.99  time 0.016s
+                                     B THREAD   0]  582/1130  25.1% accepted  (  3204/  9565 Acc/Rej)  twiddle  3.99  time 0.012s
+                                     B THREAD   0]  583/1130  24.8% accepted  (  3164/  9605 Acc/Rej)  twiddle  3.99  time 0.016s
+                                     B THREAD   0]  584/1130  25.1% accepted  (  3203/  9566 Acc/Rej)  twiddle  3.99  time 0.016s
+                                     B THREAD   0]  585/1130  26.7% accepted  (  3408/  9361 Acc/Rej)  twiddle  3.99  time 0.012s
+                                     B THREAD   0]  586/1130  28.5% accepted  (  3641/  9128 Acc/Rej)  twiddle  4.13  time 0.012s
+                                     B THREAD   0]  587/1130  23.2% accepted  (  2968/  9801 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  588/1130  25.7% accepted  (  3279/  9490 Acc/Rej)  twiddle  4.13  time 0.012s
+                                     B THREAD   0]  589/1130  23.7% accepted  (  3021/  9748 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  590/1130  23.8% accepted  (  3033/  9736 Acc/Rej)  twiddle  4.13  time 0.012s
+                                     B THREAD   0]  591/1130  28.4% accepted  (  3624/  9145 Acc/Rej)  twiddle  4.13  time 0.012s
+                                     B THREAD   0]  592/1130  23.5% accepted  (  3005/  9764 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  593/1130  21.4% accepted  (  2734/ 10035 Acc/Rej)  twiddle  4.13  time 0.012s
+                                     B THREAD   0]  594/1130  23.8% accepted  (  3044/  9725 Acc/Rej)  twiddle  4.13  time 0.020s
+                                     B THREAD   0]  595/1130  25.3% accepted  (  3226/  9543 Acc/Rej)  twiddle  4.03  time 0.016s
+                                     B THREAD   0]  596/1130  24.0% accepted  (  3066/  9703 Acc/Rej)  twiddle  4.03  time 0.016s
+                                     B THREAD   0]  597/1130  25.6% accepted  (  3275/  9494 Acc/Rej)  twiddle  4.03  time 0.012s
+                                     B THREAD   0]  598/1130  24.0% accepted  (  3068/  9701 Acc/Rej)  twiddle  4.08  time 0.012s
+                                     B THREAD   0]  599/1130  30.0% accepted  (  3835/  8934 Acc/Rej)  twiddle  4.08  time 0.016s
+                                     B THREAD   0]  600/1130  23.3% accepted  (  2980/  9789 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  601/1130  26.0% accepted  (  3319/  9450 Acc/Rej)  twiddle  4.49  time 0.012s
+                                     B THREAD   0]  602/1130  23.6% accepted  (  3012/  9757 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  603/1130  28.6% accepted  (  3658/  9111 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  604/1130  21.3% accepted  (  2719/ 10050 Acc/Rej)  twiddle  4.49  time 0.012s
+                                     B THREAD   0]  605/1130  26.7% accepted  (  3413/  9356 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  606/1130  25.6% accepted  (  3275/  9494 Acc/Rej)  twiddle  4.49  time 0.012s
+                                     B THREAD   0]  607/1130  27.6% accepted  (  3528/  9241 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  608/1130  20.6% accepted  (  2635/ 10134 Acc/Rej)  twiddle  4.49  time 0.012s
+                                     B THREAD   0]  609/1130  23.8% accepted  (  3038/  9731 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  610/1130  24.4% accepted  (  3113/  9656 Acc/Rej)  twiddle  4.49  time 0.012s
+                                     B THREAD   0]  611/1130  25.6% accepted  (  3265/  9504 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  612/1130  23.3% accepted  (  2978/  9791 Acc/Rej)  twiddle  4.49  time 0.012s
+                                     B THREAD   0]  613/1130  24.6% accepted  (  3140/  9629 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  614/1130  23.4% accepted  (  2992/  9777 Acc/Rej)  twiddle  4.49  time 0.012s
+                                     B THREAD   0]  615/1130  24.4% accepted  (  3114/  9655 Acc/Rej)  twiddle  4.35  time 0.016s
+                                     B THREAD   0]  616/1130  26.8% accepted  (  3418/  9351 Acc/Rej)  twiddle  4.35  time 0.016s
+                                     B THREAD   0]  617/1130  24.8% accepted  (  3165/  9604 Acc/Rej)  twiddle  4.51  time 0.012s
+                                     B THREAD   0]  618/1130  23.7% accepted  (  3020/  9749 Acc/Rej)  twiddle  4.51  time 0.016s
+                                     B THREAD   0]  619/1130  23.7% accepted  (  3021/  9748 Acc/Rej)  twiddle  4.51  time 0.012s
+                                     B THREAD   0]  620/1130  26.1% accepted  (  3328/  9441 Acc/Rej)  twiddle  4.51  time 0.016s
+                                     B THREAD   0]  621/1130  26.4% accepted  (  3365/  9404 Acc/Rej)  twiddle  4.51  time 0.016s
+                                     B THREAD   0]  622/1130  23.2% accepted  (  2964/  9805 Acc/Rej)  twiddle  4.51  time 0.012s
+                                     B THREAD   0]  623/1130  22.0% accepted  (  2803/  9966 Acc/Rej)  twiddle  4.51  time 0.012s
+                                     B THREAD   0]  624/1130  24.2% accepted  (  3095/  9674 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  625/1130  24.4% accepted  (  3113/  9656 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  626/1130  22.9% accepted  (  2924/  9845 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  627/1130  27.8% accepted  (  3549/  9220 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  628/1130  27.5% accepted  (  3510/  9259 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  629/1130  26.9% accepted  (  3429/  9340 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  630/1130  25.4% accepted  (  3241/  9528 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  631/1130  24.8% accepted  (  3166/  9603 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  632/1130  23.3% accepted  (  2970/  9799 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  633/1130  26.8% accepted  (  3427/  9342 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  634/1130  23.6% accepted  (  3015/  9754 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  635/1130  23.4% accepted  (  2989/  9780 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  636/1130  23.9% accepted  (  3050/  9719 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  637/1130  25.5% accepted  (  3258/  9511 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  638/1130  23.6% accepted  (  3019/  9750 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  639/1130  24.2% accepted  (  3085/  9684 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  640/1130  23.8% accepted  (  3040/  9729 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  641/1130  26.9% accepted  (  3438/  9331 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  642/1130  25.7% accepted  (  3278/  9491 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  643/1130  29.6% accepted  (  3779/  8990 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  644/1130  25.3% accepted  (  3236/  9533 Acc/Rej)  twiddle  4.62  time 0.016s
+                                     B THREAD   0]  645/1130  23.0% accepted  (  2942/  9827 Acc/Rej)  twiddle  4.62  time 0.012s
+                                     B THREAD   0]  646/1130  24.3% accepted  (  3097/  9672 Acc/Rej)  twiddle  4.62  time 0.016s
+                                     B THREAD   0]  647/1130  24.5% accepted  (  3127/  9642 Acc/Rej)  twiddle  4.62  time 0.012s
+                                     B THREAD   0]  648/1130  21.6% accepted  (  2753/ 10016 Acc/Rej)  twiddle  4.62  time 0.012s
+                                     B THREAD   0]  649/1130  23.9% accepted  (  3049/  9720 Acc/Rej)  twiddle  4.62  time 0.012s
+                                     B THREAD   0]  650/1130  23.8% accepted  (  3033/  9736 Acc/Rej)  twiddle  4.52  time 0.012s
+                                     B THREAD   0]  651/1130  24.6% accepted  (  3145/  9624 Acc/Rej)  twiddle  4.52  time 0.012s
+                                     B THREAD   0]  652/1130  22.7% accepted  (  2893/  9876 Acc/Rej)  twiddle  4.52  time 0.016s
+                                     B THREAD   0]  653/1130  24.0% accepted  (  3061/  9708 Acc/Rej)  twiddle  4.52  time 0.012s
+                                     B THREAD   0]  654/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle  4.52  time 0.016s
+                                     B THREAD   0]  655/1130  25.3% accepted  (  3235/  9534 Acc/Rej)  twiddle  4.52  time 0.012s
+                                     B THREAD   0]  656/1130  23.2% accepted  (  2967/  9802 Acc/Rej)  twiddle  4.52  time 0.016s
+                                     B THREAD   0]  657/1130  22.6% accepted  (  2880/  9889 Acc/Rej)  twiddle  4.52  time 0.012s
+                                     B THREAD   0]  658/1130  23.8% accepted  (  3044/  9725 Acc/Rej)  twiddle  4.52  time 0.016s
+                                     B THREAD   0]  659/1130  18.7% accepted  (  2388/ 10381 Acc/Rej)  twiddle  4.52  time 0.008s
+                                     B THREAD   0]  660/1130  26.9% accepted  (  3435/  9334 Acc/Rej)  twiddle  3.95  time 0.012s
+                                     B THREAD   0]  661/1130  25.8% accepted  (  3299/  9470 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  662/1130  24.4% accepted  (  3116/  9653 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  663/1130  28.0% accepted  (  3581/  9188 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  664/1130  27.8% accepted  (  3548/  9221 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  665/1130  25.8% accepted  (  3290/  9479 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  666/1130  25.3% accepted  (  3228/  9541 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  667/1130  25.3% accepted  (  3231/  9538 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  668/1130  22.0% accepted  (  2813/  9956 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  669/1130  24.6% accepted  (  3141/  9628 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  670/1130  28.6% accepted  (  3657/  9112 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  671/1130  25.7% accepted  (  3285/  9484 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  672/1130  26.9% accepted  (  3432/  9337 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  673/1130  25.7% accepted  (  3276/  9493 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  674/1130  27.6% accepted  (  3524/  9245 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  675/1130  24.2% accepted  (  3088/  9681 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  676/1130  28.1% accepted  (  3586/  9183 Acc/Rej)  twiddle  4.03  time 0.016s
+                                     B THREAD   0]  677/1130  24.5% accepted  (  3124/  9645 Acc/Rej)  twiddle  4.03  time 0.012s
+                                     B THREAD   0]  678/1130  24.9% accepted  (  3179/  9590 Acc/Rej)  twiddle  4.03  time 0.012s
+                                     B THREAD   0]  679/1130  26.8% accepted  (  3428/  9341 Acc/Rej)  twiddle  4.03  time 0.016s
+                                     B THREAD   0]  680/1130  26.1% accepted  (  3329/  9440 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  681/1130  26.8% accepted  (  3419/  9350 Acc/Rej)  twiddle  4.18  time 0.016s
+Computing eigenvalues... [682/1130]
+average store delta 0.184136717034
+New twiddle 4.179391
+                                     B THREAD   0]  682/1130  27.1% accepted  (  3463/  9306 Acc/Rej)  twiddle  4.18  time 0.020s
+                                     B THREAD   0]  683/1130  27.1% accepted  (  3455/  9314 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  684/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  685/1130  26.1% accepted  (  3337/  9432 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  686/1130  27.5% accepted  (  3514/  9255 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  687/1130  24.2% accepted  (  3091/  9678 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  688/1130  23.2% accepted  (  2957/  9812 Acc/Rej)  twiddle  4.11  time 0.012s
+                                     B THREAD   0]  689/1130  24.8% accepted  (  3173/  9596 Acc/Rej)  twiddle  4.11  time 0.024s
+                                     B THREAD   0]  690/1130  25.5% accepted  (  3252/  9517 Acc/Rej)  twiddle  4.11  time 0.016s
+                                     B THREAD   0]  691/1130  27.8% accepted  (  3551/  9218 Acc/Rej)  twiddle  4.11  time 0.016s
+                                     B THREAD   0]  692/1130  27.7% accepted  (  3533/  9236 Acc/Rej)  twiddle  4.34  time 0.016s
+                                     B THREAD   0]  693/1130  28.0% accepted  (  3581/  9188 Acc/Rej)  twiddle  4.34  time 0.016s
+                                     B THREAD   0]  694/1130  26.7% accepted  (  3403/  9366 Acc/Rej)  twiddle  4.34  time 0.016s
+                                     B THREAD   0]  695/1130  26.6% accepted  (  3395/  9374 Acc/Rej)  twiddle  4.49  time 0.020s
+                                     B THREAD   0]  696/1130  22.2% accepted  (  2832/  9937 Acc/Rej)  twiddle  4.49  time 0.016s
+                                     B THREAD   0]  697/1130  25.4% accepted  (  3243/  9526 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  698/1130  25.0% accepted  (  3197/  9572 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  699/1130  23.0% accepted  (  2935/  9834 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  700/1130  23.8% accepted  (  3038/  9731 Acc/Rej)  twiddle  4.23  time 0.016s
+                                     B THREAD   0]  701/1130  23.4% accepted  (  2990/  9779 Acc/Rej)  twiddle  4.23  time 0.012s
+                                     B THREAD   0]  702/1130  24.1% accepted  (  3077/  9692 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  703/1130  25.3% accepted  (  3236/  9533 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  704/1130  26.5% accepted  (  3379/  9390 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  705/1130  25.4% accepted  (  3245/  9524 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  706/1130  28.1% accepted  (  3585/  9184 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  707/1130  26.2% accepted  (  3346/  9423 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  708/1130  23.5% accepted  (  2995/  9774 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  709/1130  26.1% accepted  (  3335/  9434 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  710/1130  27.4% accepted  (  3499/  9270 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  711/1130  22.9% accepted  (  2921/  9848 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  712/1130  24.6% accepted  (  3139/  9630 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  713/1130  27.4% accepted  (  3504/  9265 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  714/1130  24.3% accepted  (  3101/  9668 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  715/1130  30.5% accepted  (  3895/  8874 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  716/1130  23.4% accepted  (  2984/  9785 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  717/1130  20.3% accepted  (  2594/ 10175 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  718/1130  28.8% accepted  (  3679/  9090 Acc/Rej)  twiddle  3.60  time 0.016s
+                                     B THREAD   0]  719/1130  27.8% accepted  (  3553/  9216 Acc/Rej)  twiddle  3.60  time 0.016s
+                                     B THREAD   0]  720/1130  28.0% accepted  (  3570/  9199 Acc/Rej)  twiddle  3.60  time 0.012s
+                                     B THREAD   0]  721/1130  28.5% accepted  (  3639/  9130 Acc/Rej)  twiddle  3.60  time 0.012s
+                                     B THREAD   0]  722/1130  32.8% accepted  (  4193/  8576 Acc/Rej)  twiddle  3.60  time 0.016s
+                                     B THREAD   0]  723/1130  28.6% accepted  (  3657/  9112 Acc/Rej)  twiddle  3.60  time 0.016s
+                                     B THREAD   0]  724/1130  28.0% accepted  (  3581/  9188 Acc/Rej)  twiddle  3.86  time 0.016s
+                                     B THREAD   0]  725/1130  24.3% accepted  (  3097/  9672 Acc/Rej)  twiddle  3.86  time 0.012s
+                                     B THREAD   0]  726/1130  26.7% accepted  (  3404/  9365 Acc/Rej)  twiddle  3.86  time 0.016s
+                                     B THREAD   0]  727/1130  25.4% accepted  (  3241/  9528 Acc/Rej)  twiddle  3.86  time 0.012s
+                                     B THREAD   0]  728/1130  22.6% accepted  (  2891/  9878 Acc/Rej)  twiddle  3.86  time 0.012s
+                                     B THREAD   0]  729/1130  27.5% accepted  (  3509/  9260 Acc/Rej)  twiddle  3.86  time 0.012s
+                                     B THREAD   0]  730/1130  23.2% accepted  (  2964/  9805 Acc/Rej)  twiddle  3.86  time 0.012s
+                                     B THREAD   0]  731/1130  27.2% accepted  (  3472/  9297 Acc/Rej)  twiddle  3.86  time 0.016s
+                                     B THREAD   0]  732/1130  26.1% accepted  (  3336/  9433 Acc/Rej)  twiddle  3.86  time 0.012s
+                                     B THREAD   0]  733/1130  27.1% accepted  (  3462/  9307 Acc/Rej)  twiddle  3.86  time 0.012s
+                                     B THREAD   0]  734/1130  25.3% accepted  (  3226/  9543 Acc/Rej)  twiddle  3.86  time 0.016s
+                                     B THREAD   0]  735/1130  28.3% accepted  (  3614/  9155 Acc/Rej)  twiddle  3.86  time 0.020s
+                                     B THREAD   0]  736/1130  26.3% accepted  (  3360/  9409 Acc/Rej)  twiddle  4.12  time 0.016s
+                                     B THREAD   0]  737/1130  22.9% accepted  (  2920/  9849 Acc/Rej)  twiddle  4.12  time 0.016s
+                                     B THREAD   0]  738/1130  23.3% accepted  (  2980/  9789 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  739/1130  25.3% accepted  (  3232/  9537 Acc/Rej)  twiddle  4.12  time 0.016s
+                                     B THREAD   0]  740/1130  24.4% accepted  (  3110/  9659 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  741/1130  26.4% accepted  (  3375/  9394 Acc/Rej)  twiddle  4.12  time 0.016s
+                                     B THREAD   0]  742/1130  25.8% accepted  (  3291/  9478 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  743/1130  24.8% accepted  (  3167/  9602 Acc/Rej)  twiddle  4.12  time 0.016s
+                                     B THREAD   0]  744/1130  22.2% accepted  (  2829/  9940 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  745/1130  25.3% accepted  (  3236/  9533 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  746/1130  27.3% accepted  (  3480/  9289 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  747/1130  24.6% accepted  (  3135/  9634 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  748/1130  24.9% accepted  (  3178/  9591 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  749/1130  21.9% accepted  (  2798/  9971 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  750/1130  28.9% accepted  (  3690/  9079 Acc/Rej)  twiddle  4.12  time 0.012s
+                                     B THREAD   0]  751/1130  27.1% accepted  (  3463/  9306 Acc/Rej)  twiddle  4.44  time 0.012s
+                                     B THREAD   0]  752/1130  25.0% accepted  (  3192/  9577 Acc/Rej)  twiddle  4.63  time 0.016s
+                                     B THREAD   0]  753/1130  22.7% accepted  (  2894/  9875 Acc/Rej)  twiddle  4.63  time 0.012s
+                                     B THREAD   0]  754/1130  25.1% accepted  (  3202/  9567 Acc/Rej)  twiddle  4.63  time 0.016s
+                                     B THREAD   0]  755/1130  25.2% accepted  (  3224/  9545 Acc/Rej)  twiddle  4.63  time 0.012s
+                                     B THREAD   0]  756/1130  19.9% accepted  (  2542/ 10227 Acc/Rej)  twiddle  4.63  time 0.012s
+                                     B THREAD   0]  757/1130  24.9% accepted  (  3181/  9588 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  758/1130  28.9% accepted  (  3687/  9082 Acc/Rej)  twiddle  4.16  time 0.016s
+                                     B THREAD   0]  759/1130  26.8% accepted  (  3425/  9344 Acc/Rej)  twiddle  4.48  time 0.012s
+                                     B THREAD   0]  760/1130  22.6% accepted  (  2889/  9880 Acc/Rej)  twiddle  4.48  time 0.012s
+                                     B THREAD   0]  761/1130  21.9% accepted  (  2794/  9975 Acc/Rej)  twiddle  4.48  time 0.012s
+                                     B THREAD   0]  762/1130  23.0% accepted  (  2934/  9835 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  763/1130  27.7% accepted  (  3532/  9237 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  764/1130  24.5% accepted  (  3131/  9638 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  765/1130  25.9% accepted  (  3309/  9460 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  766/1130  25.0% accepted  (  3186/  9583 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  767/1130  25.5% accepted  (  3250/  9519 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  768/1130  23.0% accepted  (  2940/  9829 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  769/1130  24.9% accepted  (  3183/  9586 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  770/1130  21.3% accepted  (  2723/ 10046 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  771/1130  23.2% accepted  (  2962/  9807 Acc/Rej)  twiddle  4.42  time 0.020s
+                                     B THREAD   0]  772/1130  24.0% accepted  (  3069/  9700 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  773/1130  24.8% accepted  (  3167/  9602 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  774/1130  26.0% accepted  (  3323/  9446 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  775/1130  22.9% accepted  (  2918/  9851 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  776/1130  19.2% accepted  (  2451/ 10318 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  777/1130  25.6% accepted  (  3269/  9500 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  778/1130  22.2% accepted  (  2837/  9932 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  779/1130  24.6% accepted  (  3145/  9624 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  780/1130  25.1% accepted  (  3205/  9564 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  781/1130  25.7% accepted  (  3281/  9488 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  782/1130  23.9% accepted  (  3046/  9723 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  783/1130  22.9% accepted  (  2926/  9843 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  784/1130  21.1% accepted  (  2690/ 10079 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  785/1130  23.8% accepted  (  3038/  9731 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  786/1130  25.8% accepted  (  3293/  9476 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  787/1130  23.9% accepted  (  3046/  9723 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  788/1130  25.7% accepted  (  3284/  9485 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  789/1130  25.5% accepted  (  3256/  9513 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  790/1130  24.7% accepted  (  3157/  9612 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  791/1130  24.5% accepted  (  3126/  9643 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  792/1130  23.2% accepted  (  2967/  9802 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  793/1130  22.9% accepted  (  2919/  9850 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  794/1130  23.9% accepted  (  3058/  9711 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  795/1130  24.1% accepted  (  3076/  9693 Acc/Rej)  twiddle  4.42  time 0.012s
+Computing eigenvalues... [796/1130]
+average store delta 0.150369853318
+New twiddle 4.422838
+                                     B THREAD   0]  796/1130  23.0% accepted  (  2941/  9828 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  797/1130  21.6% accepted  (  2764/ 10005 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  798/1130  24.8% accepted  (  3163/  9606 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  799/1130  20.8% accepted  (  2653/ 10116 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  800/1130  26.3% accepted  (  3360/  9409 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  801/1130  23.7% accepted  (  3026/  9743 Acc/Rej)  twiddle  4.54  time 0.012s
+                                     B THREAD   0]  802/1130  23.7% accepted  (  3022/  9747 Acc/Rej)  twiddle  4.54  time 0.012s
+                                     B THREAD   0]  803/1130  24.2% accepted  (  3095/  9674 Acc/Rej)  twiddle  4.42  time 0.016s
+                                     B THREAD   0]  804/1130  23.9% accepted  (  3046/  9723 Acc/Rej)  twiddle  4.42  time 0.012s
+                                     B THREAD   0]  805/1130  25.1% accepted  (  3206/  9563 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  806/1130  24.3% accepted  (  3102/  9667 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  807/1130  24.2% accepted  (  3089/  9680 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  808/1130  25.7% accepted  (  3286/  9483 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  809/1130  24.0% accepted  (  3066/  9703 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  810/1130  25.4% accepted  (  3248/  9521 Acc/Rej)  twiddle  4.32  time 0.016s
+                                     B THREAD   0]  811/1130  24.1% accepted  (  3075/  9694 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  812/1130  22.3% accepted  (  2845/  9924 Acc/Rej)  twiddle  4.32  time 0.012s
+                                     B THREAD   0]  813/1130  27.4% accepted  (  3503/  9266 Acc/Rej)  twiddle  4.08  time 0.016s
+                                     B THREAD   0]  814/1130  24.6% accepted  (  3144/  9625 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  815/1130  26.3% accepted  (  3353/  9416 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  816/1130  26.4% accepted  (  3368/  9401 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  817/1130  25.7% accepted  (  3277/  9492 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  818/1130  28.8% accepted  (  3674/  9095 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  819/1130  25.5% accepted  (  3257/  9512 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  820/1130  24.8% accepted  (  3167/  9602 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  821/1130  25.2% accepted  (  3217/  9552 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  822/1130  24.4% accepted  (  3113/  9656 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  823/1130  24.9% accepted  (  3184/  9585 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  824/1130  25.3% accepted  (  3226/  9543 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  825/1130  21.8% accepted  (  2790/  9979 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  826/1130  23.8% accepted  (  3043/  9726 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  827/1130  24.9% accepted  (  3174/  9595 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  828/1130  24.5% accepted  (  3124/  9645 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  829/1130  25.3% accepted  (  3235/  9534 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  830/1130  24.3% accepted  (  3108/  9661 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  831/1130  24.2% accepted  (  3088/  9681 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  832/1130  24.0% accepted  (  3065/  9704 Acc/Rej)  twiddle  4.28  time 0.012s
+                                     B THREAD   0]  833/1130  25.3% accepted  (  3226/  9543 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  834/1130  26.1% accepted  (  3327/  9442 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  835/1130  25.6% accepted  (  3266/  9503 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  836/1130  22.9% accepted  (  2927/  9842 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  837/1130  25.9% accepted  (  3307/  9462 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  838/1130  28.0% accepted  (  3572/  9197 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  839/1130  25.2% accepted  (  3219/  9550 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  840/1130  25.0% accepted  (  3190/  9579 Acc/Rej)  twiddle  4.20  time 0.016s
+                                     B THREAD   0]  841/1130  23.9% accepted  (  3048/  9721 Acc/Rej)  twiddle  4.20  time 0.012s
+                                     B THREAD   0]  842/1130  28.4% accepted  (  3629/  9140 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  843/1130  30.3% accepted  (  3867/  8902 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  844/1130  26.1% accepted  (  3338/  9431 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  845/1130  25.2% accepted  (  3221/  9548 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  846/1130  27.8% accepted  (  3555/  9214 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  847/1130  28.9% accepted  (  3685/  9084 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  848/1130  25.6% accepted  (  3264/  9505 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  849/1130  27.4% accepted  (  3499/  9270 Acc/Rej)  twiddle  4.10  time 0.012s
+                                     B THREAD   0]  850/1130  25.2% accepted  (  3223/  9546 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  851/1130  28.2% accepted  (  3607/  9162 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  852/1130  29.4% accepted  (  3754/  9015 Acc/Rej)  twiddle  4.10  time 0.016s
+                                     B THREAD   0]  853/1130  24.6% accepted  (  3147/  9622 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  854/1130  22.2% accepted  (  2839/  9930 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  855/1130  25.4% accepted  (  3241/  9528 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  856/1130  23.7% accepted  (  3027/  9742 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  857/1130  25.2% accepted  (  3218/  9551 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  858/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  859/1130  25.4% accepted  (  3245/  9524 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  860/1130  23.2% accepted  (  2958/  9811 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  861/1130  24.6% accepted  (  3135/  9634 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  862/1130  22.6% accepted  (  2889/  9880 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  863/1130  25.1% accepted  (  3205/  9564 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  864/1130  24.0% accepted  (  3061/  9708 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  865/1130  26.5% accepted  (  3383/  9386 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  866/1130  25.0% accepted  (  3193/  9576 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  867/1130  25.8% accepted  (  3297/  9472 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  868/1130  26.5% accepted  (  3388/  9381 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  869/1130  23.9% accepted  (  3051/  9718 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  870/1130  26.1% accepted  (  3338/  9431 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  871/1130  25.5% accepted  (  3250/  9519 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  872/1130  23.4% accepted  (  2987/  9782 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  873/1130  24.6% accepted  (  3141/  9628 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  874/1130  24.8% accepted  (  3161/  9608 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  875/1130  26.2% accepted  (  3342/  9427 Acc/Rej)  twiddle  4.46  time 0.016s
+                                     B THREAD   0]  876/1130  23.6% accepted  (  3009/  9760 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  877/1130  23.1% accepted  (  2955/  9814 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  878/1130  25.6% accepted  (  3267/  9502 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  879/1130  23.5% accepted  (  3007/  9762 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  880/1130  20.6% accepted  (  2631/ 10138 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  881/1130  21.5% accepted  (  2750/ 10019 Acc/Rej)  twiddle  4.46  time 0.012s
+                                     B THREAD   0]  882/1130  24.7% accepted  (  3152/  9617 Acc/Rej)  twiddle  4.15  time 0.016s
+                                     B THREAD   0]  883/1130  26.1% accepted  (  3333/  9436 Acc/Rej)  twiddle  4.13  time 0.012s
+                                     B THREAD   0]  884/1130  26.4% accepted  (  3366/  9403 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  885/1130  28.9% accepted  (  3694/  9075 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  886/1130  26.4% accepted  (  3372/  9397 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  887/1130  27.6% accepted  (  3520/  9249 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  888/1130  27.9% accepted  (  3558/  9211 Acc/Rej)  twiddle  4.13  time 0.016s
+                                     B THREAD   0]  889/1130  23.0% accepted  (  2943/  9826 Acc/Rej)  twiddle  4.13  time 0.012s
+                                     B THREAD   0]  890/1130  23.8% accepted  (  3036/  9733 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  891/1130  24.5% accepted  (  3128/  9641 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  892/1130  26.2% accepted  (  3349/  9420 Acc/Rej)  twiddle  3.97  time 0.016s
+                                     B THREAD   0]  893/1130  27.9% accepted  (  3561/  9208 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  894/1130  27.2% accepted  (  3469/  9300 Acc/Rej)  twiddle  3.97  time 0.012s
+                                     B THREAD   0]  895/1130  24.4% accepted  (  3111/  9658 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  896/1130  25.1% accepted  (  3204/  9565 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  897/1130  27.2% accepted  (  3479/  9290 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  898/1130  25.8% accepted  (  3298/  9471 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  899/1130  27.6% accepted  (  3525/  9244 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  900/1130  25.4% accepted  (  3242/  9527 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  901/1130  22.2% accepted  (  2836/  9933 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  902/1130  25.3% accepted  (  3232/  9537 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  903/1130  26.0% accepted  (  3326/  9443 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  904/1130  25.2% accepted  (  3215/  9554 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  905/1130  28.4% accepted  (  3628/  9141 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  906/1130  27.0% accepted  (  3444/  9325 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  907/1130  24.9% accepted  (  3182/  9587 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  908/1130  27.1% accepted  (  3456/  9313 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  909/1130  23.6% accepted  (  3011/  9758 Acc/Rej)  twiddle  4.14  time 0.012s
+Computing eigenvalues... [910/1130]
+average store delta 0.0751404311119
+New twiddle 4.136961
+                                     B THREAD   0]  910/1130  24.8% accepted  (  3167/  9602 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  911/1130  28.7% accepted  (  3660/  9109 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  912/1130  25.5% accepted  (  3257/  9512 Acc/Rej)  twiddle  4.14  time 0.012s
+                                     B THREAD   0]  913/1130  24.8% accepted  (  3169/  9600 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  914/1130  27.0% accepted  (  3454/  9315 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  915/1130  23.4% accepted  (  2993/  9776 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  916/1130  25.9% accepted  (  3303/  9466 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  917/1130  24.4% accepted  (  3117/  9652 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  918/1130  24.3% accepted  (  3100/  9669 Acc/Rej)  twiddle  4.18  time 0.016s
+                                     B THREAD   0]  919/1130  22.6% accepted  (  2887/  9882 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  920/1130  23.6% accepted  (  3018/  9751 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  921/1130  25.9% accepted  (  3307/  9462 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  922/1130  24.0% accepted  (  3066/  9703 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  923/1130  26.3% accepted  (  3353/  9416 Acc/Rej)  twiddle  4.18  time 0.012s
+                                     B THREAD   0]  924/1130  24.2% accepted  (  3084/  9685 Acc/Rej)  twiddle  4.28  time 0.016s
+                                     B THREAD   0]  925/1130  23.6% accepted  (  3016/  9753 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  926/1130  24.4% accepted  (  3122/  9647 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  927/1130  25.6% accepted  (  3271/  9498 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  928/1130  25.0% accepted  (  3194/  9575 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  929/1130  24.2% accepted  (  3086/  9683 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  930/1130  26.0% accepted  (  3317/  9452 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  931/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  932/1130  26.4% accepted  (  3372/  9397 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  933/1130  22.7% accepted  (  2901/  9868 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  934/1130  27.0% accepted  (  3453/  9316 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  935/1130  23.5% accepted  (  2999/  9770 Acc/Rej)  twiddle  4.38  time 0.012s
+                                     B THREAD   0]  936/1130  24.6% accepted  (  3143/  9626 Acc/Rej)  twiddle  4.25  time 0.016s
+                                     B THREAD   0]  937/1130  24.0% accepted  (  3070/  9699 Acc/Rej)  twiddle  4.25  time 0.012s
+                                     B THREAD   0]  938/1130  26.8% accepted  (  3424/  9345 Acc/Rej)  twiddle  4.25  time 0.016s
+                                     B THREAD   0]  939/1130  25.0% accepted  (  3189/  9580 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  940/1130  21.8% accepted  (  2789/  9980 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  941/1130  24.2% accepted  (  3090/  9679 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  942/1130  23.4% accepted  (  2993/  9776 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  943/1130  25.1% accepted  (  3206/  9563 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  944/1130  23.7% accepted  (  3020/  9749 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  945/1130  24.6% accepted  (  3141/  9628 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  946/1130  21.8% accepted  (  2787/  9982 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  947/1130  24.7% accepted  (  3156/  9613 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  948/1130  24.6% accepted  (  3142/  9627 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  949/1130  24.8% accepted  (  3168/  9601 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  950/1130  24.4% accepted  (  3116/  9653 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  951/1130  25.9% accepted  (  3307/  9462 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  952/1130  25.8% accepted  (  3300/  9469 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  953/1130  26.8% accepted  (  3416/  9353 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  954/1130  25.2% accepted  (  3218/  9551 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  955/1130  25.0% accepted  (  3192/  9577 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  956/1130  24.4% accepted  (  3120/  9649 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  957/1130  26.2% accepted  (  3340/  9429 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  958/1130  23.8% accepted  (  3045/  9724 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  959/1130  24.5% accepted  (  3132/  9637 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  960/1130  27.0% accepted  (  3445/  9324 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  961/1130  26.4% accepted  (  3370/  9399 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  962/1130  25.3% accepted  (  3230/  9539 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  963/1130  26.9% accepted  (  3439/  9330 Acc/Rej)  twiddle  4.41  time 0.016s
+                                     B THREAD   0]  964/1130  22.0% accepted  (  2806/  9963 Acc/Rej)  twiddle  4.41  time 0.012s
+                                     B THREAD   0]  965/1130  25.5% accepted  (  3255/  9514 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  966/1130  28.0% accepted  (  3574/  9195 Acc/Rej)  twiddle  4.14  time 0.016s
+                                     B THREAD   0]  967/1130  22.5% accepted  (  2868/  9901 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  968/1130  23.1% accepted  (  2946/  9823 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  969/1130  21.9% accepted  (  2797/  9972 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  970/1130  23.7% accepted  (  3027/  9742 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  971/1130  26.5% accepted  (  3386/  9383 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  972/1130  27.1% accepted  (  3465/  9304 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  973/1130  23.6% accepted  (  3013/  9756 Acc/Rej)  twiddle  4.57  time 0.016s
+                                     B THREAD   0]  974/1130  25.3% accepted  (  3236/  9533 Acc/Rej)  twiddle  4.57  time 0.012s
+                                     B THREAD   0]  975/1130  24.8% accepted  (  3170/  9599 Acc/Rej)  twiddle  4.57  time 0.012s
+                                     B THREAD   0]  976/1130  22.8% accepted  (  2916/  9853 Acc/Rej)  twiddle  4.57  time 0.012s
+                                     B THREAD   0]  977/1130  22.9% accepted  (  2927/  9842 Acc/Rej)  twiddle  4.57  time 0.016s
+                                     B THREAD   0]  978/1130  23.1% accepted  (  2954/  9815 Acc/Rej)  twiddle  4.57  time 0.012s
+                                     B THREAD   0]  979/1130  24.5% accepted  (  3127/  9642 Acc/Rej)  twiddle  4.57  time 0.016s
+                                     B THREAD   0]  980/1130  24.4% accepted  (  3121/  9648 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  981/1130  23.9% accepted  (  3053/  9716 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  982/1130  23.5% accepted  (  3002/  9767 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  983/1130  26.6% accepted  (  3402/  9367 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  984/1130  25.9% accepted  (  3301/  9468 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  985/1130  25.7% accepted  (  3277/  9492 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  986/1130  24.3% accepted  (  3097/  9672 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  987/1130  24.0% accepted  (  3060/  9709 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  988/1130  26.4% accepted  (  3371/  9398 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  989/1130  23.6% accepted  (  3017/  9752 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  990/1130  21.5% accepted  (  2751/ 10018 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  991/1130  24.8% accepted  (  3170/  9599 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  992/1130  24.6% accepted  (  3145/  9624 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  993/1130  22.5% accepted  (  2869/  9900 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  994/1130  26.1% accepted  (  3327/  9442 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  995/1130  24.7% accepted  (  3157/  9612 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  996/1130  24.1% accepted  (  3076/  9693 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  997/1130  24.9% accepted  (  3179/  9590 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  998/1130  25.4% accepted  (  3249/  9520 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  999/1130  24.0% accepted  (  3068/  9701 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  1000/1130  25.1% accepted  (  3210/  9559 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  1001/1130  23.3% accepted  (  2974/  9795 Acc/Rej)  twiddle  4.21  time 0.020s
+                                     B THREAD   0]  1002/1130  24.6% accepted  (  3144/  9625 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  1003/1130  25.2% accepted  (  3214/  9555 Acc/Rej)  twiddle  4.21  time 0.016s
+                                     B THREAD   0]  1004/1130  24.7% accepted  (  3153/  9616 Acc/Rej)  twiddle  4.21  time 0.012s
+                                     B THREAD   0]  1005/1130  23.7% accepted  (  3032/  9737 Acc/Rej)  twiddle  4.21  time 0.024s
+                                     B THREAD   0]  1006/1130  29.7% accepted  (  3791/  8978 Acc/Rej)  twiddle  4.21  time 0.020s
+                                     B THREAD   0]  1007/1130  22.2% accepted  (  2833/  9936 Acc/Rej)  twiddle  4.61  time 0.012s
+                                     B THREAD   0]  1008/1130  23.3% accepted  (  2974/  9795 Acc/Rej)  twiddle  4.61  time 0.016s
+                                     B THREAD   0]  1009/1130  26.0% accepted  (  3323/  9446 Acc/Rej)  twiddle  4.61  time 0.016s
+                                     B THREAD   0]  1010/1130  24.7% accepted  (  3160/  9609 Acc/Rej)  twiddle  4.61  time 0.012s
+                                     B THREAD   0]  1011/1130  23.4% accepted  (  2994/  9775 Acc/Rej)  twiddle  4.61  time 0.016s
+                                     B THREAD   0]  1012/1130  23.4% accepted  (  2987/  9782 Acc/Rej)  twiddle  4.61  time 0.012s
+                                     B THREAD   0]  1013/1130  24.9% accepted  (  3184/  9585 Acc/Rej)  twiddle  4.61  time 0.016s
+                                     B THREAD   0]  1014/1130  23.6% accepted  (  3014/  9755 Acc/Rej)  twiddle  4.61  time 0.012s
+                                     B THREAD   0]  1015/1130  24.9% accepted  (  3180/  9589 Acc/Rej)  twiddle  4.61  time 0.012s
+                                     B THREAD   0]  1016/1130  20.7% accepted  (  2649/ 10120 Acc/Rej)  twiddle  4.61  time 0.012s
+                                     B THREAD   0]  1017/1130  23.9% accepted  (  3055/  9714 Acc/Rej)  twiddle  4.61  time 0.016s
+                                     B THREAD   0]  1018/1130  20.2% accepted  (  2582/ 10187 Acc/Rej)  twiddle  4.61  time 0.012s
+                                     B THREAD   0]  1019/1130  24.6% accepted  (  3137/  9632 Acc/Rej)  twiddle  4.17  time 0.012s
+                                     B THREAD   0]  1020/1130  23.0% accepted  (  2942/  9827 Acc/Rej)  twiddle  4.17  time 0.012s
+                                     B THREAD   0]  1021/1130  23.5% accepted  (  2998/  9771 Acc/Rej)  twiddle  4.17  time 0.012s
+                                     B THREAD   0]  1022/1130  24.0% accepted  (  3064/  9705 Acc/Rej)  twiddle  4.17  time 0.016s
+                                     B THREAD   0]  1023/1130  27.7% accepted  (  3539/  9230 Acc/Rej)  twiddle  4.17  time 0.012s
+Computing eigenvalues... [1024/1130]
+average store delta 0.155883004943
+New twiddle 4.394891
+                                     B THREAD   0]  1024/1130  21.7% accepted  (  2769/ 10000 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  1025/1130  25.3% accepted  (  3233/  9536 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  1026/1130  29.0% accepted  (  3708/  9061 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  1027/1130  27.0% accepted  (  3444/  9325 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  1028/1130  26.6% accepted  (  3395/  9374 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  1029/1130  25.8% accepted  (  3291/  9478 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  1030/1130  25.9% accepted  (  3306/  9463 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  1031/1130  25.5% accepted  (  3258/  9511 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  1032/1130  23.5% accepted  (  3002/  9767 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  1033/1130  23.5% accepted  (  3003/  9766 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  1034/1130  24.7% accepted  (  3151/  9618 Acc/Rej)  twiddle  4.39  time 0.012s
+                                     B THREAD   0]  1035/1130  24.3% accepted  (  3100/  9669 Acc/Rej)  twiddle  4.39  time 0.016s
+                                     B THREAD   0]  1036/1130  25.1% accepted  (  3208/  9561 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1037/1130  22.4% accepted  (  2861/  9908 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1038/1130  25.8% accepted  (  3296/  9473 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1039/1130  25.5% accepted  (  3255/  9514 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1040/1130  28.2% accepted  (  3606/  9163 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1041/1130  24.7% accepted  (  3160/  9609 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1042/1130  24.3% accepted  (  3099/  9670 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1043/1130  24.3% accepted  (  3109/  9660 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1044/1130  26.3% accepted  (  3358/  9411 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1045/1130  27.6% accepted  (  3523/  9246 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1046/1130  25.9% accepted  (  3313/  9456 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1047/1130  26.5% accepted  (  3380/  9389 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1048/1130  24.0% accepted  (  3066/  9703 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1049/1130  24.3% accepted  (  3102/  9667 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1050/1130  23.7% accepted  (  3023/  9746 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1051/1130  23.4% accepted  (  2984/  9785 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1052/1130  22.7% accepted  (  2899/  9870 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1053/1130  26.5% accepted  (  3379/  9390 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1054/1130  23.9% accepted  (  3057/  9712 Acc/Rej)  twiddle  4.33  time 0.012s
+                                     B THREAD   0]  1055/1130  26.1% accepted  (  3334/  9435 Acc/Rej)  twiddle  4.33  time 0.016s
+                                     B THREAD   0]  1056/1130  26.4% accepted  (  3368/  9401 Acc/Rej)  twiddle  4.43  time 0.012s
+                                     B THREAD   0]  1057/1130  27.7% accepted  (  3537/  9232 Acc/Rej)  twiddle  4.43  time 0.016s
+                                     B THREAD   0]  1058/1130  21.6% accepted  (  2762/ 10007 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1059/1130  24.4% accepted  (  3111/  9658 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1060/1130  24.9% accepted  (  3178/  9591 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1061/1130  23.9% accepted  (  3049/  9720 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1062/1130  23.9% accepted  (  3049/  9720 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1063/1130  22.4% accepted  (  2856/  9913 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1064/1130  22.8% accepted  (  2914/  9855 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1065/1130  25.1% accepted  (  3201/  9568 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1066/1130  24.0% accepted  (  3063/  9706 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1067/1130  24.7% accepted  (  3156/  9613 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1068/1130  24.2% accepted  (  3096/  9673 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1069/1130  22.7% accepted  (  2896/  9873 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1070/1130  22.8% accepted  (  2917/  9852 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1071/1130  24.0% accepted  (  3062/  9707 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1072/1130  20.8% accepted  (  2654/ 10115 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1073/1130  21.0% accepted  (  2684/ 10085 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1074/1130  21.6% accepted  (  2759/ 10010 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1075/1130  22.1% accepted  (  2819/  9950 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1076/1130  24.7% accepted  (  3154/  9615 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1077/1130  24.1% accepted  (  3071/  9698 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1078/1130  23.3% accepted  (  2978/  9791 Acc/Rej)  twiddle  4.67  time 0.012s
+                                     B THREAD   0]  1079/1130  26.0% accepted  (  3322/  9447 Acc/Rej)  twiddle  4.67  time 0.016s
+                                     B THREAD   0]  1080/1130  22.8% accepted  (  2907/  9862 Acc/Rej)  twiddle  4.76  time 0.016s
+                                     B THREAD   0]  1081/1130  24.7% accepted  (  3156/  9613 Acc/Rej)  twiddle  4.76  time 0.012s
+                                     B THREAD   0]  1082/1130  22.8% accepted  (  2911/  9858 Acc/Rej)  twiddle  4.76  time 0.016s
+                                     B THREAD   0]  1083/1130  23.1% accepted  (  2946/  9823 Acc/Rej)  twiddle  4.76  time 0.012s
+                                     B THREAD   0]  1084/1130  23.7% accepted  (  3027/  9742 Acc/Rej)  twiddle  4.76  time 0.012s
+                                     B THREAD   0]  1085/1130  24.4% accepted  (  3118/  9651 Acc/Rej)  twiddle  4.76  time 0.016s
+                                     B THREAD   0]  1086/1130  21.7% accepted  (  2769/ 10000 Acc/Rej)  twiddle  4.76  time 0.012s
+                                     B THREAD   0]  1087/1130  24.3% accepted  (  3107/  9662 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1088/1130  24.0% accepted  (  3067/  9702 Acc/Rej)  twiddle  4.45  time 0.012s
+                                     B THREAD   0]  1089/1130  24.0% accepted  (  3063/  9706 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1090/1130  25.0% accepted  (  3191/  9578 Acc/Rej)  twiddle  4.45  time 0.012s
+                                     B THREAD   0]  1091/1130  26.1% accepted  (  3332/  9437 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1092/1130  26.1% accepted  (  3338/  9431 Acc/Rej)  twiddle  4.45  time 0.012s
+                                     B THREAD   0]  1093/1130  24.5% accepted  (  3133/  9636 Acc/Rej)  twiddle  4.45  time 0.012s
+                                     B THREAD   0]  1094/1130  29.3% accepted  (  3744/  9025 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1095/1130  23.0% accepted  (  2932/  9837 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1096/1130  27.6% accepted  (  3530/  9239 Acc/Rej)  twiddle  4.45  time 0.012s
+                                     B THREAD   0]  1097/1130  27.1% accepted  (  3458/  9311 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1098/1130  27.7% accepted  (  3538/  9231 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1099/1130  24.5% accepted  (  3134/  9635 Acc/Rej)  twiddle  4.45  time 0.012s
+                                     B THREAD   0]  1100/1130  24.9% accepted  (  3180/  9589 Acc/Rej)  twiddle  4.45  time 0.012s
+                                     B THREAD   0]  1101/1130  27.8% accepted  (  3555/  9214 Acc/Rej)  twiddle  4.45  time 0.016s
+                                     B THREAD   0]  1102/1130  23.2% accepted  (  2964/  9805 Acc/Rej)  twiddle  4.70  time 0.012s
+                                     B THREAD   0]  1103/1130  23.7% accepted  (  3022/  9747 Acc/Rej)  twiddle  4.53  time 0.020s
+                                     B THREAD   0]  1104/1130  24.1% accepted  (  3071/  9698 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1105/1130  26.3% accepted  (  3357/  9412 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1106/1130  23.4% accepted  (  2988/  9781 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1107/1130  25.1% accepted  (  3206/  9563 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1108/1130  24.2% accepted  (  3088/  9681 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1109/1130  26.4% accepted  (  3372/  9397 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1110/1130  26.1% accepted  (  3337/  9432 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1111/1130  25.0% accepted  (  3188/  9581 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1112/1130  25.3% accepted  (  3226/  9543 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1113/1130  24.7% accepted  (  3152/  9617 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1114/1130  25.6% accepted  (  3266/  9503 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1115/1130  25.4% accepted  (  3246/  9523 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1116/1130  23.6% accepted  (  3018/  9751 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1117/1130  26.9% accepted  (  3439/  9330 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1118/1130  23.9% accepted  (  3047/  9722 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1119/1130  23.0% accepted  (  2938/  9831 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1120/1130  26.5% accepted  (  3389/  9380 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1121/1130  23.0% accepted  (  2937/  9832 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1122/1130  26.6% accepted  (  3395/  9374 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1123/1130  22.9% accepted  (  2918/  9851 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1124/1130  24.7% accepted  (  3150/  9619 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1125/1130  24.7% accepted  (  3149/  9620 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1126/1130  24.9% accepted  (  3175/  9594 Acc/Rej)  twiddle  4.53  time 0.012s
+                                     B THREAD   0]  1127/1130  26.4% accepted  (  3374/  9395 Acc/Rej)  twiddle  4.53  time 0.016s
+                                     B THREAD   0]  1128/1130  23.9% accepted  (  3055/  9714 Acc/Rej)  twiddle  4.66  time 0.012s
+                                     B THREAD   0]  1129/1130  23.8% accepted  (  3034/  9735 Acc/Rej)  twiddle  4.66  time 0.016s
+                                     B THREAD   0]  1130/1130  26.1% accepted  (  3338/  9431 Acc/Rej)  twiddle  4.66  time 0.012s
+Computing eigenvalues... [1130/1130]
+average store delta 0.108721183489
+New twiddle 4.765785
+                                       STARTING rwalk THREAD 0 [this thread makes 200 models]
+                                       THREAD   0  0  24.3% accepted  (  3103/  9666 Acc/Rej)  twiddle  4.77  time 0.016s  200 left.
+                                       THREAD   0  1  25.2% accepted  (  3219/  9550 Acc/Rej)  twiddle  4.77  time 0.016s  199 left.
+199 models left to generate
+Model 1/200 complete.
+                                       THREAD   0  2  25.4% accepted  (  3242/  9527 Acc/Rej)  twiddle  4.77  time 0.012s  198 left.
+198 models left to generate
+Model 2/200 complete.
+                                       THREAD   0  3  23.7% accepted  (  3030/  9739 Acc/Rej)  twiddle  4.77  time 0.016s  197 left.
+197 models left to generate
+Model 3/200 complete.
+196 models left to generate
+Model 4/200 complete.
+                                       THREAD   0  4  26.8% accepted  (  3427/  9342 Acc/Rej)  twiddle  4.77  time 0.012s  196 left.
+195 models left to generate
+Model 5/200 complete.
+                                       THREAD   0  5  20.4% accepted  (  2611/ 10158 Acc/Rej)  twiddle  4.77  time 0.008s  195 left.
+                                       THREAD   0  6  21.4% accepted  (  2733/ 10036 Acc/Rej)  twiddle  4.77  time 0.012s  194 left.
+194 models left to generate
+Model 6/200 complete.
+193 models left to generate
+Model 7/200 complete.
+                                       THREAD   0  7  24.4% accepted  (  3119/  9650 Acc/Rej)  twiddle  4.77  time 0.012s  193 left.
+192 models left to generate
+Model 8/200 complete.
+                                       THREAD   0  8  20.1% accepted  (  2572/ 10197 Acc/Rej)  twiddle  4.77  time 0.012s  192 left.
+                                       THREAD   0  9  22.8% accepted  (  2908/  9861 Acc/Rej)  twiddle  4.77  time 0.012s  191 left.
+191 models left to generate
+Model 9/200 complete.
+                                       THREAD   0  10  25.6% accepted  (  3272/  9497 Acc/Rej)  twiddle  4.77  time 0.012s  190 left.
+190 models left to generate
+Model 10/200 complete.
+                                       THREAD   0  11  24.3% accepted  (  3103/  9666 Acc/Rej)  twiddle  4.77  time 0.012s  189 left.
+189 models left to generate
+Model 11/200 complete.
+                                       THREAD   0  12  25.3% accepted  (  3230/  9539 Acc/Rej)  twiddle  4.77  time 0.016s  188 left.
+188 models left to generate
+Model 12/200 complete.
+187 models left to generate
+Model 13/200 complete.
+                                       THREAD   0  13  23.3% accepted  (  2974/  9795 Acc/Rej)  twiddle  4.77  time 0.012s  187 left.
+                                       THREAD   0  14  25.7% accepted  (  3279/  9490 Acc/Rej)  twiddle  4.77  time 0.012s  186 left.
+186 models left to generate
+Model 14/200 complete.
+185 models left to generate
+Model 15/200 complete.
+                                       THREAD   0  15  25.8% accepted  (  3294/  9475 Acc/Rej)  twiddle  4.77  time 0.016s  185 left.
+184 models left to generate
+Model 16/200 complete.
+                                       THREAD   0  16  24.6% accepted  (  3139/  9630 Acc/Rej)  twiddle  4.77  time 0.012s  184 left.
+                                       THREAD   0  17  21.8% accepted  (  2779/  9990 Acc/Rej)  twiddle  4.77  time 0.012s  183 left.
+183 models left to generate
+Model 17/200 complete.
+182 models left to generate
+Model 18/200 complete.
+                                       THREAD   0  18  22.8% accepted  (  2915/  9854 Acc/Rej)  twiddle  4.77  time 0.012s  182 left.
+                                       THREAD   0  19  24.9% accepted  (  3181/  9588 Acc/Rej)  twiddle  4.77  time 0.016s  181 left.
+181 models left to generate
+Model 19/200 complete.
+180 models left to generate
+Model 20/200 complete.
+                                       THREAD   0  20  23.2% accepted  (  2968/  9801 Acc/Rej)  twiddle  4.77  time 0.012s  180 left.
+                                       THREAD   0  21  25.9% accepted  (  3301/  9468 Acc/Rej)  twiddle  4.77  time 0.016s  179 left.
+179 models left to generate
+Model 21/200 complete.
+178 models left to generate
+Model 22/200 complete.
+                                       THREAD   0  22  24.7% accepted  (  3157/  9612 Acc/Rej)  twiddle  4.77  time 0.016s  178 left.
+177 models left to generate
+Model 23/200 complete.
+                                       THREAD   0  23  22.5% accepted  (  2867/  9902 Acc/Rej)  twiddle  4.77  time 0.012s  177 left.
+176 models left to generate
+Model 24/200 complete.
+                                       THREAD   0  24  22.0% accepted  (  2804/  9965 Acc/Rej)  twiddle  4.77  time 0.012s  176 left.
+                                       THREAD   0  25  24.8% accepted  (  3163/  9606 Acc/Rej)  twiddle  4.77  time 0.012s  175 left.
+175 models left to generate
+Model 25/200 complete.
+174 models left to generate
+Model 26/200 complete.
+                                       THREAD   0  26  22.5% accepted  (  2874/  9895 Acc/Rej)  twiddle  4.77  time 0.012s  174 left.
+                                       THREAD   0  27  23.0% accepted  (  2940/  9829 Acc/Rej)  twiddle  4.77  time 0.012s  173 left.
+173 models left to generate
+Model 27/200 complete.
+                                       THREAD   0  28  22.4% accepted  (  2857/  9912 Acc/Rej)  twiddle  4.77  time 0.012s  172 left.
+172 models left to generate
+Model 28/200 complete.
+171 models left to generate
+Model 29/200 complete.
+                                       THREAD   0  29  23.8% accepted  (  3042/  9727 Acc/Rej)  twiddle  4.77  time 0.012s  171 left.
+170 models left to generate
+Model 30/200 complete.
+                                       THREAD   0  30  23.3% accepted  (  2974/  9795 Acc/Rej)  twiddle  4.77  time 0.012s  170 left.
+169 models left to generate
+Model 31/200 complete.
+                                       THREAD   0  31  24.2% accepted  (  3095/  9674 Acc/Rej)  twiddle  4.77  time 0.016s  169 left.
+                                       THREAD   0  32  24.4% accepted  (  3116/  9653 Acc/Rej)  twiddle  4.77  time 0.012s  168 left.
+168 models left to generate
+Model 32/200 complete.
+                                       THREAD   0  33  21.6% accepted  (  2752/ 10017 Acc/Rej)  twiddle  4.77  time 0.012s  167 left.
+167 models left to generate
+Model 33/200 complete.
+166 models left to generate
+Model 34/200 complete.
+                                       THREAD   0  34  22.8% accepted  (  2914/  9855 Acc/Rej)  twiddle  4.77  time 0.012s  166 left.
+165 models left to generate
+Model 35/200 complete.
+                                       THREAD   0  35  24.3% accepted  (  3097/  9672 Acc/Rej)  twiddle  4.77  time 0.016s  165 left.
+                                       THREAD   0  36  24.9% accepted  (  3180/  9589 Acc/Rej)  twiddle  4.77  time 0.012s  164 left.
+164 models left to generate
+Model 36/200 complete.
+163 models left to generate
+Model 37/200 complete.
+                                       THREAD   0  37  24.5% accepted  (  3127/  9642 Acc/Rej)  twiddle  4.77  time 0.016s  163 left.
+                                       THREAD   0  38  24.1% accepted  (  3073/  9696 Acc/Rej)  twiddle  4.77  time 0.012s  162 left.
+162 models left to generate
+Model 38/200 complete.
+                                       THREAD   0  39  23.3% accepted  (  2979/  9790 Acc/Rej)  twiddle  4.77  time 0.012s  161 left.
+161 models left to generate
+Model 39/200 complete.
+160 models left to generate
+Model 40/200 complete.
+                                       THREAD   0  40  23.8% accepted  (  3040/  9729 Acc/Rej)  twiddle  4.77  time 0.016s  160 left.
+                                       THREAD   0  41  22.7% accepted  (  2902/  9867 Acc/Rej)  twiddle  4.77  time 0.012s  159 left.
+159 models left to generate
+Model 41/200 complete.
+158 models left to generate
+Model 42/200 complete.
+                                       THREAD   0  42  24.0% accepted  (  3068/  9701 Acc/Rej)  twiddle  4.77  time 0.016s  158 left.
+157 models left to generate
+Model 43/200 complete.
+                                       THREAD   0  43  24.0% accepted  (  3068/  9701 Acc/Rej)  twiddle  4.77  time 0.012s  157 left.
+                                       THREAD   0  44  23.7% accepted  (  3020/  9749 Acc/Rej)  twiddle  4.77  time 0.016s  156 left.
+156 models left to generate
+Model 44/200 complete.
+155 models left to generate
+Model 45/200 complete.
+                                       THREAD   0  45  23.3% accepted  (  2979/  9790 Acc/Rej)  twiddle  4.77  time 0.012s  155 left.
+                                       THREAD   0  46  24.4% accepted  (  3116/  9653 Acc/Rej)  twiddle  4.77  time 0.016s  154 left.
+154 models left to generate
+Model 46/200 complete.
+153 models left to generate
+Model 47/200 complete.
+                                       THREAD   0  47  27.1% accepted  (  3457/  9312 Acc/Rej)  twiddle  4.77  time 0.012s  153 left.
+152 models left to generate
+Model 48/200 complete.
+                                       THREAD   0  48  23.3% accepted  (  2973/  9796 Acc/Rej)  twiddle  4.77  time 0.012s  152 left.
+                                       THREAD   0  49  22.3% accepted  (  2852/  9917 Acc/Rej)  twiddle  4.77  time 0.012s  151 left.
+151 models left to generate
+Model 49/200 complete.
+                                       THREAD   0  50  22.2% accepted  (  2835/  9934 Acc/Rej)  twiddle  4.77  time 0.016s  150 left.
+150 models left to generate
+Model 50/200 complete.
+                                       THREAD   0  51  23.5% accepted  (  2996/  9773 Acc/Rej)  twiddle  4.77  time 0.012s  149 left.
+149 models left to generate
+Model 51/200 complete.
+148 models left to generate
+Model 52/200 complete.
+                                       THREAD   0  52  22.1% accepted  (  2822/  9947 Acc/Rej)  twiddle  4.77  time 0.012s  148 left.
+147 models left to generate
+Model 53/200 complete.
+                                       THREAD   0  53  23.5% accepted  (  3007/  9762 Acc/Rej)  twiddle  4.77  time 0.012s  147 left.
+                                       THREAD   0  54  26.0% accepted  (  3321/  9448 Acc/Rej)  twiddle  4.77  time 0.016s  146 left.
+146 models left to generate
+Model 54/200 complete.
+                                       THREAD   0  55  21.2% accepted  (  2702/ 10067 Acc/Rej)  twiddle  4.77  time 0.012s  145 left.
+145 models left to generate
+Model 55/200 complete.
+144 models left to generate
+Model 56/200 complete.
+                                       THREAD   0  56  23.1% accepted  (  2954/  9815 Acc/Rej)  twiddle  4.77  time 0.012s  144 left.
+                                       THREAD   0  57  22.5% accepted  (  2876/  9893 Acc/Rej)  twiddle  4.77  time 0.012s  143 left.
+143 models left to generate
+Model 57/200 complete.
+142 models left to generate
+Model 58/200 complete.
+                                       THREAD   0  58  25.4% accepted  (  3239/  9530 Acc/Rej)  twiddle  4.77  time 0.016s  142 left.
+141 models left to generate
+Model 59/200 complete.
+                                       THREAD   0  59  27.0% accepted  (  3451/  9318 Acc/Rej)  twiddle  4.77  time 0.016s  141 left.
+                                       THREAD   0  60  25.7% accepted  (  3280/  9489 Acc/Rej)  twiddle  4.77  time 0.012s  140 left.
+140 models left to generate
+Model 60/200 complete.
+                                       THREAD   0  61  27.6% accepted  (  3520/  9249 Acc/Rej)  twiddle  4.77  time 0.016s  139 left.
+139 models left to generate
+Model 61/200 complete.
+138 models left to generate
+Model 62/200 complete.
+                                       THREAD   0  62  24.3% accepted  (  3103/  9666 Acc/Rej)  twiddle  4.77  time 0.016s  138 left.
+                                       THREAD   0  63  23.9% accepted  (  3051/  9718 Acc/Rej)  twiddle  4.77  time 0.012s  137 left.
+137 models left to generate
+Model 63/200 complete.
+136 models left to generate
+Model 64/200 complete.
+                                       THREAD   0  64  23.0% accepted  (  2932/  9837 Acc/Rej)  twiddle  4.77  time 0.016s  136 left.
+                                       THREAD   0  65  21.9% accepted  (  2802/  9967 Acc/Rej)  twiddle  4.77  time 0.012s  135 left.
+135 models left to generate
+Model 65/200 complete.
+134 models left to generate
+Model 66/200 complete.
+                                       THREAD   0  66  24.4% accepted  (  3122/  9647 Acc/Rej)  twiddle  4.77  time 0.012s  134 left.
+                                       THREAD   0  67  21.7% accepted  (  2773/  9996 Acc/Rej)  twiddle  4.77  time 0.012s  133 left.
+133 models left to generate
+Model 67/200 complete.
+                                       THREAD   0  68  20.3% accepted  (  2596/ 10173 Acc/Rej)  twiddle  4.77  time 0.012s  132 left.
+132 models left to generate
+Model 68/200 complete.
+                                       THREAD   0  69  24.5% accepted  (  3131/  9638 Acc/Rej)  twiddle  4.77  time 0.016s  131 left.
+131 models left to generate
+Model 69/200 complete.
+                                       THREAD   0  70  23.4% accepted  (  2991/  9778 Acc/Rej)  twiddle  4.77  time 0.012s  130 left.
+130 models left to generate
+Model 70/200 complete.
+                                       THREAD   0  71  26.9% accepted  (  3435/  9334 Acc/Rej)  twiddle  4.77  time 0.016s  129 left.
+129 models left to generate
+Model 71/200 complete.
+128 models left to generate
+Model 72/200 complete.
+                                       THREAD   0  72  23.4% accepted  (  2987/  9782 Acc/Rej)  twiddle  4.77  time 0.012s  128 left.
+                                       THREAD   0  73  26.6% accepted  (  3395/  9374 Acc/Rej)  twiddle  4.77  time 0.016s  127 left.
+127 models left to generate
+Model 73/200 complete.
+126 models left to generate
+Model 74/200 complete.
+                                       THREAD   0  74  18.6% accepted  (  2376/ 10393 Acc/Rej)  twiddle  4.77  time 0.012s  126 left.
+                                       THREAD   0  75  24.5% accepted  (  3123/  9646 Acc/Rej)  twiddle  4.77  time 0.012s  125 left.
+125 models left to generate
+Model 75/200 complete.
+124 models left to generate
+Model 76/200 complete.
+                                       THREAD   0  76  23.9% accepted  (  3049/  9720 Acc/Rej)  twiddle  4.77  time 0.016s  124 left.
+                                       THREAD   0  77  23.6% accepted  (  3009/  9760 Acc/Rej)  twiddle  4.77  time 0.012s  123 left.
+123 models left to generate
+Model 77/200 complete.
+122 models left to generate
+Model 78/200 complete.
+                                       THREAD   0  78  22.9% accepted  (  2928/  9841 Acc/Rej)  twiddle  4.77  time 0.016s  122 left.
+121 models left to generate
+Model 79/200 complete.
+                                       THREAD   0  79  22.3% accepted  (  2842/  9927 Acc/Rej)  twiddle  4.77  time 0.012s  121 left.
+                                       THREAD   0  80  22.3% accepted  (  2847/  9922 Acc/Rej)  twiddle  4.77  time 0.012s  120 left.
+120 models left to generate
+Model 80/200 complete.
+119 models left to generate
+Model 81/200 complete.
+                                       THREAD   0  81  24.1% accepted  (  3075/  9694 Acc/Rej)  twiddle  4.77  time 0.016s  119 left.
+                                       THREAD   0  82  21.3% accepted  (  2717/ 10052 Acc/Rej)  twiddle  4.77  time 0.012s  118 left.
+118 models left to generate
+Model 82/200 complete.
+117 models left to generate
+Model 83/200 complete.
+                                       THREAD   0  83  23.7% accepted  (  3028/  9741 Acc/Rej)  twiddle  4.77  time 0.016s  117 left.
+116 models left to generate
+Model 84/200 complete.
+                                       THREAD   0  84  23.7% accepted  (  3031/  9738 Acc/Rej)  twiddle  4.77  time 0.012s  116 left.
+                                       THREAD   0  85  24.8% accepted  (  3171/  9598 Acc/Rej)  twiddle  4.77  time 0.016s  115 left.
+115 models left to generate
+Model 85/200 complete.
+114 models left to generate
+Model 86/200 complete.
+                                       THREAD   0  86  25.1% accepted  (  3207/  9562 Acc/Rej)  twiddle  4.77  time 0.012s  114 left.
+113 models left to generate
+Model 87/200 complete.
+                                       THREAD   0  87  26.1% accepted  (  3339/  9430 Acc/Rej)  twiddle  4.77  time 0.016s  113 left.
+                                       THREAD   0  88  20.3% accepted  (  2590/ 10179 Acc/Rej)  twiddle  4.77  time 0.012s  112 left.
+112 models left to generate
+Model 88/200 complete.
+                                       THREAD   0  89  21.8% accepted  (  2785/  9984 Acc/Rej)  twiddle  4.77  time 0.012s  111 left.
+111 models left to generate
+Model 89/200 complete.
+110 models left to generate
+Model 90/200 complete.
+                                       THREAD   0  90  21.3% accepted  (  2726/ 10043 Acc/Rej)  twiddle  4.77  time 0.012s  110 left.
+109 models left to generate
+Model 91/200 complete.
+                                       THREAD   0  91  24.6% accepted  (  3145/  9624 Acc/Rej)  twiddle  4.77  time 0.012s  109 left.
+                                       THREAD   0  92  23.0% accepted  (  2935/  9834 Acc/Rej)  twiddle  4.77  time 0.016s  108 left.
+108 models left to generate
+Model 92/200 complete.
+                                       THREAD   0  93  24.1% accepted  (  3073/  9696 Acc/Rej)  twiddle  4.77  time 0.012s  107 left.
+107 models left to generate
+Model 93/200 complete.
+106 models left to generate
+Model 94/200 complete.
+                                       THREAD   0  94  22.7% accepted  (  2897/  9872 Acc/Rej)  twiddle  4.77  time 0.012s  106 left.
+                                       THREAD   0  95  24.2% accepted  (  3090/  9679 Acc/Rej)  twiddle  4.77  time 0.016s  105 left.
+105 models left to generate
+Model 95/200 complete.
+104 models left to generate
+Model 96/200 complete.
+                                       THREAD   0  96  24.1% accepted  (  3075/  9694 Acc/Rej)  twiddle  4.77  time 0.012s  104 left.
+                                       THREAD   0  97  22.7% accepted  (  2901/  9868 Acc/Rej)  twiddle  4.77  time 0.016s  103 left.
+103 models left to generate
+Model 97/200 complete.
+                                       THREAD   0  98  21.0% accepted  (  2681/ 10088 Acc/Rej)  twiddle  4.77  time 0.012s  102 left.
+102 models left to generate
+Model 98/200 complete.
+101 models left to generate
+Model 99/200 complete.
+                                       THREAD   0  99  22.1% accepted  (  2818/  9951 Acc/Rej)  twiddle  4.77  time 0.012s  101 left.
+                                       THREAD   0  100  24.7% accepted  (  3159/  9610 Acc/Rej)  twiddle  4.77  time 0.016s  100 left.
+100 models left to generate
+Model 100/200 complete.
+99 models left to generate
+Model 101/200 complete.
+                                       THREAD   0  101  24.8% accepted  (  3166/  9603 Acc/Rej)  twiddle  4.77  time 0.012s  99 left.
+98 models left to generate
+Model 102/200 complete.
+                                       THREAD   0  102  26.0% accepted  (  3315/  9454 Acc/Rej)  twiddle  4.77  time 0.012s  98 left.
+                                       THREAD   0  103  25.2% accepted  (  3214/  9555 Acc/Rej)  twiddle  4.77  time 0.016s  97 left.
+97 models left to generate
+Model 103/200 complete.
+                                       THREAD   0  104  22.3% accepted  (  2845/  9924 Acc/Rej)  twiddle  4.77  time 0.012s  96 left.
+96 models left to generate
+Model 104/200 complete.
+95 models left to generate
+Model 105/200 complete.
+                                       THREAD   0  105  22.6% accepted  (  2884/  9885 Acc/Rej)  twiddle  4.77  time 0.016s  95 left.
+94 models left to generate
+Model 106/200 complete.
+                                       THREAD   0  106  23.8% accepted  (  3044/  9725 Acc/Rej)  twiddle  4.77  time 0.012s  94 left.
+                                       THREAD   0  107  25.1% accepted  (  3205/  9564 Acc/Rej)  twiddle  4.77  time 0.016s  93 left.
+93 models left to generate
+Model 107/200 complete.
+92 models left to generate
+Model 108/200 complete.
+                                       THREAD   0  108  25.4% accepted  (  3244/  9525 Acc/Rej)  twiddle  4.77  time 0.012s  92 left.
+91 models left to generate
+Model 109/200 complete.
+                                       THREAD   0  109  22.7% accepted  (  2898/  9871 Acc/Rej)  twiddle  4.77  time 0.012s  91 left.
+                                       THREAD   0  110  23.9% accepted  (  3058/  9711 Acc/Rej)  twiddle  4.77  time 0.012s  90 left.
+90 models left to generate
+Model 110/200 complete.
+                                       THREAD   0  111  23.6% accepted  (  3012/  9757 Acc/Rej)  twiddle  4.77  time 0.012s  89 left.
+89 models left to generate
+Model 111/200 complete.
+                                       THREAD   0  112  24.9% accepted  (  3174/  9595 Acc/Rej)  twiddle  4.77  time 0.016s  88 left.
+88 models left to generate
+Model 112/200 complete.
+                                       THREAD   0  113  24.2% accepted  (  3095/  9674 Acc/Rej)  twiddle  4.77  time 0.012s  87 left.
+87 models left to generate
+Model 113/200 complete.
+                                       THREAD   0  114  25.2% accepted  (  3218/  9551 Acc/Rej)  twiddle  4.77  time 0.012s  86 left.
+86 models left to generate
+Model 114/200 complete.
+                                       THREAD   0  115  23.4% accepted  (  2993/  9776 Acc/Rej)  twiddle  4.77  time 0.012s  85 left.
+85 models left to generate
+Model 115/200 complete.
+84 models left to generate
+Model 116/200 complete.
+                                       THREAD   0  116  23.9% accepted  (  3047/  9722 Acc/Rej)  twiddle  4.77  time 0.016s  84 left.
+83 models left to generate
+Model 117/200 complete.
+                                       THREAD   0  117  25.1% accepted  (  3211/  9558 Acc/Rej)  twiddle  4.77  time 0.012s  83 left.
+                                       THREAD   0  118  22.8% accepted  (  2911/  9858 Acc/Rej)  twiddle  4.77  time 0.012s  82 left.
+82 models left to generate
+Model 118/200 complete.
+                                       THREAD   0  119  24.2% accepted  (  3084/  9685 Acc/Rej)  twiddle  4.77  time 0.012s  81 left.
+81 models left to generate
+Model 119/200 complete.
+80 models left to generate
+Model 120/200 complete.
+                                       THREAD   0  120  23.8% accepted  (  3033/  9736 Acc/Rej)  twiddle  4.77  time 0.012s  80 left.
+                                       THREAD   0  121  23.7% accepted  (  3028/  9741 Acc/Rej)  twiddle  4.77  time 0.016s  79 left.
+79 models left to generate
+Model 121/200 complete.
+78 models left to generate
+Model 122/200 complete.
+                                       THREAD   0  122  22.9% accepted  (  2922/  9847 Acc/Rej)  twiddle  4.77  time 0.012s  78 left.
+                                       THREAD   0  123  20.1% accepted  (  2572/ 10197 Acc/Rej)  twiddle  4.77  time 0.012s  77 left.
+77 models left to generate
+Model 123/200 complete.
+                                       THREAD   0  124  23.9% accepted  (  3051/  9718 Acc/Rej)  twiddle  4.77  time 0.016s  76 left.
+76 models left to generate
+Model 124/200 complete.
+                                       THREAD   0  125  23.3% accepted  (  2972/  9797 Acc/Rej)  twiddle  4.77  time 0.012s  75 left.
+75 models left to generate
+Model 125/200 complete.
+74 models left to generate
+Model 126/200 complete.
+                                       THREAD   0  126  24.5% accepted  (  3128/  9641 Acc/Rej)  twiddle  4.77  time 0.016s  74 left.
+73 models left to generate
+Model 127/200 complete.
+                                       THREAD   0  127  25.8% accepted  (  3289/  9480 Acc/Rej)  twiddle  4.77  time 0.012s  73 left.
+72 models left to generate
+Model 128/200 complete.
+                                       THREAD   0  128  26.1% accepted  (  3336/  9433 Acc/Rej)  twiddle  4.77  time 0.016s  72 left.
+71 models left to generate
+Model 129/200 complete.
+                                       THREAD   0  129  23.4% accepted  (  2984/  9785 Acc/Rej)  twiddle  4.77  time 0.012s  71 left.
+                                       THREAD   0  130  21.2% accepted  (  2706/ 10063 Acc/Rej)  twiddle  4.77  time 0.012s  70 left.
+70 models left to generate
+Model 130/200 complete.
+                                       THREAD   0  131  23.3% accepted  (  2981/  9788 Acc/Rej)  twiddle  4.77  time 0.012s  69 left.
+69 models left to generate
+Model 131/200 complete.
+68 models left to generate
+Model 132/200 complete.
+                                       THREAD   0  132  22.0% accepted  (  2805/  9964 Acc/Rej)  twiddle  4.77  time 0.012s  68 left.
+                                       THREAD   0  133  22.9% accepted  (  2930/  9839 Acc/Rej)  twiddle  4.77  time 0.012s  67 left.
+67 models left to generate
+Model 133/200 complete.
+66 models left to generate
+Model 134/200 complete.
+                                       THREAD   0  134  24.1% accepted  (  3083/  9686 Acc/Rej)  twiddle  4.77  time 0.012s  66 left.
+65 models left to generate
+Model 135/200 complete.
+                                       THREAD   0  135  22.3% accepted  (  2842/  9927 Acc/Rej)  twiddle  4.77  time 0.012s  65 left.
+                                       THREAD   0  136  21.3% accepted  (  2716/ 10053 Acc/Rej)  twiddle  4.77  time 0.012s  64 left.
+64 models left to generate
+Model 136/200 complete.
+63 models left to generate
+Model 137/200 complete.
+                                       THREAD   0  137  25.8% accepted  (  3290/  9479 Acc/Rej)  twiddle  4.77  time 0.012s  63 left.
+                                       THREAD   0  138  25.0% accepted  (  3186/  9583 Acc/Rej)  twiddle  4.77  time 0.016s  62 left.
+62 models left to generate
+Model 138/200 complete.
+61 models left to generate
+Model 139/200 complete.
+                                       THREAD   0  139  25.5% accepted  (  3251/  9518 Acc/Rej)  twiddle  4.77  time 0.012s  61 left.
+                                       THREAD   0  140  21.6% accepted  (  2754/ 10015 Acc/Rej)  twiddle  4.77  time 0.012s  60 left.
+60 models left to generate
+Model 140/200 complete.
+                                       THREAD   0  141  24.3% accepted  (  3097/  9672 Acc/Rej)  twiddle  4.77  time 0.016s  59 left.
+59 models left to generate
+Model 141/200 complete.
+58 models left to generate
+Model 142/200 complete.
+                                       THREAD   0  142  23.3% accepted  (  2977/  9792 Acc/Rej)  twiddle  4.77  time 0.012s  58 left.
+                                       THREAD   0  143  20.6% accepted  (  2632/ 10137 Acc/Rej)  twiddle  4.77  time 0.012s  57 left.
+57 models left to generate
+Model 143/200 complete.
+56 models left to generate
+Model 144/200 complete.
+                                       THREAD   0  144  22.1% accepted  (  2828/  9941 Acc/Rej)  twiddle  4.77  time 0.012s  56 left.
+                                       THREAD   0  145  24.1% accepted  (  3075/  9694 Acc/Rej)  twiddle  4.77  time 0.012s  55 left.
+55 models left to generate
+Model 145/200 complete.
+54 models left to generate
+Model 146/200 complete.
+                                       THREAD   0  146  27.1% accepted  (  3456/  9313 Acc/Rej)  twiddle  4.77  time 0.016s  54 left.
+53 models left to generate
+Model 147/200 complete.
+                                       THREAD   0  147  24.6% accepted  (  3143/  9626 Acc/Rej)  twiddle  4.77  time 0.012s  53 left.
+52 models left to generate
+Model 148/200 complete.
+                                       THREAD   0  148  21.7% accepted  (  2770/  9999 Acc/Rej)  twiddle  4.77  time 0.012s  52 left.
+51 models left to generate
+Model 149/200 complete.
+                                       THREAD   0  149  24.0% accepted  (  3062/  9707 Acc/Rej)  twiddle  4.77  time 0.016s  51 left.
+                                       THREAD   0  150  22.0% accepted  (  2809/  9960 Acc/Rej)  twiddle  4.77  time 0.012s  50 left.
+50 models left to generate
+Model 150/200 complete.
+                                       THREAD   0  151  23.8% accepted  (  3036/  9733 Acc/Rej)  twiddle  4.77  time 0.012s  49 left.
+49 models left to generate
+Model 151/200 complete.
+                                       THREAD   0  152  22.7% accepted  (  2898/  9871 Acc/Rej)  twiddle  4.77  time 0.012s  48 left.
+48 models left to generate
+Model 152/200 complete.
+                                       THREAD   0  153  23.2% accepted  (  2963/  9806 Acc/Rej)  twiddle  4.77  time 0.016s  47 left.
+47 models left to generate
+Model 153/200 complete.
+                                       THREAD   0  154  25.7% accepted  (  3282/  9487 Acc/Rej)  twiddle  4.77  time 0.012s  46 left.
+46 models left to generate
+Model 154/200 complete.
+                                       THREAD   0  155  25.7% accepted  (  3284/  9485 Acc/Rej)  twiddle  4.77  time 0.016s  45 left.
+45 models left to generate
+Model 155/200 complete.
+                                       THREAD   0  156  23.9% accepted  (  3050/  9719 Acc/Rej)  twiddle  4.77  time 0.012s  44 left.
+44 models left to generate
+Model 156/200 complete.
+                                       THREAD   0  157  21.5% accepted  (  2743/ 10026 Acc/Rej)  twiddle  4.77  time 0.012s  43 left.
+43 models left to generate
+Model 157/200 complete.
+                                       THREAD   0  158  22.1% accepted  (  2824/  9945 Acc/Rej)  twiddle  4.77  time 0.016s  42 left.
+42 models left to generate
+Model 158/200 complete.
+41 models left to generate
+Model 159/200 complete.
+                                       THREAD   0  159  23.6% accepted  (  3010/  9759 Acc/Rej)  twiddle  4.77  time 0.012s  41 left.
+40 models left to generate
+Model 160/200 complete.
+                                       THREAD   0  160  24.8% accepted  (  3164/  9605 Acc/Rej)  twiddle  4.77  time 0.012s  40 left.
+39 models left to generate
+Model 161/200 complete.
+                                       THREAD   0  161  23.6% accepted  (  3014/  9755 Acc/Rej)  twiddle  4.77  time 0.012s  39 left.
+38 models left to generate
+Model 162/200 complete.
+                                       THREAD   0  162  24.1% accepted  (  3083/  9686 Acc/Rej)  twiddle  4.77  time 0.012s  38 left.
+37 models left to generate
+Model 163/200 complete.
+                                       THREAD   0  163  25.5% accepted  (  3262/  9507 Acc/Rej)  twiddle  4.77  time 0.016s  37 left.
+36 models left to generate
+Model 164/200 complete.
+                                       THREAD   0  164  24.8% accepted  (  3167/  9602 Acc/Rej)  twiddle  4.77  time 0.012s  36 left.
+35 models left to generate
+Model 165/200 complete.
+                                       THREAD   0  165  22.9% accepted  (  2928/  9841 Acc/Rej)  twiddle  4.77  time 0.016s  35 left.
+34 models left to generate
+                                       THREAD   0  166  22.8% accepted  (  2914/  9855 Acc/Rej)  twiddle  4.77  time 0.012s  34 left.
+Model 166/200 complete.
+33 models left to generate
+Model 167/200 complete.
+                                       THREAD   0  167  23.1% accepted  (  2950/  9819 Acc/Rej)  twiddle  4.77  time 0.016s  33 left.
+                                       THREAD   0  168  24.5% accepted  (  3131/  9638 Acc/Rej)  twiddle  4.77  time 0.012s  32 left.
+32 models left to generate
+Model 168/200 complete.
+31 models left to generate
+Model 169/200 complete.
+                                       THREAD   0  169  19.8% accepted  (  2534/ 10235 Acc/Rej)  twiddle  4.77  time 0.012s  31 left.
+                                       THREAD   0  170  24.8% accepted  (  3173/  9596 Acc/Rej)  twiddle  4.77  time 0.016s  30 left.
+30 models left to generate
+Model 170/200 complete.
+                                       THREAD   0  171  24.2% accepted  (  3087/  9682 Acc/Rej)  twiddle  4.77  time 0.012s  29 left.
+29 models left to generate
+Model 171/200 complete.
+28 models left to generate
+Model 172/200 complete.
+                                       THREAD   0  172  20.1% accepted  (  2561/ 10208 Acc/Rej)  twiddle  4.77  time 0.012s  28 left.
+27 models left to generate
+Model 173/200 complete.
+                                       THREAD   0  173  22.8% accepted  (  2908/  9861 Acc/Rej)  twiddle  4.77  time 0.012s  27 left.
+                                       THREAD   0  174  24.8% accepted  (  3170/  9599 Acc/Rej)  twiddle  4.77  time 0.016s  26 left.
+26 models left to generate
+Model 174/200 complete.
+                                       THREAD   0  175  23.9% accepted  (  3046/  9723 Acc/Rej)  twiddle  4.77  time 0.012s  25 left.
+25 models left to generate
+Model 175/200 complete.
+24 models left to generate
+Model 176/200 complete.
+                                       THREAD   0  176  26.0% accepted  (  3321/  9448 Acc/Rej)  twiddle  4.77  time 0.016s  24 left.
+23 models left to generate
+Model 177/200 complete.
+                                       THREAD   0  177  24.0% accepted  (  3063/  9706 Acc/Rej)  twiddle  4.77  time 0.016s  23 left.
+                                       THREAD   0  178  23.8% accepted  (  3040/  9729 Acc/Rej)  twiddle  4.77  time 0.012s  22 left.
+22 models left to generate
+Model 178/200 complete.
+                                       THREAD   0  179  22.3% accepted  (  2843/  9926 Acc/Rej)  twiddle  4.77  time 0.012s  21 left.
+21 models left to generate
+Model 179/200 complete.
+20 models left to generate
+Model 180/200 complete.
+                                       THREAD   0  180  25.1% accepted  (  3201/  9568 Acc/Rej)  twiddle  4.77  time 0.012s  20 left.
+                                       THREAD   0  181  24.2% accepted  (  3087/  9682 Acc/Rej)  twiddle  4.77  time 0.012s  19 left.
+19 models left to generate
+Model 181/200 complete.
+18 models left to generate
+Model 182/200 complete.
+                                       THREAD   0  182  25.5% accepted  (  3255/  9514 Acc/Rej)  twiddle  4.77  time 0.016s  18 left.
+17 models left to generate
+Model 183/200 complete.
+                                       THREAD   0  183  21.7% accepted  (  2777/  9992 Acc/Rej)  twiddle  4.77  time 0.016s  17 left.
+16 models left to generate
+Model 184/200 complete.
+                                       THREAD   0  184  24.7% accepted  (  3148/  9621 Acc/Rej)  twiddle  4.77  time 0.012s  16 left.
+                                       THREAD   0  185  24.2% accepted  (  3090/  9679 Acc/Rej)  twiddle  4.77  time 0.016s  15 left.
+15 models left to generate
+Model 185/200 complete.
+14 models left to generate
+Model 186/200 complete.
+                                       THREAD   0  186  26.8% accepted  (  3421/  9348 Acc/Rej)  twiddle  4.77  time 0.016s  14 left.
+                                       THREAD   0  187  25.1% accepted  (  3206/  9563 Acc/Rej)  twiddle  4.77  time 0.012s  13 left.
+13 models left to generate
+Model 187/200 complete.
+12 models left to generate
+Model 188/200 complete.
+                                       THREAD   0  188  24.5% accepted  (  3129/  9640 Acc/Rej)  twiddle  4.77  time 0.016s  12 left.
+                                       THREAD   0  189  23.9% accepted  (  3054/  9715 Acc/Rej)  twiddle  4.77  time 0.012s  11 left.
+11 models left to generate
+Model 189/200 complete.
+10 models left to generate
+Model 190/200 complete.
+                                       THREAD   0  190  19.4% accepted  (  2480/ 10289 Acc/Rej)  twiddle  4.77  time 0.012s  10 left.
+9 models left to generate
+Model 191/200 complete.
+                                       THREAD   0  191  24.3% accepted  (  3104/  9665 Acc/Rej)  twiddle  4.77  time 0.016s  9 left.
+                                       THREAD   0  192  23.4% accepted  (  2991/  9778 Acc/Rej)  twiddle  4.77  time 0.012s  8 left.
+8 models left to generate
+Model 192/200 complete.
+7 models left to generate
+Model 193/200 complete.
+                                       THREAD   0  193  23.8% accepted  (  3043/  9726 Acc/Rej)  twiddle  4.77  time 0.012s  7 left.
+6 models left to generate
+Model 194/200 complete.
+                                       THREAD   0  194  25.5% accepted  (  3258/  9511 Acc/Rej)  twiddle  4.77  time 0.012s  6 left.
+5 models left to generate
+Model 195/200 complete.
+                                       THREAD   0  195  25.1% accepted  (  3210/  9559 Acc/Rej)  twiddle  4.77  time 0.016s  5 left.
+4 models left to generate
+Model 196/200 complete.
+                                       THREAD   0  196  22.4% accepted  (  2857/  9912 Acc/Rej)  twiddle  4.77  time 0.012s  4 left.
+3 models left to generate
+Model 197/200 complete.
+                                       THREAD   0  197  27.0% accepted  (  3452/  9317 Acc/Rej)  twiddle  4.77  time 0.016s  3 left.
+2 models left to generate
+Model 198/200 complete.
+                                       THREAD   0  198  21.4% accepted  (  2727/ 10042 Acc/Rej)  twiddle  4.77  time 0.012s  2 left.
+                                       THREAD   0  199  23.5% accepted  (  3005/  9764 Acc/Rej)  twiddle  4.77  time 0.012s  1 left.
+1 models left to generate
+Model 199/200 complete.
+0 models left to generate
+Model 200/200 complete.
+--------------------------------------------------------------------------------
+SAMPLEX TIMINGS
+--------------------------------------------------------------------------------
+Initial inner point    0.19s
+Estimate eigenvectors  0.07s
+Burn-in                0.90s
+Modeling               1.09s
+Max/Avg thread time    2.79s 2.79s
+Total wall-clock time  2.27s
+--------------------------------------------------------------------------------
+Generated 200 model(s).
+Post processed 200 model(s), 0 had post processing functions applied.
+Saving state to ../tmp_media/000000/state.txt

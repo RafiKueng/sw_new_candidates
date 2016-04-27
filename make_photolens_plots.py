@@ -16,7 +16,7 @@ import matplotlib as mpl
 
 import matplotlib.pyplot as plt
 
-from stelmass.angdiam import sig_factor
+from stelmass.angdiam import sig_factor, dis_factor
 
 import create_data as CRDA
 #from create_data import ONLY_RECENT_MODELS as MODELS, LENS_CANDIDATES as LENSES
@@ -38,7 +38,7 @@ if not os.path.exists(path):
 if True:
 
     mid = CRDA.MAPS['swid2model']['SW05']
-    mid = CRDA.MAPS['swid2model']['SW28']
+    #mid = CRDA.MAPS['swid2model']['SW28']
 
     m = CRDA.ALL_MODELS[mid]
     ffn = os.path.join(path, filename.format(_=m))
@@ -47,8 +47,6 @@ if True:
     #fig = plt.figure(dpi=100)
     ax1 = fig.add_subplot(1,2,1)
     ax2 = fig.add_subplot(1,2,2)
-    
-    r = m['R']['data'] #* m['R']['units']['kpc'][0] # factor at the end converts from arcsec to kpc
 
 
     # make redshoft correction
@@ -57,17 +55,20 @@ if True:
     zl_used = m['z_lens_used']
     zs_used = m['z_src_used']
        
-    f_act = sig_factor(zl_actual,zs_actual)
-    f_use = sig_factor(zl_used,zs_used)
-    zcorrf = f_act / f_use
-    zcorrf = 1.0
+    m_cf = sig_factor(zl_actual,zs_actual) / sig_factor(zl_used,zs_used)
+    r_cf = dis_factor(zl_actual,zs_actual) / dis_factor(zl_used,zs_used)
 
+    m_cf = 1.0
+    r_cf = 1.0
+
+    
+    r = m['R']['data'] / m['R']['units']['kpc'][0] # factor at the end converts from arcsec to kpc
 
     _me = m['M(<R)']
 
-    me = _me['data'] * zcorrf
-    me_min = _me['min'] * zcorrf
-    me_max = _me['max'] * zcorrf
+    me = _me['data'] * m_cf
+    me_min = _me['min'] * m_cf
+    me_max = _me['max'] * m_cf
     
     err_m = me - me_min
     err_p = me_max - me 

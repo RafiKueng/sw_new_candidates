@@ -1,0 +1,45 @@
+import matplotlib as mpl
+import pylab as pl
+glass_basis('glass.basis.pixels', solver='rwalk')
+meta(author='some user', notes='using LensModellingTools')
+setup_log('log.txt')
+samplex_random_seed(0)
+samplex_acceptance(rate=0.25, tol=0.15)
+exclude_all_priors()
+include_prior(
+  'lens_eq',
+  'time_delay',
+  'profile_steepness',
+  'J3gradient',
+  'magnification',
+  'hubble_constant',
+  'PLsmoothness3',
+  'shared_h',
+  'external_shear',
+)
+hubble_time(13.700000)
+globject('lensidddd')
+zlens(0.500)
+pixrad(8)
+steepness(0,None)
+smooth(2.00,include_central_pixel=False)
+local_gradient(45.00)
+symm()
+
+shear(0.10)
+
+hires(1, 3)
+A = 0.885, 5.242
+B = -4.211, -2.383
+C = -4.703, -0.266
+D = 2.421, -2.094
+source(1.000,
+  A, 'min', 
+  B, 'min', None,
+  C, 'sad', None,
+  D, 'sad', None)
+model(200)
+savestate('../tmp_media/000000/state.txt')
+env().make_ensemble_average()
+LMT={
+}
