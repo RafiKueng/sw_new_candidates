@@ -6,17 +6,20 @@ Created on Tue Apr 19 20:37:05 2016
 """
 
 import os
-import sys
+#import sys
 import logging
 import cPickle as pickle
 
 import numpy as np
 import scipy as sp
-import scipy.misc
+#import scipy.misc
 import matplotlib as mpl
 mpl.use('Qt4Agg') # the default Qt5Agg is really buggy at the moment
+
 import matplotlib.pyplot as plt
 import matplotlib.widgets
+import matplotlib.gridspec as gridspec
+
 
 import parse_candidates as PACA
 import create_data as CRDA
@@ -27,8 +30,8 @@ _ = GSAC.I + DORG.I
 del _
 
 import settings as _S
-from settings import settings as S, INT, save_pickle, load_pickle, save_csv
-from settings import print_first_line, print_last_line, getI, del_cache
+from settings import settings as S #, INT, save_pickle, load_pickle, save_csv
+from settings import print_first_line, print_last_line, getI
 
 
 
@@ -660,9 +663,12 @@ class Analysis(object):
     def px2arcs(self, coords, pxsize = 0.187):
     
         x = coords[1]
-        y = -coords[0]
+        y = coords[0]
     
         cx, cy = self.center
+        roix, roiy = self.roiH.roi.xy0
+        cx -= roix
+        cy -= roiy
     
         x = ( x-cx ) * pxsize
         y = ( y-cy ) * pxsize
@@ -719,6 +725,7 @@ class Analysis(object):
         Y = np.int32(np.floor(M*(1+d_source.imag/r)+.5))
         
         pxllist = np.zeros((2*M+1,2*M+1), dtype=list)
+        
         srcimg  = np.zeros((2*M+1,2*M+1,3), dtype=np.uint8)
         srcimg_gray = np.zeros((2*M+1,2*M+1), dtype=np.uint8)
         cntimg  = np.zeros((2*M+1,2*M+1), dtype=np.uint8)
@@ -731,7 +738,13 @@ class Analysis(object):
             pxllist[x,y].append(i)
         
         
+        self.synimg_pure = self.orgimg_c * 0
+        
+        gray = np.dot(self.orgimg_c[...,:3], [0.299, 0.587, 0.114]) # convert to gray to paint over in color afterwards
         self.synimg = self.orgimg_c * 0
+        self.synimg[...,0] = gray
+        self.synimg[...,1] = gray
+        self.synimg[...,2] = gray
         
         for (x,y), lst in np.ndenumerate(pxllist):
             n = len(lst)    
@@ -750,11 +763,30 @@ class Analysis(object):
                 for i in lst:
                     ix,iy = pixel[i]
                     self.synimg[ix,iy] = pxlave
+                    self.synimg_pure[ix,iy] = pxlave
+                    
+        # difference image
+        diff = self.orgimg_c.astype(np.int32)
+        diff = np.abs(diff - self.synimg)
+        self.diff = np.clip(np.mean(diff, axis=2, dtype=np.uint32), 0, 255).astype(np.uint8)
+        self.diff[~self.mask] = 0
+
+        self.srcimg = srcimg
+        self.srcimg_gray = srcimg_gray
+        self.cntimg = cntimg
         
         log.debug("showing result of analysis")
-        self.axSynthImg.imshow(self.synimg)
+        self.axSynthImg.imshow(self.synimg, interpolation="none", origin='upper')
         #self.axSynthImg.set_xlim(self.roiH.ax.get_xlim())
         #self.axSynthImg.set_ylim(self.roiH.ax.get_ylim())
+        
+        self.axSrcImg.imshow(self.srcimg, interpolation="none", origin='upper')
+        self.axSrcImgGray.imshow(self.srcimg_gray, interpolation="none", origin='upper')
+        self.axCount.imshow(self.cntimg, interpolation="none", origin='upper')
+        self.axDiff.imshow(self.diff, interpolation="none", origin='upper')
+        
+        #self.axDiff.imshow(self.orgimg_c, interpolation="none", origin='upper')
+
         self.axSynthImg.figure.canvas.draw()
         
     def on_key_release(self, event):
@@ -764,12 +796,25 @@ class Analysis(object):
             self.update()
 
             
+DEBUG=False
+if DEBUG:
+    swidAswMid = [("sw00", 'ASW0007k4r', "012402")]
+else:
+    swids = ['SW02', 'SW05', 'SW09', 'SW28', 'SW29']
+    swidAswMid = []
+    for swid in swids:
+        swidAswMid.append((swid, swid2asw[swid], swid2model[swid]))
 
-swidAswMid = [("sw00", 'ASW0007k4r', "012402")]
-
-for swid, asw, mid in swidAswMid:
+path = os.path.join(S['output_dir'], 'nsynth')
+if not os.path.exists(path):
+    os.makedirs(path)
+nn=len(swidAswMid)
+for ii, _ in enumerate(swidAswMid):
+    swid, asw, mid = _
     
-    log.info("working on %s %s %s", swid, asw, mid)
+    log.info("working on %s %s %s ( %03i/%03i )", swid, asw, mid, ii, nn)
+
+    ffn = os.path.join(path, "%s_%s_%s.png" % (asw, mid, '%s'))    
     
     orgimg_path = os.path.join(_path, _fn%asw)
     if not os.path.isfile(orgimg_path):
@@ -779,35 +824,56 @@ for swid, asw, mid in swidAswMid:
     orgimg = sp.misc.imread(orgimg_path)
     
     fig = plt.figure()
-    ax1 = fig.add_subplot(1, 4, 1)
-    ax2 = fig.add_subplot(1, 4, 2)
-    ax3 = fig.add_subplot(1, 4, 3)
-    ax4 = fig.add_subplot(1, 4, 4)
+    
+    fig.suptitle("working on %s ( %03i/%03i )" % (asw, ii, nn), fontsize='14')
+#    ax1 = fig.add_subplot(1, 4, 1)
+#    ax2 = fig.add_subplot(1, 4, 2)
+#    ax3 = fig.add_subplot(1, 4, 3)
+#    ax4 = fig.add_subplot(1, 4, 4)
 
-    mpl_img1 = ax1.imshow(orgimg, interpolation="none", origin='upper')
-    mpl_img2 = ax2.imshow(orgimg, interpolation="none", origin='upper')
-    tmp      = ax3.imshow(orgimg, interpolation="none", origin='upper')
+    gs0  = gridspec.GridSpec(2, 1, height_ratios=[2,1])
+    gs00 = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=gs0[0])
+    gs01 = gridspec.GridSpecFromSubplotSpec(1, 5, subplot_spec=gs0[1])
+    ax00 = plt.subplot(gs00[0])
+    ax01 = plt.subplot(gs00[1])
+    ax02 = plt.subplot(gs00[2])
+    ax10 = plt.subplot(gs01[0])
+    ax11 = plt.subplot(gs01[1])
+    ax12 = plt.subplot(gs01[2])
+    ax13 = plt.subplot(gs01[3])
+    ax14 = plt.subplot(gs01[4])
+    axs = (ax00, ax01, ax02, ax10, ax11, ax12, ax13, ax14)
 
-    ax1.set_title("1. choose region of interest")
-    ax2.set_title("2. add + / rem - mask; right clk to set center")
-    ax3.set_title("3. [space] to refresh pixel mask")
-    ax3.set_title("4. [enter] to get synth img")
+
+    for ax in axs:
+        ax.imshow(orgimg*0, interpolation="none", origin='upper')
+
+    mpl_img1 = ax00.imshow(orgimg, interpolation="none", origin='upper')
+    mpl_img2 = ax01.imshow(orgimg, interpolation="none", origin='upper')
+    # tmp      = ax3.imshow(orgimg, interpolation="none", origin='upper')
+
+    ax00.set_title("1. choose region of interest")
+    ax01.set_title("2. add + / rem - mask; right clk to set center")
+    ax10.set_title("3. [space] to refresh pixel mask")
+    ax02.set_title("4. [enter] to get synth img")
     
 
-    if False:
-        ax1.xaxis.set_visible(False)
-        ax1.yaxis.set_visible(False)
-        ax2.xaxis.set_visible(False)
-        ax2.yaxis.set_visible(False)
+#    if False:
+#        ax1.xaxis.set_visible(False)
+#        ax1.yaxis.set_visible(False)
+#        ax2.xaxis.set_visible(False)
+#        ax2.yaxis.set_visible(False)
     
     hotkeysHandle = GlobalHotkeyHandler(fig)
-    multiCursorHandle = mpl.widgets.MultiCursor(fig.canvas, (ax1, ax2, ax3, ax4), color='r', lw=1, horizOn=True, vertOn=True,useblit=True)
+    multiCursorH1 = mpl.widgets.MultiCursor(fig.canvas, (ax00, ax01, ax10), color='r', lw=1, horizOn=True, vertOn=True,useblit=True)
+    
+    multiCursorH2 = mpl.widgets.MultiCursor(fig.canvas, (ax11, ax12, ax13, ax14), color='g', lw=1, horizOn=True, vertOn=True,useblit=True)
 
     #h_z = ZoomHandler(ax1,ax2)
-    zoomH = RectangleZoomSelector(ax1,ax2)
-    maskH = MasksHandler(ax2, orgimg, zoomH)
-    roiH  = ROIDisplay(ax3, orgimg, orgimg.shape, zoomH.c, maskH.masks)
-    analH = Analysis(orgimg, state_path, zoomH, maskH, roiH, ax4)
+    zoomH = RectangleZoomSelector(ax00,ax01)
+    maskH = MasksHandler(ax01, orgimg, zoomH)
+    roiH  = ROIDisplay(ax10, orgimg, orgimg.shape, zoomH.c, maskH.masks)
+    analH = Analysis(orgimg, state_path, zoomH, maskH, roiH, ax02, ax11, ax12,ax13,ax14)
 
     # tell the next step in the pipeline to update automatically
     zoomH.register(maskH.update)
@@ -829,7 +895,7 @@ for swid, asw, mid in swidAswMid:
     
     #fig.show()
     
-    #plt.show()
+    plt.show()
     plt.close()
     
     d = {
@@ -838,11 +904,26 @@ for swid, asw, mid in swidAswMid:
         'masks' : [m.tuple for m in maskH.masks]
     }
     if True:
-        with open(fn, 'wb') as f:
-            pickle.dump(d,f)
+        if zoomH.c is not None and maskH.center is not None:
+            with open(fn, 'wb') as f:
+                pickle.dump(d,f)
+    
+    dpi=150
+    doplots = [
+        ('nsynth', analH.synimg),
+        ('srcimg', analH.srcimg)
+    ]
+    for name, var in doplots:
+        fig = plt.figure(figsize=(8,8), dpi=dpi)
+        axF = fig.add_subplot(1, 1, 1)
+        axF.xaxis.set_visible(False)
+        axF.yaxis.set_visible(False)
+        axF.imshow(var, interpolation="none", origin='upper')
+        fig.set_tight_layout(True)
+        fig.savefig(ffn%name, dpi=dpi)
+        fig.clear()
+        plt.close()
 
-
-    #fig.close()
 
 ### MAIN #####################################################################
 

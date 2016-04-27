@@ -24,8 +24,9 @@ filename = '{_[swid]}_{_[asw]}_{_[mid]}_mstel_vs_mtot.png'
 if not os.path.exists(path):
     os.makedirs(path)
 
-from create_data import ONLY_RECENT_MODELS as MODELS, LENS_CANDIDATES as LENSES
-from parse_candidates import MAP as ASW2SWID, MAP as SWID2ASW
+#from create_data import ONLY_RECENT_MODELS as MODELS, LENS_CANDIDATES as LENSES
+from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
+from parse_candidates import MAP as ASW2SWID   #, MAP as SWID2ASW
 
 I = getI(__file__)
 
