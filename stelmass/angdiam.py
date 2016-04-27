@@ -18,7 +18,19 @@ def sig_factor(zlens,zsrc):
     Ds = asrc*r[2]
     Dls = asrc*r[1]
     return Dl*Ds/Dls
-
+    
 # Multiply masses by
 # sig_factor(zl_actual,zs_actual)/sig_factor(zl_used,zs_used)
 
+def dis_factor(zlens,zsrc):
+    alens = 1./(1+zlens)
+    asrc = 1./(1+zsrc)
+    a = [asrc,alens,1]
+    r = odeint(dcomov,[0],a)[:,0]
+    Dl = alens*(r[2]-r[1])
+    return Dl
+    
+# Multiply kpc distances by
+# dis_factor(zl_actual,zs_actual)/dis_factor(zl_used,zs_used)
+
+    

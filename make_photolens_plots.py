@@ -11,8 +11,8 @@ import sys
 import numpy as np
 import matplotlib as mpl
 
-mpl.rc('font', family='serif')
-mpl.rc('text', usetex=True)
+#mpl.rc('font', family='serif')
+#mpl.rc('text', usetex=True)
 
 import matplotlib.pyplot as plt
 
@@ -38,6 +38,8 @@ if not os.path.exists(path):
 if True:
 
     mid = CRDA.MAPS['swid2model']['SW05']
+    mid = CRDA.MAPS['swid2model']['SW28']
+
     m = CRDA.ALL_MODELS[mid]
     ffn = os.path.join(path, filename.format(_=m))
 
@@ -46,7 +48,7 @@ if True:
     ax1 = fig.add_subplot(1,2,1)
     ax2 = fig.add_subplot(1,2,2)
     
-    r = m['R']['data'] * m['R']['units']['kpc'][0] # factor at the end converts from arcsec to kpc
+    r = m['R']['data'] #* m['R']['units']['kpc'][0] # factor at the end converts from arcsec to kpc
 
 
     # make redshoft correction
@@ -58,6 +60,7 @@ if True:
     f_act = sig_factor(zl_actual,zs_actual)
     f_use = sig_factor(zl_used,zs_used)
     zcorrf = f_act / f_use
+    zcorrf = 1.0
 
 
     _me = m['M(<R)']
@@ -73,8 +76,8 @@ if True:
     ax1.errorbar(r, me/scl, yerr=[err_m/scl, err_p/scl], fmt='ko')
     
     #ax1.set_title("Stellar vs Lensing Mass")
-    ax1.set_xlabel(u'Radius $\mathrm{r (kpc)$')
-    ax1.set_ylabel(u'Enclosed Mass $\mathrm{M_{<R} (10^{12} M_{\odot})}$')
+    #ax1.set_xlabel(u'Radius $\mathrm{r (kpc)$')
+    #ax1.set_ylabel(u'Enclosed Mass $\mathrm{M_{<R} (10^{12} M_{\odot})}$')
     
     #axis limits
 #    ax.set_xlim(xmin=2e8, xmax=1e12)
@@ -99,8 +102,8 @@ if True:
     ax2.errorbar(r, sigma/yscl, yerr=[err_m/yscl, err_p/yscl], fmt='ko')
     
     #ax2.set_title("Stellar vs Lensing Mass")
-    ax2.set_xlabel(u'Radius $\mathrm{r (kpc)$')
-    ax2.set_ylabel(u'Formal dispersion $\mathrm{\sigma_{lens} (km\,s^{-1})}$')
+    #ax2.set_xlabel(u'Radius $\mathrm{r (kpc)$')
+    #ax2.set_ylabel(u'Formal dispersion $\mathrm{\sigma_{lens} (km\,s^{-1})}$')
 
     fig.set_tight_layout(True)
     #plt.tight_layout()
