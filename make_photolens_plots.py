@@ -29,18 +29,30 @@ from settings import print_first_line, getI, print_last_line
 
 path     = os.path.join(S['output_dir'], 'plots2')
 filename = '{_[swid]}_{_[asw]}_{_[mid]}_enclMass_dispersion.png'
+title = '{_[swid]} {_[asw]} {_[mid]}'
 
 if not os.path.exists(path):
     os.makedirs(path)
 
 
 #def create_plot(mid):
-if True:
+#if True:
+init = True
 
-    mid = CRDA.MAPS['swid2model']['SW05']
+swid = "SW05"
+for mid in CRDA.MAPS['swid2all_models'][swid]:
+    
+    
+    #mid = CRDA.MAPS['swid2model']['SW05']
     #mid = CRDA.MAPS['swid2model']['SW28']
 
     m = CRDA.ALL_MODELS[mid]
+    if not 'swid' in m:
+        m['swid'] = swid
+
+    print title.format(_=m)
+
+        
     ffn = os.path.join(path, filename.format(_=m))
 
     fig = plt.figure(figsize=(8,4), dpi=100)
@@ -50,19 +62,20 @@ if True:
 
 
     # make redshoft correction
-    zl_actual = m['z_lens_meassured']
-    zs_actual = 2.0                 #!!!!!!!!! source redshifts not yet available, using estimate
+    zl_actual = 0.56 # m['z_lens_meassured']
+    zs_actual = 2.9                 #!!!!!!!!! source redshifts not yet available, using estimate
     zl_used = m['z_lens_used']
     zs_used = m['z_src_used']
        
     m_cf = sig_factor(zl_actual,zs_actual) / sig_factor(zl_used,zs_used)
     r_cf = dis_factor(zl_actual,zs_actual) / dis_factor(zl_used,zs_used)
 
-    m_cf = 1.0
-    r_cf = 1.0
+    #m_cf = 1.0
+    #r_cf = 1.0
 
     
-    r = m['R']['data'] / m['R']['units']['kpc'][0] # factor at the end converts from arcsec to kpc
+    r = m['R']['data'] * m['R']['units']['kpc'][0] # factor at the end converts from arcsec to kpc
+    r = r * r_cf # correct for wrong redshifts
 
     _me = m['M(<R)']
 
@@ -77,8 +90,8 @@ if True:
     ax1.errorbar(r, me/scl, yerr=[err_m/scl, err_p/scl], fmt='ko')
     
     #ax1.set_title("Stellar vs Lensing Mass")
-    #ax1.set_xlabel(u'Radius $\mathrm{r (kpc)$')
-    #ax1.set_ylabel(u'Enclosed Mass $\mathrm{M_{<R} (10^{12} M_{\odot})}$')
+    ax1.set_xlabel(u'Radius $\mathrm{r}$ \, $(kpc)$')
+    ax1.set_ylabel(u'Enclosed Mass $\mathrm{M_{<R}}$ \, $(10^{12} M_{\odot})$')
     
     #axis limits
 #    ax.set_xlim(xmin=2e8, xmax=1e12)
@@ -101,18 +114,22 @@ if True:
 
     yscl = 1e3
     ax2.errorbar(r, sigma/yscl, yerr=[err_m/yscl, err_p/yscl], fmt='ko')
+    ax2.set_ylim([0,525])
     
     #ax2.set_title("Stellar vs Lensing Mass")
     #ax2.set_xlabel(u'Radius $\mathrm{r (kpc)$')
     #ax2.set_ylabel(u'Formal dispersion $\mathrm{\sigma_{lens} (km\,s^{-1})}$')
-
+    
+    fig.suptitle(title.format(_=m), fontsize=12)
     fig.set_tight_layout(True)
     #plt.tight_layout()
     fig.savefig(ffn, dpi=150)
-    plt.show()
+    if init:
+        plt.show()
+        init=False
     #break
-    #plt.clf()
-    #plt.close(fig)
+    plt.clf()
+    plt.close(fig)
 
 
 
