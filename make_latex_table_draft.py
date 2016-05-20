@@ -30,7 +30,25 @@ for l in lns:
             print "%s: no complete record found" % (_[0],)
             dd[_[0]] = ['']*6
 
-ss = ""
+ss = r"""
+\begin{tabular}{c c c | c c | c c c | c c c}
+  \hline
+  SWID & ASW id & model id
+  
+    & \rot{$z_\text{lens}$}
+
+    & \rot{\shortstack[l]{image\\morphology}}
+    
+    & \multicolumn{1}{|l|}{\rot{\shortstack[l]{unblended\\images}}}
+    & \rot{\shortstack[l]{all images\\discernible}}
+    & \rot{\shortstack[l]{isolated\\ lens}}
+    
+    & \rot{\shortstack[l]{synthetic image\\ reasonable}}
+    & \rot{\shortstack[l]{mass map\\ reasonable}}
+    & \rot{\shortstack[l]{total vs stellar\\ mass ratio}}
+  \\ \hline
+"""
+
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     mid = CRDA.MAPS['swid2model'].get(swid, "")
@@ -84,9 +102,17 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
 """.format(**m)
 
-    print s
+    #print s
     ss += s
-    
+
+ss += """
+
+  \hline
+
+\end{tabular}
+"""    
 pyperclip.copy(ss)
 
+with open("output/table.tex", "w") as f:
+    f.write(ss)
 

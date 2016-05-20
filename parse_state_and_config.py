@@ -123,8 +123,19 @@ def parse_state(mid):
     state.make_ensemble_average()
     obj, data = state.ensemble_average['obj,data'][0]
     
+    # get the images:
+    images = []
+    for img in obj.sources[0].images:
+        ii = {
+            'type': ['min', 'sad', 'max', 'unk'][img.parity],
+            'pos' : img.pos,
+            'angle': img.angle
+        }
+        images.append(ii)
+
+    
     # keys to save in the pickle
-    keys = ['M(<R)', 'kappa(R)', 'R', 'Rlens', 'Sigma(R)']
+    keys = ['M(<R)', 'kappa(R)', 'kappa(<R)', 'R', 'Rlens', 'Sigma(R)']
 
     # init temp data storage to NaN
     minmax_storage = {}
@@ -194,6 +205,10 @@ def parse_state(mid):
 #            'units':  sigmar.units,
 #            'symbol': sigmar.symbol
 #        },
+        
+        "images": images,
+        "rings": obj.basis.rings,
+        "radial_cell_size": obj.basis.radial_cell_size
     }
     
     for k in keys:

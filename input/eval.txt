@@ -6,77 +6,77 @@
  
 5. synthetic image reasonable (incl model reasonable)
 6. mass map reasonable
-7. total vs stellar mass ratio
+#7. total vs stellar mass ratio 
 
 # answer with Yes and N; mark questions with *
 # only lines starting with SW will be considered
 
 SW01,                       
-SW02,1+3,     n,y,n,  y,y,y
+SW02,1+3,     n,y,n,  y,y
 SW03,                       
-SW04,1+1+1+1*,y,n,n,  n,y,n
-SW05,1+2+1,   y,y,y,  y,y,n
-SW06,1+3,     n,y,y*, y,n*,y
+SW04,1+1+1+1*,y,n,n,  n,y
+SW05,1+2+1,   y,y,y,  y,y
+SW06,1+3,     n,y,y*, y,n*
 SW07,                       
-SW08,1+1,     y,y,n,  y,y,y
-SW09,3+1,     n,y,y,  y,y,y
-SW10,1+1,     y,n,y,  n,n,y 
-SW11,1+3,     n,y,n,  y,y*,y
-SW12,1+1,     y*,y,n, y,y,y
-SW13,1+3    , n,n,n,  n,n,y
+SW08,1+1,     y,y,n,  y,y
+SW09,3+1,     n,y,y,  y,y
+SW10,1+1,     y,n,y,  n,n 
+SW11,1+3,     n,y,n,  y,y*
+SW12,1+1,     y*,y,n, y,y
+SW13,1+3    , n,n,n,  n,n
 SW14,                       
-SW15,1+3    , n,y,n,  y,y,y 
-SW16,1+1    , n,n,y,  n,y,y
-SW17,1+1    , y,n,n,  n,y,y
-SW18,1+1    , y,n,y,  n,n,y 
-SW19,1+2+1  , n,y,n,  n,y,n
-SW20,1+2+1* , y,y*,y, n,y,y
-SW21,1+1*   , y,n,n,  n,y,y
-SW22,1+1*   , *,n,n,  n,y,n
-SW23,???    , ?,?,?,  ?,?,?
-SW24,1+3    , n,y,n,  y,y,y
+SW15,1+3    , n,y,n,  y,y 
+SW16,1+1    , n,n,y,  n,y
+SW17,1+1    , y,n,n,  n,y
+SW18,1+1    , y,n,y,  n,n 
+SW19,1+2+1  , n,y,n,  n,y
+SW20,1+2+1* , y,y*,y, n,y
+SW21,1+1*   , y,n,n,  n,y
+SW22,1+1*   , *,n,n,  n,y
+SW23,???    , ?,?,?,  ?,?
+SW24,1+3    , n,y,n,  y,y
 SW25,                       
-SW26,1+1    , y,n,y,  n,n,n 
-SW27,1+3    , n,n,n,  n,y,y
-SW28,1+3    , n,y,n,  y,y,y
-SW29,3+1    , n,y,y,  y,y,y
+SW26,1+1    , y,n,y,  n,n 
+SW27,1+3    , n,n,n,  n,y
+SW28,1+3    , n,y,n,  y,y
+SW29,3+1    , n,y,y,  y,y
 SW30,                       
-SW31,                       
+SW31,1+3    , n,y,n,  y,y   
 SW32,                       
-SW33,                       
-SW34,                       
-SW35,                       
-SW36,1+1,y,y,n,n,y
+SW33,1+1    , y,y,n,  n,y   
+SW34,???    , ?,?,?,  ?,?
+SW35,1+3    , n,y,n,  y,y   
+SW36,1+1    , y,y,n,  n,y
 SW37,                       
-SW38,                       
+SW38,1+3    , n,y,y,  y,y   
 SW39,                       
 SW40,                       
-SW41,                       
-SW42,1+2+1,y,y,n,y,n
-SW43,                       
-SW44,                       
-SW45,                       
-SW46,                       
-SW47,                       
+SW41,1+2+1* , y,n,y,  y,y
+SW42,1+2+1  , y,y,n,  y,n
+SW43,1+2+1  , n,n,n,  n,y
+SW44,???    , ?,?,?,  ?,?
+SW45,R      , n,y,y,  n,y  
+SW46,1+1    , y,y,n,  y,y   
+SW47,1+1    , y,n,y,  n,y
 SW48,                       
 SW49,                       
 SW50,                       
 SW51,                       
 SW52,                       
-SW53,                       
-SW54,                       
-SW55,                       
-SW56,                       
-SW57,1+3,n,y,n,n,n
-SW58,3+1,n,n,y,y,y
+SW53,1+1    , y,n,y,  n,y   
+SW54,R      , n,y,n,  y,y 
+SW55,
+SW56,1+1    , y,n,y,  n,n
+SW57,1+3    , n,y,n,  n,n
+SW58,3+1    , n,n,y,  y,y
 SW59,                       
 
 
 1, image morphology
-2. unblended  images
-3. all images discernible
-4. isolated  lens
 
-5. synthetic image reasonable
+2. unblended  images
+3. all images discernible (all prediced by synth image, even if not marked)
+4. isolated  lens
+ 
+5. synthetic image reasonable (incl model reasonable)
 6. mass map reasonable
-## 7. total vs stellar mass ratio
