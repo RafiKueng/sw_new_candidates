@@ -27,7 +27,7 @@ import parse_state_and_config as PSAC       # make sure:
                                             # 1) this if first run in glass env..
                                             # 2) load this last of all modules
 
-from stelmass.angdiam import sig_factor
+from stelmass.angdiam import sig_factor, dis_factor, z_to_D
 
 
 DATA = {}
@@ -98,6 +98,8 @@ def correct_scaling(mid):
         f = 1
 
     print INT*2,'- correcting scaling f=%5.2f' % f
+    
+    DATA[mid]['scale_fact'] = f
         
     DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f
     DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f
@@ -123,6 +125,30 @@ def correct_mass(mid):
     f_act = sig_factor(zl_actual,zs_actual)
     f_use = sig_factor(zl_used,zs_used)
     fact = f_act / f_use
+    
+    # TODO refracture: only save the factors, don't actually calcualte any 
+    m_cf = sig_factor(zl_actual,zs_actual) / sig_factor(zl_used,zs_used)
+    r_cf = dis_factor(zl_actual,zs_actual) / dis_factor(zl_used,zs_used)
+    
+
+    if zl_actual * zs_actual * zl_used * zs_used > 0:
+        model['sig_fact'] = m_cf
+        model['dis_fact'] = r_cf
+    else:
+        model['sig_fact'] = None
+        model['dis_fact'] = None
+
+    Dl_a, Ds_a, Dls_a = z_to_D(zl_actual, zs_actual)
+    Dl_u, Ds_u, Dls_u = z_to_D(zl_used, zs_used)
+    
+    D = {
+        'l'  : {'actual': Dl_a,  'used':Dl_u},    
+        's'  : {'actual': Ds_a,  'used':Ds_u},    
+        'ls' : {'actual': Dls_a, 'used':Dls_u},    
+    }
+    model['D'] = D
+    
+    
     
 #    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
 #        zl_actual,zl_used,zs_actual,zs_used,
