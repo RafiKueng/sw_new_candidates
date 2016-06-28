@@ -1,3 +1,6 @@
+# Moster et al (2010)
+# http://adsabs.harvard.edu/abs/2010ApJ...710..903M
+
 import numpy as np
 import matplotlib.pyplot as pl
 
