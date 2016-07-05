@@ -73,7 +73,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print "   no mid, skipping"
         continue
     
-    imgname = "output/M_encl/%s_%s_M_encl.png" % (swid, mid)
+    imgname = "output/M_encl/%s_%s_M_encl.png" % (asw, mid)
     
     m = CRDA.ALL_MODELS[mid]
     

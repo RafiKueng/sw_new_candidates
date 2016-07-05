@@ -1,4 +1,4 @@
-1, image morphology
+1, image morphology X+Y -> X close images, Y images far away
 
 2. unblended  images
 3. all images discernible (all prediced by synth image, even if not marked)
