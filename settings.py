@@ -10,6 +10,34 @@ from os.path import join
 import cPickle as pickle
 
 
+top_color = "r"
+bot_color = "#666666"
+bg_color  = '#cccccc'
+border_color = "k"
+
+styles = {
+    'forbiddenarea' : {
+        'facecolor': bg_color,
+        #'linestyle': u':', 
+        'color'    : bg_color
+    },
+    
+    'hilight_marker' : {
+        'marker'    : 'o',
+        'color'     : top_color,
+        'fillstyle' : 'full',
+    },
+    'background_marker' : {
+        'marker'    : '+',
+        'color'     : bot_color,
+        'facecolor' : bot_color,
+    }
+}
+
+
+
+
+
 settings = {
 
 # setup directories
@@ -116,3 +144,5 @@ def del_cache(I,fn):
         os.remove(fn)
     except OSError:
         pass
+
+

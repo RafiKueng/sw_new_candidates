@@ -15,11 +15,21 @@ mpl.rc('font', family='serif')
 mpl.rc('text', usetex=True)
 
 import matplotlib.pyplot as plt
+from moster import moster
 
+import settings
+reload(settings)
 from settings import settings as S, getI, INT
+styles = settings.styles # for better reload() in ipython
 
 path     = join(S['output_dir'], 'plots')
 filename = '{_[swid]}_{_[asw]}_{_[mid]}_mstel_vs_mtot.png'
+overwrite = True
+debug = False if 0 == 0 else True
+
+areastyle = styles['forbiddenarea']
+fgmarker = styles['hilight_marker']
+bgmarker = styles['background_marker']
 
 if not os.path.exists(path):
     os.makedirs(path)
@@ -48,6 +58,8 @@ print INT,"missing:"
 for asw in symdiff:
     print INT,'-',asw
     
+if debug:
+    intersect = ['ASW0007k4r',]#'ASW0008swn']
 
 # collect data
 M_stellar = []
@@ -61,10 +73,13 @@ for asw in intersect:
     mid = ASW2MID[asw]
     swid = ASW2SWID[asw]
     
-    m_stellar = LENSES[asw]['m_s_geom']
-    m_lens = MODELS[mid]['Mtot_ave_z_corrected']
-    m_lens_max = MODELS[ASW2MID[asw]]['Mtot_max_z_corrected']
-    m_lens_min = MODELS[ASW2MID[asw]]['Mtot_min_z_corrected']
+    try:
+        m_stellar = LENSES[asw]['m_s_geom']
+        m_lens = MODELS[mid]['Mtot_ave_z_corrected']
+        m_lens_max = MODELS[ASW2MID[asw]]['Mtot_max_z_corrected']
+        m_lens_min = MODELS[ASW2MID[asw]]['Mtot_min_z_corrected']
+    except KeyError:
+        print "%s not found"%asw
     
     label = '%s (%s)' % (swid, asw)
     
@@ -75,6 +90,8 @@ for asw in intersect:
     data[label] = {
         'm_stellar':m_stellar,
         'm_lens':m_lens,
+        'm_lens_max':m_lens_max,
+        'm_lens_min': m_lens_min
     }
 
     data[label].update(LENSES[asw])
@@ -94,12 +111,14 @@ for i, _ in enumerate(data.items()):
     label, _ = _
     m_stellar = _['m_stellar']
     m_lens = _['m_lens']
+    m_lens_max = _['m_lens_max']
+    m_lens_min = _['m_lens_min']
     
     print INT,"(%3.0f%%) plotting %s..." % (100.0*i/len(data.keys()), label),
     
     # filename
     ffn = join(path, filename.format(_=_))
-    if os.path.exists(ffn):
+    if os.path.exists(ffn) and not overwrite:
         print "exists, skipping (%s)" % ffn
         continue
     
@@ -107,25 +126,44 @@ for i, _ in enumerate(data.items()):
     fig = plt.figure(figsize=(4,4), dpi=200)
     ax = fig.add_subplot(111)
     
-    # black line
-    ax.plot([1e7,1e15],[1e7,1e15],'k:')
-    ax.plot([1e7,1e15],[1e7,1e15],'k:')
+    # plot range for additional stuff
+    # make sure it's outside the plot range
+    rng_max = 1e15
+    rng_min = 1e7
+    rng_n = 50
+    rng = np.array([rng_min,rng_max])
+    rng_lin = np.linspace(rng_min, rng_max, rng_n)
+    rng_log = np.logspace(np.log10(rng_min), np.log10(rng_max), rng_n)
     
+    # plot moster area
+    most = moster(rng_log)
+    ax.fill_between(most, rng_log, rng_max, **areastyle)
+    #ax.plot(most, rng_log,'k:')
+    
+    # black line
+    #ax.plot(rng,rng,'k:')
+    ax.fill_between(rng_log, rng_log, rng_min, **areastyle)
+
+
     # brackground points
     g = 0.3 # gray
-    ax.scatter(M_stellar, M_lens, c=(g,g,g), marker='+')
+    ax.scatter(M_stellar, M_lens, **bgmarker)
     
     # coloured point
-    ax.plot(m_stellar, m_lens, 'or')
+    #ax.plot(m_stellar, m_lens, **fgmarker)
+    yerr = np.array([[m_lens-m_lens_min], [m_lens_max-m_lens]])
+    if debug:
+        yerr = 5*yerr
+    ax.errorbar(m_stellar, m_lens, yerr=yerr, **fgmarker)
     
     #plt.title("Stellar vs Lensing Mass")
-    plt.title(label)
+    #plt.title(label)
     ax.set_xlabel('Stellar Mass $\mathrm{M_{\odot}}$')
     ax.set_ylabel('Lensing Mass $\mathrm{M_{lens}}$')
     
     #axis limits
     ax.set_xlim(xmin=2e8, xmax=1e12)
-    ax.set_ylim(ymin=2e10, ymax=1e14)
+    ax.set_ylim(ymin=8e10, ymax=2e13)
     ax.set_xscale("log", nonposx='clip')
     ax.set_yscale("log", nonposy='clip')
     
