@@ -163,7 +163,7 @@ for i, _ in enumerate(data.items()):
     
     #axis limits
     ax.set_xlim(xmin=2e8, xmax=1e12)
-    ax.set_ylim(ymin=8e10, ymax=2e13)
+    ax.set_ylim(ymin=2e10, ymax=1e14)
     ax.set_xscale("log", nonposx='clip')
     ax.set_yscale("log", nonposy='clip')
     
