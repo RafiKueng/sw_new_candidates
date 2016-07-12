@@ -5,10 +5,16 @@ Created on Fri May 20 02:01:26 2016
 @author: rafik
 """
 
+from __future__ import unicode_literals
 
-import create_data as CRDA
-from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
-import parse_candidates as PACA
+import os
+from os.path import join
+
+import settings as SET
+reload(SET)
+SET.set_mpl_rc()
+STY = SET.styles
+S = SET.settings
 
 import numpy as np
 import matplotlib as mpl
@@ -16,6 +22,30 @@ import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 from scipy import optimize, interpolate
 
+
+import create_data as CRDA
+from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
+import parse_candidates as PACA
+
+
+DBG = SET.DEBUG
+
+
+fpath = join(S['output_dir'], "kappa_encl")
+filename = SET.filename_base % "kappa_encl"
+
+
+# rE text label position
+rEpos = 0.68 # in axes coordinates
+t_dx = 0.0
+t_dy = 0.1
+
+
+
+t_props = STY['text']
+
+if not os.path.exists(fpath):
+    os.makedirs(fpath)
 
 
 def getEinsteinR(x, y):
@@ -44,21 +74,7 @@ def getEinsteinR(x, y):
 
 
 
-# rE text label
-rEpos = 0.6667 # in axes
-t_dx = 0.0
-t_dy = 0.1
 
-t_props = {
-    'ha':'left',
-    'va':'bottom',
-    'size': 14,
-} 
-
-# Image marker postitions
-iypos = 0.8 # general y postion of the image marker line
-dy = 0.075  # length of the line 
-oy = 0.025   # offset between lines
 
 
 
@@ -73,7 +89,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print "   no mid, skipping"
         continue
     
-    imgname = "output/M_encl/%s_%s_M_encl.png" % (asw, mid)
+    #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
+    imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
     m = CRDA.ALL_MODELS[mid]
     
@@ -104,7 +121,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ymin = np.min(mn)
     ymax = np.max(mx)
 
-    fig = plt.figure()
+    fig = plt.figure(**STY['figure_sq'])
     ax = fig.add_subplot(1,1,1)
 
     # the x coords of this transformation are data, and the
@@ -113,14 +130,14 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         ax.transData, ax.transAxes)
 
     
-    plt.plot(rr, mn, 'b')
-    plt.plot(rr, mx, 'b')
-    plt.plot(rr, da, 'b--')
-    plt.fill_between(rr, mx, mn, facecolor='blue', alpha=0.5)
+    #ax.plot(rr, mn, 'b')
+    #ax.plot(rr, mx, 'b')
+    ax.plot(rr, da, **STY['fg_line1'])
+    ax.fill_between(rr, mx, mn, **STY['fg_area1'])
 
 
     #plt.plot([xmin,xmax], [1,1], 'k:')  
-    plt.axhline(1, color="k", ls=":")
+    ax.axhline(1, **STY['bg_line'])
 
     rE_mean = getEinsteinR(rr, da)
     rE_min  = getEinsteinR(rr, mn)
@@ -137,7 +154,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         rE_pos = max(round(ymax*0.75), 3)
         
         #plt.plot(np.array([rE_mean, rE_mean]), [0,rE_pos], '--', color=(0,0.5,0))
-        plt.axvline(rE_mean, 0, rEpos, ls='--', color=(0,0.5,0))
+        ax.axvline(rE_mean, 0, rEpos, **STY['fg_line2'])
         
         if rE_mean > 0.75*xmax:
             ha = "right" 
@@ -146,66 +163,61 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         else:
             ha = "center" 
         
-        lbl = r'$r_\Theta = %4.2f \; ' % rE_mean
+        lbl = r'$r_{\Theta} = {%4.2f} \; {} ' % rE_mean
         if rE_min:
-            lbl += r'_{-%4.2f} ' % (rE_mean-rE_min)
+            lbl += r'_{{} - {%4.2f}} ' % (rE_mean-rE_min)
         else:
             lbl += r'_{?}'
 
         if rE_max:
-            lbl += r'^{+%4.2f}' % (rE_max-rE_mean)
+            lbl += r'^{+ {%4.2f}}' % (rE_max-rE_mean)
         else:
             lbl += r'^{?}'
             
         lbl += r'$'
-        plt.text(
+
+        # print lbl
+        ax.text(
             rE_mean+t_dx, rEpos,
             lbl,
             transform=trans,
             horizontalalignment=ha,
-            **t_props)
+            **STY['text'])
 
     
     #append the max in 0/0
     #m['images'].append({'pos':0+0j, 'type':'max', 'angle':0})
-
-    for ii in m['images']:
-        xpos = np.abs(ii['pos'])
-        jj = ["min", "sad", "max"].index(ii['type'])
-        c = ["red", "blue", "green"][jj]
-        m = ['1', '2', '3'][jj] # assign marker style
-        m = ['v', '>', '^'][jj] # assign marker style
-        # http://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
-        de = [(0,3),(2,3),(2,3)][jj] # draw every (start, offset)
-        
-        sy = oy * jj
-        #plt.axvline(xpos, iypos+sy, iypos+dy+sy, color="k" )
-        
-        #_, iypt=  ax.transData.transform_point((0, iypos+dy+sy))
-        #_, iypb=  ax.transData.transform_point((0, iypos+sy))
-        #print iypt, iypb
-        plt.plot([xpos, xpos, xpos], [iypos+sy, iypos+dy/2.+sy, iypos+dy+sy],
-                 color=c,
-                 marker=m,
-                 markevery=de,
-                 markeredgecolor=c, markerfacecoloralt=c,
-                 transform=trans)
     
-    plt.tick_params(axis='both', which='both', labelsize=16)
+    SET.plot_image_positions(ax, m['images'] + [{'pos':0,'type':'max'},] )
+
+
+    ax.tick_params(axis='both', which='both', **STY['ticks'])
 
 
     #plt.tight_layout()
-    plt.ylim([0.5,10])
+    ax.set_ylim(bottom=0.5, top=8)
     ax.set_yscale('log')    
+    
+    ddxx = np.max(rr) * 0.05
+    ax.set_xlim(left=-ddxx, right=np.max(rr)+ddxx)
+    
 
-    plt.xlabel(r'image radius [arcsec]', fontsize = 18)
-    plt.ylabel(r'$\kappa$(\textless R) [1]', fontsize = 18)
+    plt.xlabel(r'image radius [arcsec]', **STY['label'])
+    plt.ylabel(r'$\kappa_{<R}$ [1]', **STY['label'])
 
-    formatter = mpl.ticker.FuncFormatter(lambda x, p: '$'+str(int(round(x)))+'$' if x>=1 else '$'+str(round(x,1))+'$')
+    formatter = mpl.ticker.FuncFormatter(
+        lambda x, p: str(int(round(x))) if x>=1 else str(round(x,1))
+    )
     ax.yaxis.set_major_formatter(formatter)
     ax.yaxis.set_minor_formatter(formatter)
 
-    #plt.show()
-    plt.savefig(imgname)
+    plt.tight_layout()
+    
+    plt.savefig(imgname, **STY['figure_save'])
+
+    if DBG:
+        plt.show()
+        break
+    
     plt.close()
-    #break
+

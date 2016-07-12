@@ -8,28 +8,32 @@ Created on Sun Nov  1 21:51:21 2015
 import os
 from os.path import join
 
+# reminder: settings before mpl
+import settings as SET
+reload(SET)
+SET.set_mpl_rc()
+STY = SET.styles # for better reload() in ipython
+S = SET.settings
+from settings import getI, INT
+
+
 import numpy as np
-import matplotlib as mpl
-
-mpl.rc('font', family='serif')
-mpl.rc('text', usetex=True)
-
 import matplotlib.pyplot as plt
+
 from moster import moster
 
-import settings
-reload(settings)
-from settings import settings as S, getI, INT
-styles = settings.styles # for better reload() in ipython
 
-path     = join(S['output_dir'], 'plots')
-filename = '{_[swid]}_{_[asw]}_{_[mid]}_mstel_vs_mtot.png'
+DBG = SET.DEBUG
+#DBG = False
+
+
+path     = join(S['output_dir'], 'mlens_vs_mstel')
+filename = SET.filename_base % 'mstel_vs_mtot'
 overwrite = True
-debug = False if 0 == 0 else True
 
-areastyle = styles['forbiddenarea']
-fgmarker = styles['hilight_marker']
-bgmarker = styles['background_marker']
+#areastyle = styles['forbiddenarea']
+#fgmarker = styles['hilight_marker']
+#bgmarker = styles['background_marker']
 
 if not os.path.exists(path):
     os.makedirs(path)
@@ -58,8 +62,8 @@ print INT,"missing:"
 for asw in symdiff:
     print INT,'-',asw
     
-if debug:
-    intersect = ['ASW0007k4r',]#'ASW0008swn']
+if DBG:
+    intersect = ['ASW0007k4r','ASW0008swn']
 
 # collect data
 M_stellar = []
@@ -123,7 +127,7 @@ for i, _ in enumerate(data.items()):
         continue
     
     # setup plot
-    fig = plt.figure(figsize=(4,4), dpi=200)
+    fig = plt.figure(**STY['figure_sq'])
     ax = fig.add_subplot(111)
     
     # plot range for additional stuff
@@ -137,29 +141,29 @@ for i, _ in enumerate(data.items()):
     
     # plot moster area
     most = moster(rng_log)
-    ax.fill_between(most, rng_log, rng_max, **areastyle)
+    ax.fill_between(most, rng_log, rng_max, **STY['bg_area'])
     #ax.plot(most, rng_log,'k:')
     
     # black line
     #ax.plot(rng,rng,'k:')
-    ax.fill_between(rng_log, rng_log, rng_min, **areastyle)
+    ax.fill_between(rng_log, rng_log, rng_min, **STY['bg_area'])
 
 
     # brackground points
     g = 0.3 # gray
-    ax.scatter(M_stellar, M_lens, **bgmarker)
+    ax.scatter(M_stellar, M_lens, **STY['bg_marker'])
     
     # coloured point
     #ax.plot(m_stellar, m_lens, **fgmarker)
     yerr = np.array([[m_lens-m_lens_min], [m_lens_max-m_lens]])
-    if debug:
+    if DBG:
         yerr = 5*yerr
-    ax.errorbar(m_stellar, m_lens, yerr=yerr, **fgmarker)
+    ax.errorbar(m_stellar, m_lens, yerr=yerr, **STY['fg_marker1'])
     
     #plt.title("Stellar vs Lensing Mass")
     #plt.title(label)
-    ax.set_xlabel('Stellar Mass $\mathrm{M_{\odot}}$')
-    ax.set_ylabel('Lensing Mass $\mathrm{M_{lens}}$')
+    ax.set_xlabel('Stellar Mass $M_{\odot}$', **STY['label'])
+    ax.set_ylabel('Lensing Mass $M_{lens}$', **STY['label'])
     
     #axis limits
     ax.set_xlim(xmin=2e8, xmax=1e12)
@@ -168,9 +172,11 @@ for i, _ in enumerate(data.items()):
     ax.set_yscale("log", nonposy='clip')
     
     plt.tight_layout()
-    fig.savefig(ffn, dpi=200)
-    #plt.show()
-    #break
+    fig.savefig(ffn, **STY['figure_save'])
+    
+    if DBG:
+        plt.show()
+        break
     plt.clf()
     plt.close(fig)
     

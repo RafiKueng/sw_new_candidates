@@ -6,14 +6,17 @@ Created on Tue Apr 26 10:22:51 2016
 """
 
 import os
-import sys
+
+import settings as SET
+reload(SET)
+SET.set_mpl_rc()
+STY = SET.styles # for better reload() in ipython
+S = SET.settings
+from settings import getI, INT
+from settings import print_first_line, getI, print_last_line
+
 
 import numpy as np
-import matplotlib as mpl
-
-#mpl.rc('font', family='serif')
-#mpl.rc('text', usetex=True)
-
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 
@@ -23,14 +26,10 @@ from stelmass.angdiam import sig_factor, dis_factor
 import create_data as CRDA
 #from create_data import ONLY_RECENT_MODELS as MODELS, LENS_CANDIDATES as LENSES
 
-from settings import settings as S, INT
-from settings import print_first_line, getI, print_last_line
 
 
-
-
-path     = os.path.join(S['output_dir'], 'plots2')
-filename = '{_[swid]}_{_[asw]}_{_[mid]}_enclMass_dispersion.png'
+path     = os.path.join(S['output_dir'], 'enclMass_dispersion')
+filename = SET.filename_base % 'enclMass_dispersion'
 title = '{_[swid]} {_[asw]} {_[mid]}'
 
 if not os.path.exists(path):

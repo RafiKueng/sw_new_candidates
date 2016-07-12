@@ -9,31 +9,192 @@ import os, csv
 from os.path import join
 import cPickle as pickle
 
+import numpy as np
+import matplotlib as mpl
+import matplotlib.transforms as transforms
 
-top_color = "r"
-bot_color = "#666666"
-bg_color  = '#cccccc'
-border_color = "k"
+DEBUG = True
+#DEBUG = True
 
-styles = {
-    'forbiddenarea' : {
-        'facecolor': bg_color,
-        #'linestyle': u':', 
-        'color'    : bg_color
-    },
+
+def set_mpl_rc():
+    mpl.rcParams['font.family'] = 'serif'
+    mpl.rcParams['font.size'] = 16
     
-    'hilight_marker' : {
-        'marker'    : 'o',
-        'color'     : top_color,
-        'fillstyle' : 'full',
-    },
-    'background_marker' : {
-        'marker'    : '+',
-        'color'     : bot_color,
-        'facecolor' : bot_color,
-    }
+    mpl.rcParams['mathtext.fontset'] = 'custom'
+    mpl.rcParams['mathtext.fontset'] = 'cm'
+    mpl.rcParams['mathtext.default'] = "regular"
+    
+    #mpl.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
+    #mpl.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
+    #mpl.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
+
+
+# define colors
+# http://matplotlib.org/examples/color/named_colors.html
+
+filename_base = "{_[swid]}_{_[asw]}_{_[mid]}_%s.png"
+
+colors = {
+    'hilight1' : "darkred",
+    'hilight2' : "darkblue",
+    'bg_elem'  : "dimgrey",
+
+    'fg_area1' : "lightcoral",
+    'fg_area2' : "lightblue",
+    'bg_area'  : "lightgrey",
+
+    'min': "red",
+    'sad': "dodgerblue",
+    'max': "green"
 }
 
+sizes = { # define them relative
+    'small'   : 'small',
+    'regular' : 'medium',
+    'big'     : 'large,'
+}
+
+
+
+styles = {
+
+    'figure_sq' : {
+        'figsize' : (6,6),
+        'dpi'     : 200,
+    },
+    
+    'figure_save' : {
+        'dpi'       : 200,
+        'facecolor' : 'w',
+        'edgecolor' : 'w',
+    },
+   
+    'fg_marker1' : {
+        'marker'    : 'o',
+        'color'     : colors['hilight1'],
+        'markeredgecolor' : colors['hilight1'],
+        'fillstyle' : 'full',
+        #'linestyle' : 'none',
+    },
+    
+    'bg_marker' : {
+        'marker'    : '+',
+        'color'     : colors['bg_elem'],
+        'facecolor' : colors['bg_elem'],
+        #DEL 'fillstyle' : 'full',
+    },
+
+    'fg_line1' : {
+        'color'           : colors['hilight1'], 
+        'linestyle'       : "solid",
+        'linewidth'       : 2.0,
+        'marker'          : None,
+#        'markeredgecolor' : '',
+#        'markeredgewidth' : '',
+#        'markerfacecolor' : '',
+#        'markersize'      : '',
+    },
+
+    'fg_line2' : {
+        'color'           : colors['hilight2'], 
+        'linestyle'       : "dashed",
+        'linewidth'       : 2.0,
+#        'marker'          : 'none',
+#        'markeredgecolor' : '',
+#        'markeredgewidth' : '',
+#        'markerfacecolor' : '',
+#        'markersize'      : '',
+    },
+
+    'bg_line' : {
+        'color'           : colors['bg_elem'], 
+        'linestyle'       : "dotted",
+        'linewidth'       : 2.0,
+#        'marker'          : 'none',
+#        'markeredgecolor' : '',
+#        'markeredgewidth' : '',
+#        'markerfacecolor' : '',
+#        'markersize'      : '',
+    },
+
+    
+    
+    'fg_area1' : {
+        'facecolor': colors['fg_area1'],
+        'edgecolors': 'none',
+        'linewidths': None
+    },
+
+    'bg_area' : {
+        'facecolor': colors['bg_area'],
+        'edgecolors': 'none',
+        'linewidths': None,
+        #'linestyle': u':', 
+        #'color'    : None,
+    },
+    
+    'text': {
+        'ha':'left',
+        'va':'bottom',
+        'size': sizes['regular'],
+    },
+    
+    'label' : {
+        'fontsize' : sizes['regular']
+    },
+    
+    'ticks': {  # 
+        'labelsize': sizes['small']
+    },
+    
+    
+    
+    'EXTPNT' : {
+        'names'  : ["min", "sad", "max"],
+        'colors' : [colors['min'],colors['sad'],colors['max']],
+        'markers': ['v', '>', '^'],
+        'offsets': [(0,3),(1,3),(2,3)], # draw every (start, offset)
+    },
+
+}
+
+
+
+# Image marker postitions
+# coordinates relative to plot!
+iypos = 0.875 # general y postion of the image marker line
+dy = 0.066  # length of the line 
+oy = 0.015   # offset between lines
+
+
+def plot_image_positions(ax, imgs):
+    
+    trans = transforms.blended_transform_factory(
+        ax.transData, ax.transAxes)
+    
+    for img in imgs:
+        
+        xpos = np.abs(img['pos'])
+        i = styles['EXTPNT']['names'].index(img['type'])
+        c = styles['EXTPNT']['colors'][i]
+        m = styles['EXTPNT']['markers'][i] # assign marker style
+        # http://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
+        de = styles['EXTPNT']['offsets'][i] # draw every (start, offset)
+        
+        sy = oy * i
+        #plt.axvline(xpos, iypos+sy, iypos+dy+sy, color="k" )
+        
+        #_, iypt=  ax.transData.transform_point((0, iypos+dy+sy))
+        #_, iypb=  ax.transData.transform_point((0, iypos+sy))
+        #print iypt, iypb
+        ax.plot([xpos, xpos, xpos], [iypos+sy, iypos+dy/2.+sy, iypos+dy+sy],
+                 color=c,
+                 marker=m,
+                 markevery=de,
+                 markeredgecolor=c,
+                 markerfacecoloralt=c,
+                 transform=trans)
 
 
 
