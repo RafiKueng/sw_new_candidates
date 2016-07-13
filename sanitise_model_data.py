@@ -27,7 +27,7 @@ import parse_state_and_config as PSAC       # make sure:
                                             # 1) this if first run in glass env..
                                             # 2) load this last of all modules
 
-from stelmass.angdiam import sig_factor, dis_factor, z_to_D
+from stelmass.angdiam import sig_factor, dis_factor, kappa_factor
 
 
 DATA = {}
@@ -66,7 +66,7 @@ def collect_data(mid):
     data['asw'] = asw
     
     # add the real/messured redshift of the lens from PACA (candidates.tex)
-    data['z_lens_meassured'] = PACA.DATA[asw]['z_lens']
+    data['z_lens_measured'] = PACA.DATA[asw]['z_lens']
     
     # add the created_on time for old models from the server (it's not in the
     # config, and thus not in PSAC)
@@ -86,7 +86,11 @@ def collect_data(mid):
     
     
 
-    
+#
+# in old version of SpL I painted the orgiginal images (440px^2) to
+# a canvas of size 500px^2 and meassured distances there in (pixels / 100)
+# and in the original image 1 px = 0.187 arcsec
+#   
 scale_fact = 440./500*0.187
 def correct_scaling(mid):
     
@@ -115,59 +119,53 @@ def correct_mass(mid):
     model = DATA[mid]  # this is a "pointer", updates should change the orginal as well
     
 
-    zl_actual = model['z_lens_meassured']
-    zs_actual = 2.0                 #!!!!!!!!! source redshifts not yet available, using estimate
-    zl_used = model['z_lens_used']
-    zs_used = model['z_src_used']
+    zl_actual = model['z_lens_measured']    # from the tex file of SW2 paper
+    zs_actual = 2.0                         #!!! source redshifts not yet available, using estimate
+    zl_used = model['z_lens_used']          # from PSAC: the parsed config file
+    zs_used = model['z_src_used']           # same here
 
    
        
-    f_act = sig_factor(zl_actual,zs_actual)
-    f_use = sig_factor(zl_used,zs_used)
-    fact = f_act / f_use
+    # f_act = sig_factor(zl_actual,zs_actual)
+    # f_use = sig_factor(zl_used,zs_used)
+    
+    # fact = f_act / f_use
     
     # TODO refracture: only save the factors, don't actually calcualte any 
     m_cf = sig_factor(zl_actual,zs_actual) / sig_factor(zl_used,zs_used)
     r_cf = dis_factor(zl_actual,zs_actual) / dis_factor(zl_used,zs_used)
+    k_cf  = kappa_factor(zl_used, zs_used)
     
 
     if zl_actual * zs_actual * zl_used * zs_used > 0:
         model['sig_fact'] = m_cf
         model['dis_fact'] = r_cf
+        model['kappa_fact'] = k_cf
     else:
         model['sig_fact'] = None
         model['dis_fact'] = None
+        model['kappa_fact'] = None
 
-    Dl_a, Ds_a, Dls_a = z_to_D(zl_actual, zs_actual)
-    Dl_u, Ds_u, Dls_u = z_to_D(zl_used, zs_used)
-    
-    D = {
-        'l'  : {'actual': Dl_a,  'used':Dl_u},    
-        's'  : {'actual': Ds_a,  'used':Ds_u},    
-        'ls' : {'actual': Dls_a, 'used':Dls_u},    
-    }
-    model['D'] = D
     
     
-    
-#    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  f1: %e  f2: %e" % (
-#        zl_actual,zl_used,zs_actual,zs_used,
-#        f_act, f_use
-#    )
+    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  kappa_fact: %e" % (
+        zl_actual,zl_used,zs_actual,zs_used,
+        k_cf
+    )
 
     keys = ['Mtot_ave', 'Mtot_min', 'Mtot_max']
     
     if zl_actual * zs_actual * zl_used * zs_used > 0:
         for k in keys:
             org_mass = model[k+'_scaled']
-            corr_mass = org_mass * fact
+            corr_mass = org_mass * m_cf
             model[k+'_z_corrected'] = corr_mass
             #print INT*2,'> %s: %e -> %e' % (k,model[k+'_scaled'], model[k+'_z_corrected'])
     else:
         for k in keys:
             model[k+'_z_corrected'] = None
         #print INT*2,'> no data available!!'
-    print 'DONE (f=%.3f)' % fact
+    print 'DONE (f=%.3f)' % m_cf
 
     
 

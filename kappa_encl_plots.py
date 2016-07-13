@@ -76,8 +76,6 @@ def getEinsteinR(x, y):
 
 
 
-
-
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     mid = CRDA.MAPS['swid2model'].get(swid, "")
@@ -98,23 +96,21 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     s_cf = m['scale_fact'] # corrects wrong pixel scaling
     m_cf = m['sig_fact']   # corrects masses for wrong redshifts
     r_cf = m['dis_fact']   # corrects lengths for wrong redshifts
-    D = m['D']
+    k_cf = m['kappa_fact']
 
     # m['kappa(<R)'] is actually kappa_infty!
     # kappa = D_ls / D_s * kappa_infty
-    #
-    f_D = D['ls']['actual'] / D['s']['actual'] * D['l']['used'] / D['l']['actual']
     
-    print "      ",s_cf, m_cf, r_cf, f_D
+    print "      ",s_cf, m_cf, r_cf, k_cf
     
     if not m_cf:
         print "   no redshifts given, skipping"
         continue
 
     rr = m['R']['data']
-    da = m['kappa(<R)']['data'] * f_D
-    mn = m['kappa(<R)']['min']  * f_D
-    mx = m['kappa(<R)']['max']  * f_D
+    da = m['kappa(<R)']['data'] * k_cf
+    mn = m['kappa(<R)']['min']  * k_cf
+    mx = m['kappa(<R)']['max']  * k_cf
     
     xmax = np.max(rr)
     xmin = 0.0

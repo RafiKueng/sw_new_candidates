@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.transforms as transforms
 
-DEBUG = True
+DEBUG = False
 #DEBUG = True
 
 
