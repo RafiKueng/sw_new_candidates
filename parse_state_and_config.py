@@ -123,6 +123,18 @@ def parse_state(mid):
     state.make_ensemble_average()
     obj, data = state.ensemble_average['obj,data'][0]
     
+    ddd = convert_glass_to_dict(state, obj,data)
+
+
+    # cache the result
+    with open(cpath, 'wb') as f:
+        pickle.dump(ddd, f, -1)
+
+    return ddd
+
+
+
+def convert_glass_to_dict(state, obj, data):
     # get the images:
     images = []
     for img in obj.sources[0].images:
@@ -221,12 +233,11 @@ def parse_state(mid):
         }
     
     print 'DONE (M_lens=%8.2e [%8.2e ... %8.2e])' % (M_ens_ave, M_min, M_max)
-
-    # cache the result
-    with open(cpath, 'wb') as f:
-        pickle.dump(ddd, f, -1)
-
+    
     return ddd
+
+
+
 
 
 

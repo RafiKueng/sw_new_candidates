@@ -33,7 +33,8 @@ def set_mpl_rc():
 # define colors
 # http://matplotlib.org/examples/color/named_colors.html
 
-filename_base = "{_[swid]}_{_[asw]}_{_[mid]}_%s.png"
+imgext = "png"
+filename_base = "{_[swid]}_{_[asw]}_{_[mid]}_%s." + imgext
 
 colors = {
     'hilight1' : "darkred",
