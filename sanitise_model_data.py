@@ -104,6 +104,7 @@ def correct_scaling(mid):
     print INT*2,'- correcting scaling f=%5.2f' % f
     
     DATA[mid]['scale_fact'] = f
+    DATA[mid]['pxscale_fact'] = 440./500*0.187*100
         
     DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f
     DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f

@@ -81,24 +81,27 @@ styles = {
     'fg_marker1' : {
         'marker'    : 'o',
         'color'     : colors['hilight1'],
+        'facecolor' : colors['hilight1'],
         'markeredgecolor' : colors['hilight1'],
-        'fillstyle' : 'full',
+        #'fillstyle' : 'full',
         #'linestyle' : 'none',
     },
 
     'fg_marker2' : {
         'marker'    : 'o',
         'color'     : colors['hilight2'],
+        'facecolor' : colors['hilight2'],
         'markeredgecolor' : colors['hilight2'],
-        'fillstyle' : 'full',
+        #'fillstyle' : 'full',
         #'linestyle' : 'none',
     },
 
     'fg_marker3' : {
         'marker'    : 'o',
         'color'     : colors['hilight3'],
+        'facecolor' : colors['hilight3'],
         'markeredgecolor' : colors['hilight3'],
-        'fillstyle' : 'full',
+        #'fillstyle' : 'full',
         #'linestyle' : 'none',
     },
     

@@ -151,13 +151,16 @@ for i, _ in enumerate(data.items()):
 
     # brackground points
     g = 0.3 # gray
-    ax.scatter(M_stellar, M_lens, **STY['bg_marker'])
+    STY['fg_marker2']['marker'] = '+'
+    STY['fg_marker2'].pop('markeredgecolor', None)
+    ax.scatter(M_stellar, M_lens, **STY['fg_marker2'])
     
     # coloured point
     #ax.plot(m_stellar, m_lens, **fgmarker)
     yerr = np.array([[m_lens-m_lens_min], [m_lens_max-m_lens]])
     if DBG:
         yerr = 5*yerr
+    STY['fg_marker1'].pop('facecolor', None)
     ax.errorbar(m_stellar, m_lens, yerr=yerr, **STY['fg_marker1'])
     
     #plt.title("Stellar vs Lensing Mass")
