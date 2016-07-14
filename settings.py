@@ -36,13 +36,15 @@ def set_mpl_rc():
 imgext = "png"
 filename_base = "{_[swid]}_{_[asw]}_{_[mid]}_%s." + imgext
 
-colors = {
-    'hilight1' : "darkred",
-    'hilight2' : "darkblue",
+colors = { # http://colorbrewer2.org/
+    'hilight1' : "#ff7f00",
+    'hilight2' : "#377eb8",
+    'hilight3' : "#984ea3",
     'bg_elem'  : "dimgrey",
 
-    'fg_area1' : "lightcoral",
-    'fg_area2' : "lightblue",
+    'fg_area1' : "#fed9a6",
+    'fg_area2' : "#b3cde3",
+    'fg_area3' : "#decbe4",
     'bg_area'  : "lightgrey",
 
     'min': "red",
@@ -64,6 +66,11 @@ styles = {
         'figsize' : (6,6),
         'dpi'     : 200,
     },
+
+    'figure_rect' : {
+        'figsize' : (8,5),
+        'dpi'     : 200,
+    },
     
     'figure_save' : {
         'dpi'       : 200,
@@ -75,6 +82,22 @@ styles = {
         'marker'    : 'o',
         'color'     : colors['hilight1'],
         'markeredgecolor' : colors['hilight1'],
+        'fillstyle' : 'full',
+        #'linestyle' : 'none',
+    },
+
+    'fg_marker2' : {
+        'marker'    : 'o',
+        'color'     : colors['hilight2'],
+        'markeredgecolor' : colors['hilight2'],
+        'fillstyle' : 'full',
+        #'linestyle' : 'none',
+    },
+
+    'fg_marker3' : {
+        'marker'    : 'o',
+        'color'     : colors['hilight3'],
+        'markeredgecolor' : colors['hilight3'],
         'fillstyle' : 'full',
         #'linestyle' : 'none',
     },
@@ -90,7 +113,7 @@ styles = {
         'color'           : colors['hilight1'], 
         'linestyle'       : "solid",
         'linewidth'       : 2.0,
-        'marker'          : None,
+#        'marker'          : None,
 #        'markeredgecolor' : '',
 #        'markeredgewidth' : '',
 #        'markerfacecolor' : '',
@@ -99,6 +122,17 @@ styles = {
 
     'fg_line2' : {
         'color'           : colors['hilight2'], 
+        'linestyle'       : "dashed",
+        'linewidth'       : 2.0,
+#        'marker'          : 'none',
+#        'markeredgecolor' : '',
+#        'markeredgewidth' : '',
+#        'markerfacecolor' : '',
+#        'markersize'      : '',
+    },
+
+    'fg_line3' : {
+        'color'           : colors['hilight3'], 
         'linestyle'       : "dashed",
         'linewidth'       : 2.0,
 #        'marker'          : 'none',
