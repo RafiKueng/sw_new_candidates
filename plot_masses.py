@@ -40,6 +40,7 @@ if not os.path.exists(path):
 
 #from create_data import ONLY_RECENT_MODELS as MODELS, LENS_CANDIDATES as LENSES
 from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
+import create_data as CRDA
 from parse_candidates import MAP as ASW2SWID   #, MAP as SWID2ASW
 
 I = getI(__file__)
@@ -74,14 +75,19 @@ data = {}
 
 for asw in intersect:
 
-    mid = ASW2MID[asw]
+    #mid = ASW2MID[asw]
     swid = ASW2SWID[asw]
+    mid = CRDA.MAPS['swid2model'].get(swid, "")
+    
+    if not len(mid) > 0:
+        print "did not find", asw, swid
+        continue
     
     try:
         m_stellar = LENSES[asw]['m_s_geom']
         m_lens = MODELS[mid]['Mtot_ave_z_corrected']
-        m_lens_max = MODELS[ASW2MID[asw]]['Mtot_max_z_corrected']
-        m_lens_min = MODELS[ASW2MID[asw]]['Mtot_min_z_corrected']
+        m_lens_max = MODELS[mid]['Mtot_max_z_corrected']
+        m_lens_min = MODELS[mid]['Mtot_min_z_corrected']
     except KeyError:
         print "%s not found"%asw
     

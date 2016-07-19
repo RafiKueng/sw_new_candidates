@@ -24,7 +24,7 @@ from scipy import optimize, interpolate
 
 
 import create_data as CRDA
-from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
+# from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
 import parse_candidates as PACA
 
 

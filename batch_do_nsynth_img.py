@@ -796,9 +796,9 @@ class Analysis(object):
             self.update()
 
             
-DEBUG=False
+DEBUG=True
 if DEBUG:
-    swidAswMid = [("sw00", 'ASW0007k4r', "012402")]
+    swidAswMid = [("SW05", 'ASW0007k4r', "N7LTELSYTM")]
 else:
     swids = ['SW02', 'SW05', 'SW09', 'SW28', 'SW29']
     swidAswMid = []

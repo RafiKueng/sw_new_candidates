@@ -65,7 +65,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         m_stellar = LENSES[asw].get('m_s_geom', None)
         m_lens = MODELS[mid]['Mtot_ave_z_corrected']
 
-        zL = "%s" % MODELS[mid]['z_lens_meassured']
+        zL = "%s" % MODELS[mid]['z_lens_measured']
         
         if m_stellar is not None:
             r = m_lens / m_stellar
