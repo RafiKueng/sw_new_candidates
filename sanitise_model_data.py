@@ -100,18 +100,20 @@ def correct_scaling(mid):
 
     # version 3 and higher have correct scaling already applied
     if DATA[mid]['gls_ver'] < 3 and DATA[mid]['gls_ver'] >= 0:
-        f = ( (scale_fact*100)**2 )
+        f1 = ( (scale_fact*100)**2 )
+        f2 = 440./500*0.187*100
     else:
-        f = 1
+        f1 = 1
+        f2 = 1
 
-    print INT*2,'- correcting scaling f=%5.2f' % f
+    print INT*2,'- correcting scaling f=%5.2f' % f1
     
-    DATA[mid]['scale_fact'] = f
-    DATA[mid]['pxscale_fact'] = 440./500*0.187*100
+    DATA[mid]['scale_fact'] = f1
+    DATA[mid]['pxscale_fact'] = f2
         
-    DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f
-    DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f
-    DATA[mid]['Mtot_max_scaled'] = DATA[mid]['Mtot_max_uncorrected'] * f
+    DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f1
+    DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f1
+    DATA[mid]['Mtot_max_scaled'] = DATA[mid]['Mtot_max_uncorrected'] * f1
         
   
 

@@ -190,6 +190,8 @@ def convert_glass_to_dict(state, obj, data):
         # simple datatypes
         "H0"          : data['H0'],
         "kappa"       : data['kappa'],
+        "kappa_grid"  : obj.basis._to_grid(data['kappa'],1),
+
         "time delays" : dt,
         
 #        "M(<R)" : {
@@ -220,7 +222,8 @@ def convert_glass_to_dict(state, obj, data):
         
         "images": images,
         "rings": obj.basis.rings,
-        "radial_cell_size": obj.basis.radial_cell_size
+        "radial_cell_size": obj.basis.radial_cell_size,
+        "mapextend" :   obj.basis.mapextent
     }
     
     for k in keys:
