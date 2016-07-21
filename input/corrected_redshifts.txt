@@ -1,0 +1,4 @@
+# csv
+# swid, z_lens, z_src
+
+SW05, 0.58, 2.88
