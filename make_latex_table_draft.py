@@ -5,10 +5,16 @@ Created on Tue Apr 26 10:22:51 2016
 @author: rafik
 """
 
-import pyperclip
+#import pyperclip
+import numpy as np
+
 import create_data as CRDA
 from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
 import parse_candidates as PACA
+
+from moster import mosterinv
+
+
 
 
 with open('input/eval.txt', 'r') as f:
@@ -45,7 +51,7 @@ ss = r"""
     
     & \rot{\shortstack[l]{synthetic image\\ reasonable}}
     & \rot{\shortstack[l]{mass map\\ reasonable}}
-    & \rot{\shortstack[l]{total vs stellar\\ mass ratio}}
+    & \rot{\shortstack[l]{halo-matching\\ index \haloindex}}
   \\ \hline
 """
 
@@ -62,21 +68,30 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     zL = ""    
     
     if mid:
-        m_stellar = LENSES[asw].get('m_s_geom', None)
-        m_lens = MODELS[mid]['Mtot_ave_z_corrected']
-
+        m_stel = LENSES[asw].get('m_s_geom', None)
+        m_lens = MODELS[mid]['Mtot_ave_z_corrected'] # usually called m_lens in the pipeline
+        m_moster = mosterinv(m_stel)
+        
         zL = "%s" % MODELS[mid]['z_lens_measured']
         
-        if m_stellar is not None:
-            r = m_lens / m_stellar
+        if m_stel is not None:
+            
+            haloindex = np.log(m_lens / m_stel) / np.log(m_moster / m_stel)
+            
+            r = m_lens / m_stel
             if r<99.:
                 m_ratio = '%i'%r
             else:
                 m_ratio = '%.1e'%r
         else:
             m_ratio = ""
+            haloindex = ""
     else:
         m_ratio = ""
+        haloindex = ""
+        
+    print "haloindex", haloindex
+        
 
     
     m = {
@@ -85,6 +100,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         #'mid':    mid,
         'coords': name,
         'm_ratio': m_ratio,
+        'haloindex': haloindex,
         'zL' : zL,
         'd0' : dd[swid][0],
         'd1' : dd[swid][1],
@@ -98,7 +114,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     s = """  {swid} & {asw} & {coords} & {zL}
     & {d0}
     & {d1} & {d2} & {d3}
-    & {d4} & {d5} & {m_ratio} \\\\
+    & {d4} & {d5} & {haloindex} \\\\
     
 """.format(**m)
 
@@ -111,7 +127,7 @@ ss += """
 
 \end{tabular}
 """    
-pyperclip.copy(ss)
+#pyperclip.copy(ss)
 
 with open("output/table.tex", "w") as f:
     f.write(ss)

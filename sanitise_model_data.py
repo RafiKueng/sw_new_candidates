@@ -66,7 +66,10 @@ def collect_data(mid):
     data['asw'] = asw
     
     # add the real/messured redshift of the lens from PACA (candidates.tex)
+    # possibly corrected by newer measurements (corrected_redshifts.txt)
     data['z_lens_measured'] = PACA.DATA[asw]['z_lens']
+    data['z_src_measured'] = PACA.DATA[asw].get('z_src', None)
+
     
     # add the created_on time for old models from the server (it's not in the
     # config, and thus not in PSAC)
@@ -121,7 +124,7 @@ def correct_mass(mid):
     
 
     zl_actual = model['z_lens_measured']    # from the tex file of SW2 paper
-    zs_actual = 2.0                         #!!! source redshifts not yet available, using estimate
+    zs_actual = model['z_src_measured'] or 2.0   # if value 0, "" None, use default of 2.0 for src redshifts
     zl_used = model['z_lens_used']          # from PSAC: the parsed config file
     zs_used = model['z_src_used']           # same here
 

@@ -75,7 +75,31 @@ def load_tex():
 
 
 
+def load_corrections():
+    print I, 'load_corrections'
+    
+    with open(corrections_fn) as f:
+        lns = f.readlines()
+        
+    for l in lns:
+        if len(l)<=0 or l.strip().startswith('#'):
+            continue
+        es = l.split(',')
+        es = [_.strip() for _ in es]
+        if len(es)>3 or len(es)<2:
+            continue
+        swid = es[0]
+        zlens = float(es[1] or 0)
+        zsrc  = float(es[2] or 0)
 
+        asw = MAP[swid]
+        
+        DATA[asw].update({
+            'z_lens': float(zlens),
+            'z_src':  float(zsrc),
+        })
+        print I, "applied correction for ", asw
+  
 
 
 
@@ -87,6 +111,7 @@ I = getI(__file__)
 print_first_line(I)
 
 input_fn  = join(S['input_dir'], 'candidates.tex')
+corrections_fn  = join(S['input_dir'], 'corrected_redshifts.txt')
 pickle_fn = join(S['cache_dir'], 'candidates.pickle')
 csv_fn    = join(S['temp_dir'],  'candidates.csv')
 
@@ -101,6 +126,7 @@ if os.path.isfile(pickle_fn):
     DATA,MAP = load_pickle(I, pickle_fn)
 else:
     load_tex()
+    load_corrections()
     save_pickle(I, pickle_fn, (DATA,MAP))
 
 save_csv(I, csv_fn, DATA, 'asw')

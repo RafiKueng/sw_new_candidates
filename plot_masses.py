@@ -84,12 +84,13 @@ for asw in intersect:
         continue
     
     try:
-        m_stellar = LENSES[asw]['m_s_geom']
-        m_lens = MODELS[mid]['Mtot_ave_z_corrected']
+        m_stellar  = LENSES[asw]['m_s_geom']
+        m_lens     = MODELS[mid]['Mtot_ave_z_corrected']
         m_lens_max = MODELS[mid]['Mtot_max_z_corrected']
         m_lens_min = MODELS[mid]['Mtot_min_z_corrected']
     except KeyError:
-        print "%s not found"%asw
+        print "data for %s not found !!!!!" % asw
+        exit(1)
     
     label = '%s (%s)' % (swid, asw)
     
@@ -98,9 +99,9 @@ for asw in intersect:
     Label.append(label)
     
     data[label] = {
-        'm_stellar':m_stellar,
-        'm_lens':m_lens,
-        'm_lens_max':m_lens_max,
+        'm_stellar':  m_stellar,
+        'm_lens':     m_lens,
+        'm_lens_max': m_lens_max,
         'm_lens_min': m_lens_min
     }
 
