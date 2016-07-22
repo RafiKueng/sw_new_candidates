@@ -18,11 +18,12 @@ STY = SET.styles
 S = SET.settings
 
 import numpy as np
-import matplotlib as mpl
+#import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.transforms as transforms
-from scipy import optimize, interpolate
-
+import matplotlib.colors
+#import matplotlib.transforms as transforms
+#from scipy import optimize, interpolate
+from scipy import interpolate
 
 import create_data as CRDA
 # from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
@@ -32,8 +33,8 @@ import parse_candidates as PACA
 DBG = SET.DEBUG
 
 
-fpath = join(S['output_dir'], "kappa_plot")
-filename = SET.filename_base % "kappa_encl"
+fpath = join(S['output_dir'], "kappa_map")
+filename = SET.filename_base % "kappa_map"
 
 
 # rE text label position
@@ -73,14 +74,14 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     #if not data: return None
 
 
-    delta  = 0.1  # contour level spacing in log space
+    delta  = np.log10( np.sqrt(2))  # contour level spacing in log space
     rscale = m['pxscale_fact']
 
     kw = {
         'extend'        : 'both', # contour levels are automatically added to one or both ends of the range so that all data are included
         'aspect'        : 'equal',
-        'origin'        : 'upper',
-        'colors'        : 'k',
+        'origin'        : 'lower',
+        'colors'        : [SET.colors['hilight1'],],
         'antialiased'   : True,
     }
 
@@ -102,10 +103,10 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     clev = np.arange(0,ab+1e-10,delta)
     clevels = np.concatenate((-clev[:0:-1],clev))
     
-    print "ma, mi, ab", ma, mi, ab
-    print "extent", extent
-    np.set_printoptions(precision=3)
-    print clevels
+    print "   ma, mi, ab", ma, mi, ab
+    print "   extent", extent
+    # np.set_printoptions(precision=3)
+    print "   clevels", clevels
     
 
     # PLOTTING
@@ -121,25 +122,81 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 #    kw.setdefault('antialiased', True)
 
     # plot
-    fig = plt.figure()
+    fig = plt.figure(**STY['figure_sq'])
     ax = fig.add_subplot(1,1,1)
-    ax.contour(grid, levels=clevels, **kw)
-    ax.set_aspect('equal')
-    ax.tick_params(
-        axis='both',       # changes apply to the x- and y-axis
-        which='both',      # both major and minor ticks are affected
-        bottom='off',      # ticks along the bottom edge are off
-        top='off',         # ticks along the top edge are off
-        left='off',        # ticks along the bottom edge are off
-        right='off',       # ticks along the top edge are off
-        labelbottom='off',
-        labeltop='off',
-        labelleft='off',
-        labelright='off'
-        )
     
-    plt.show()
+    mymin = -R 
+    mymax = R
+    n_cells = m['pixrad'] * 2 + 1
+    dxy = m['pixrad'] * 8 + 1
+    
+    X = np.linspace(mymin,mymax,n_cells)
+    Y = np.linspace(mymin,mymax,n_cells)
+    Xnew = np.linspace(mymin,mymax,dxy)
+    Ynew = np.linspace(mymin,mymax,dxy)
 
+    x,y = np.meshgrid(X,Y)
+    
+    # grid1 = np.nan_to_num(grid)
+    
+    mask = np.isnan(grid)
+    grid1 = grid
+    grid1[mask] = np.interp(np.flatnonzero(mask), np.flatnonzero(~mask), grid[~mask])
+
+    f = interpolate.RectBivariateSpline(X,Y, grid1)
+    
+    maskf = interpolate.RectBivariateSpline(X,Y,mask, kx=1, ky=1)
+
+    bg_mask = np.clip(maskf(Xnew, Ynew), 0,1)
+    mask_inp = bg_mask < 0.5
+    grid_inp = f(Xnew,Ynew)
+    
+    grid_inpnan = grid_inp
+    grid_inpnan[~mask_inp] = np.nan
+    
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("mycm",
+             [ "white", SET.colors['bg_elem'] ])
+    
+    ax.imshow(bg_mask, extent=extent, cmap=cmap) #, interpolation='nearest')#'gray_r')
+    
+    CS1 = ax.contour(grid_inp, levels=clev, **kw)
+    clev2=-clev[:0:-1]
+    kw.update({'colors':[SET.colors['hilight2'],]})
+    CS2 = ax.contour(grid_inp, levels=clev2, **kw)
+    
+    def fmt(x):
+        return "%1.1f" % 10**x
+    offs = len(clevels)//2%2 # makes sure 0 -> 1 is always labeled
+    # ax.clabel(CS, clevels[offs::2], fmt=fmt, fontsize=SET.sizes['small'])
+
+    ax.clabel(CS1, clev[::2], fmt=lambda x:"%i" % np.around(10**x) , fontsize=SET.sizes['small'], inline_spacing=5)
+    ax.clabel(CS2, clev2[::-1][1::2], fmt=lambda x:"1/%i" % np.around(10**(-x)) , fontsize='10')
+    
+    ax.set_aspect('equal')
+    ax.tick_params(axis='both', which='both', **STY['ticks'])
+    # ax.grid()
+
+#    ax.tick_params(
+#        axis='both',       # changes apply to the x- and y-axis
+#        which='both',      # both major and minor ticks are affected
+#        bottom='off',      # ticks along the bottom edge are off
+#        top='off',         # ticks along the top edge are off
+#        left='off',        # ticks along the bottom edge are off
+#        right='off',       # ticks along the top edge are off
+#        labelbottom='off',
+#        labeltop='off',
+#        labelleft='off',
+#        labelright='off'
+#    )
+    
+    #plt.tight_layout()
+    plt.savefig(imgname, **STY['figure_save'])
+        
+    if DBG:
+        plt.show()
+        break
+    
+    plt.close()
 
 
 
