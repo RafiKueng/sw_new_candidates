@@ -101,6 +101,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     mi = np.nanmin(grid)
     ab = ma if ma>-mi else -mi
     clev = np.arange(0,ab+1e-10,delta)
+    clev2=-clev[:0:-1]
     clevels = np.concatenate((-clev[:0:-1],clev))
     
     print "   ma, mi, ab", ma, mi, ab
@@ -139,6 +140,9 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     # grid1 = np.nan_to_num(grid)
     
+    # flip laong y axis
+    grid = np.flipud(grid)
+    
     mask = np.isnan(grid)
     grid1 = grid
     grid1[mask] = np.interp(np.flatnonzero(mask), np.flatnonzero(~mask), grid[~mask])
@@ -160,7 +164,6 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.imshow(bg_mask, extent=extent, cmap=cmap) #, interpolation='nearest')#'gray_r')
     
     CS1 = ax.contour(grid_inp, levels=clev, **kw)
-    clev2=-clev[:0:-1]
     kw.update({'colors':[SET.colors['hilight2'],]})
     CS2 = ax.contour(grid_inp, levels=clev2, **kw)
     

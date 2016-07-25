@@ -12,7 +12,7 @@ import create_data as CRDA
 from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
 import parse_candidates as PACA
 
-from moster import mosterinv
+import moster
 
 
 
@@ -51,7 +51,7 @@ ss = r"""
     
     & \rot{\shortstack[l]{synthetic image\\ reasonable}}
     & \rot{\shortstack[l]{mass map\\ reasonable}}
-    & \rot{\shortstack[l]{halo-matching\\ index \haloindex}}
+    & \rot{\shortstack[l]{halo-matching\\ index $\haloindex$}}
   \\ \hline
 """
 
@@ -67,10 +67,12 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
     zL = ""    
     
+    m_ratio = ""
+    haloindex = ""
     if mid:
         m_stel = LENSES[asw].get('m_s_geom', None)
         m_lens = MODELS[mid]['Mtot_ave_z_corrected'] # usually called m_lens in the pipeline
-        m_moster = mosterinv(m_stel)
+        m_moster = moster.inv(m_stel)
         
         zL = "%s" % MODELS[mid]['z_lens_measured']
         
@@ -83,15 +85,15 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
                 m_ratio = '%i'%r
             else:
                 m_ratio = '%.1e'%r
-        else:
-            m_ratio = ""
-            haloindex = ""
-    else:
-        m_ratio = ""
-        haloindex = ""
+                
+    
         
     print "haloindex", haloindex
-        
+    
+    try:
+        haloindex = "%3.2f" % haloindex
+    except:
+        pass
 
     
     m = {
