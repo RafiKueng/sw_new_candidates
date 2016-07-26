@@ -93,7 +93,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     extent = np.array([-R,R,-R,R]) * rscale
 
     # prepare data
-    grid = m['kappa_grid']
+    grid = m['kappa_grid'] 
     grid = np.where(grid==0,np.nan,np.log10(grid))
 
 

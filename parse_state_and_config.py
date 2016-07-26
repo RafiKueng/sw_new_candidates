@@ -31,6 +31,8 @@ from os.path import join
 import cPickle as pickle
 import numpy as np
 
+import glass.exmass
+
 from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
 from settings import state_path, state_fn, cfg_path, cfg_fn, stateconf_cache_path
@@ -223,7 +225,16 @@ def convert_glass_to_dict(state, obj, data):
         "images": images,
         "rings": obj.basis.rings,
         "radial_cell_size": obj.basis.radial_cell_size,
-        "mapextend" :   obj.basis.mapextent
+        "mapextend" :   obj.basis.mapextent,
+        
+        "source_indices": [_.index for _ in obj.sources],
+        "arrival_contour_levels": obj.basis.arrival_contour_levels(data),
+        "arrival_grid": obj.basis.arrival_grid(data),
+        #subdivision = obj.basis.subdivision
+        'source_images': [ {'parity': img.parity, 'pos': img.pos} for img in obj.sources[0].images ],
+        'extra_potentials': [ {'r': _.r} for _ in obj.extra_potentials if isinstance(_, glass.exmass.PointMass) ]
+
+        
     }
     
     for k in keys:

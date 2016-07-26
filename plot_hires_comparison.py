@@ -35,6 +35,7 @@ from stelmass.angdiam import kappa_factor
 
 
 DBG = SET.DEBUG
+DBG= True
 
 fpath     = join(S['output_dir'], 'hires_comparison')
 filename = "{_[asw]}_{_[mid]}_{_[mode]}_hires_comparison." + SET.imgext
@@ -247,7 +248,7 @@ for coll in DATA.values():
             else:
                 ha = "center" 
             
-            lbl = r'$r_{\Theta} = {%4.2f} \; {} ' % rE_mean
+            lbl = r'$\Theta_\mathrm{E} = {%4.2f} \; {} ' % rE_mean
             if rE_min:
                 lbl += r'_{{} - {%4.2f}} ' % (rE_mean-rE_min)
             else:
@@ -296,11 +297,11 @@ for coll in DATA.values():
     
         plt.tight_layout()
         
-        plt.savefig(imgname, **STY['figure_save'])
-    
         if DBG:
             plt.show()
             break
+        
+        plt.savefig(imgname, **STY['figure_save'])
         
         plt.close()
 
