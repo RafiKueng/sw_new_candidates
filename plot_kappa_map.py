@@ -31,6 +31,7 @@ import parse_candidates as PACA
 
 
 DBG = SET.DEBUG
+DBG=True
 
 
 fpath = join(S['output_dir'], "kappa_map")
@@ -69,31 +70,30 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     m = CRDA.ALL_MODELS[mid]
 
 
+    delta  = np.log10( 2 ** 0.25)  # contour level spacing in log space
+    #rscale = m['pxscale_fact']
 
-    #obj, data = model['obj,data'][obj_index]
-    #if not data: return None
+    # ScaleCorrectionFactors
+    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+    aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
+    # RedshiftCorrectionFactor
+    r_rcf = m['dis_fact']          # corrects lengths for wrong redshifts
+    m_rcf = m['sig_fact']          # corrects masses for wrong redshifts
+    k_rcf = m['kappa_fact']        # corrects kappa for wrong redshifts
 
 
-    delta  = np.log10( np.sqrt(2))  # contour level spacing in log space
-    rscale = m['pxscale_fact']
 
-    kw = {
-        'extend'        : 'both', # contour levels are automatically added to one or both ends of the range so that all data are included
-        'aspect'        : 'equal',
-        'origin'        : 'lower',
-        'colors'        : [SET.colors['hilight1'],],
-        'antialiased'   : True,
-    }
+    kw = {}
 
 
     # SET UP DATA
 
     # fix the different scaling of glass and SL
     R = m['mapextend']
-    extent = np.array([-R,R,-R,R]) * rscale
+    extent = np.array([-R,R,-R,R]) * px_scf * r_rcf
 
     # prepare data
-    grid = m['kappa_grid'] 
+    grid = m['kappa_grid'] * k_rcf
     grid = np.where(grid==0,np.nan,np.log10(grid))
 
 
@@ -104,23 +104,16 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     clev2=-clev[:0:-1]
     clevels = np.concatenate((-clev[:0:-1],clev))
     
-    print "   ma, mi, ab", ma, mi, ab
-    print "   extent", extent
+    #print "   ma, mi, ab", ma, mi, ab
+    #print "   extent", extent
     # np.set_printoptions(precision=3)
-    print "   clevels", clevels
+    #print "   clevels", clevels
     
 
     # PLOTTING
 
     # setup
     kw.update({'extent': extent})
-#    kw.setdefault('extend', 'both') # contour levels are automatically added to one or both ends of the range so that all data are included
-#    #kw.setdefault('interpolation', 'nearest')
-#    kw.setdefault('aspect', 'equal')
-#    kw.setdefault('origin', 'upper')
-#    #kw.setdefault('cmap', cm.bone)
-#    kw.setdefault('colors', 'k')
-#    kw.setdefault('antialiased', True)
 
     # plot
     fig = plt.figure(**STY['figure_sq'])
@@ -138,10 +131,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
     x,y = np.meshgrid(X,Y)
     
-    # grid1 = np.nan_to_num(grid)
-    
     # flip laong y axis
-    grid = np.flipud(grid)
+    #grid = np.flipud(grid)
     
     mask = np.isnan(grid)
     grid1 = grid
@@ -163,10 +154,15 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     ax.imshow(bg_mask, extent=extent, cmap=cmap) #, interpolation='nearest')#'gray_r')
     
+    kw.update(STY['fg_contour'])
     CS1 = ax.contour(grid_inp, levels=clev, **kw)
-    kw.update({'colors':[SET.colors['hilight2'],]})
+
+    kw.update(STY['bg_contour'])
     CS2 = ax.contour(grid_inp, levels=clev2, **kw)
     
+
+    # contour labels
+
     def fmt(x):
         return "%1.1f" % 10**x
     offs = len(clevels)//2%2 # makes sure 0 -> 1 is always labeled
@@ -175,30 +171,19 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.clabel(CS1, clev[::2], fmt=lambda x:"%i" % np.around(10**x) , fontsize=SET.sizes['small'], inline_spacing=5)
     ax.clabel(CS2, clev2[::-1][1::2], fmt=lambda x:"1/%i" % np.around(10**(-x)) , fontsize='10')
     
-    ax.set_aspect('equal')
-    ax.tick_params(axis='both', which='both', **STY['ticks'])
-    # ax.grid()
 
-#    ax.tick_params(
-#        axis='both',       # changes apply to the x- and y-axis
-#        which='both',      # both major and minor ticks are affected
-#        bottom='off',      # ticks along the bottom edge are off
-#        top='off',         # ticks along the top edge are off
-#        left='off',        # ticks along the bottom edge are off
-#        right='off',       # ticks along the top edge are off
-#        labelbottom='off',
-#        labeltop='off',
-#        labelleft='off',
-#        labelright='off'
-#    )
+    ax.set_aspect('equal')
+    ax.tick_params(**STY['bigticksonly'])
+    ax.grid()
     
-    #plt.tight_layout()
-    plt.savefig(imgname, **STY['figure_save'])
+    fig.tight_layout()
+    fig.savefig(imgname, **STY['figure_save'])
         
     if DBG:
         plt.show()
         break
     
+    fig.clear()
     plt.close()
 
 

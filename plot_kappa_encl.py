@@ -36,7 +36,7 @@ filename = SET.filename_base % "kappa_encl"
 
 
 # rE text label position
-rEpos = 0.68 # in axes coordinates
+rEpos = 0.5 # in axes coordinates
 t_dx = 0.0
 t_dy = 0.1
 
@@ -93,24 +93,27 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     m = CRDA.ALL_MODELS[mid]
     
     # load correcting factors
-    s_cf = m['scale_fact'] # corrects wrong pixel scaling
-    m_cf = m['sig_fact']   # corrects masses for wrong redshifts
-    r_cf = m['dis_fact']   # corrects lengths for wrong redshifts
-    k_cf = m['kappa_fact']
+    # ScaleCorrectionFactors
+    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+    aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
+    # RedshiftCorrectionFactor
+    r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
+    m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
+    k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
 
     # m['kappa(<R)'] is actually kappa_infty!
     # kappa = D_ls / D_s * kappa_infty
     
-    print "      ",s_cf, m_cf, r_cf, k_cf
+    print "      ",px_scf, aa_scf, r_rcf, m_rcf, k_rcf
     
-    if not m_cf:
-        print "   no redshifts given, skipping"
-        continue
+#    if not r_rcf:
+#        print "   no redshifts given, skipping"
+#        continue
 
-    rr = m['R']['data']
-    da = m['kappa(<R)']['data'] * k_cf
-    mn = m['kappa(<R)']['min']  * k_cf
-    mx = m['kappa(<R)']['max']  * k_cf
+    rr = m['R']['data']         * px_scf * r_rcf
+    da = m['kappa(<R)']['data'] * k_rcf
+    mn = m['kappa(<R)']['min']  * k_rcf
+    mx = m['kappa(<R)']['max']  * k_rcf
     
     xmax = np.max(rr)
     xmin = 0.0
@@ -147,28 +150,34 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print_rE = False
 
     if print_rE:
-        rE_pos = max(round(ymax*0.75), 3)
+        #rE_pos = max(round(ymax*0.5), 2)
         
         #plt.plot(np.array([rE_mean, rE_mean]), [0,rE_pos], '--', color=(0,0.5,0))
         ax.axvline(rE_mean, 0, rEpos, **STY['fg_line2'])
         
         if rE_mean > 0.75*xmax:
             ha = "right" 
-        elif rE_mean < 0.25*xmax:
+        elif rE_mean < 0.5*xmax:
             ha = "left"
         else:
             ha = "center" 
         
-        lbl = r'$r_{\Theta} = {%4.2f} \; {} ' % rE_mean
-        if rE_min:
-            lbl += r'_{{} - {%4.2f}} ' % (rE_mean-rE_min)
-        else:
-            lbl += r'_{?}'
+        lbl = r'$\Theta_\mathrm{E} = {%4.2f}' % rE_mean
+
+        # for alignment, first add signes
+
+        if rE_min or rE_max:
+            lbl += r'\stackrel'
 
         if rE_max:
-            lbl += r'^{+ {%4.2f}}' % (rE_max-rE_mean)
+            lbl += r'{+ %4.2f}' % (rE_max-rE_mean)
         else:
-            lbl += r'^{?}'
+            lbl += r'{?}'
+        if rE_min:
+            lbl += r'{\,-\,%4.2f} ' % (rE_mean-rE_min)
+        else:
+            lbl += r'{?}'
+
             
         lbl += r'$'
 
@@ -186,12 +195,16 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     SET.plot_image_positions(ax, m['images'] + [{'pos':0,'type':'max'},] )
 
-
-    ax.tick_params(axis='both', which='both', **STY['ticks'])
+    kw2 = dict(STY['smallticks'])
+    kw2.update({
+               'labelleft': True
+               })
+    ax.tick_params(axis='both', **STY['bigtickslabel'])
+    ax.tick_params(axis='both', **kw2)
 
 
     #plt.tight_layout()
-    ax.set_ylim(bottom=0.5, top=8)
+    ax.set_ylim(bottom=0.51, top=7.9)
     ax.set_yscale('log')    
     
     ddxx = np.max(rr) * 0.05

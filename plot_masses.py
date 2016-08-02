@@ -157,10 +157,10 @@ for i, _ in enumerate(data.items()):
 
 
     # brackground points
-    g = 0.3 # gray
-    STY['fg_marker2']['marker'] = '+'
-    STY['fg_marker2'].pop('markeredgecolor', None)
-    ax.scatter(M_stellar, M_lens, **STY['fg_marker2'])
+    kw={}
+    kw.update(STY['fg_marker2'])
+    kw.pop('facecolor', None)
+    ax.plot(M_stellar, M_lens, **kw)
     
     # coloured point
     #ax.plot(m_stellar, m_lens, **fgmarker)
@@ -176,10 +176,13 @@ for i, _ in enumerate(data.items()):
     ax.set_ylabel('Lensing Mass $M_{lens}$', **STY['label'])
     
     #axis limits
-    ax.set_xlim(xmin=2e8, xmax=1e12)
-    ax.set_ylim(ymin=2e10, ymax=1e14)
+    ax.set_xlim(xmin=2.5e8, xmax=9.5e11)
+    ax.set_ylim(ymin=2.5e10, ymax=9.5e13)
     ax.set_xscale("log", nonposx='clip')
     ax.set_yscale("log", nonposy='clip')
+    
+    ax.tick_params(**STY['bigtickslabel'])
+    ax.tick_params(**STY['smallticks'])
     
     plt.tight_layout()
     fig.savefig(ffn, **STY['figure_save'])

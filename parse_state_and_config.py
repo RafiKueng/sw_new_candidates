@@ -31,7 +31,6 @@ from os.path import join
 import cPickle as pickle
 import numpy as np
 
-import glass.exmass
 
 from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
@@ -108,6 +107,9 @@ def parse_state(mid):
             print "DONE, found cached (%s)" % cpath
             return data
     
+    # not running from cache, so load glass stuff needed
+    import glass.exmass
+
     path = join(state_path, state_fn % mid)
 
     state = None

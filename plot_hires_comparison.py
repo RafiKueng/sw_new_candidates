@@ -35,7 +35,7 @@ from stelmass.angdiam import kappa_factor
 
 
 DBG = SET.DEBUG
-DBG= True
+# DBG= True
 
 fpath     = join(S['output_dir'], 'hires_comparison')
 filename = "{_[asw]}_{_[mid]}_{_[mode]}_hires_comparison." + SET.imgext
@@ -46,7 +46,7 @@ sims_dir = join(S['input_dir'], 'hires/systems')
 pckl_dir = join(S['input_dir'], 'hires/pickles')
 
 # rE text label position
-rEpos = 0.68 # in axes coordinates
+rEpos = 0.5 # in axes coordinates
 t_dx = 0.0
 t_dy = 0.1
 
@@ -237,13 +237,13 @@ for coll in DATA.values():
             print_rE = False
     
         if print_rE:
-            rE_pos = max(round(ymax*0.75), 3)
+            #rE_pos = max(round(ymax*0.75), 3)
             
             ax.axvline(rE_mean, 0, rEpos, **STY['fg_line3'])
             
             if rE_mean > 0.75*xmax:
                 ha = "right" 
-            elif rE_mean < 0.25*xmax:
+            elif rE_mean < 0.5*xmax:
                 ha = "left"
             else:
                 ha = "center" 
@@ -275,11 +275,19 @@ for coll in DATA.values():
         #m['images'].append({'pos':0+0j, 'type':'max', 'angle':0})
         SET.plot_image_positions(ax, m['images'] + [{'pos':0,'type':'max'},] )
 
-    
-        ax.tick_params(axis='both', which='both', **STY['ticks'])
+        kw1 = dict(STY['bigtickslabel'])
+        kw1.update({
+            'top': False
+        })
+        kw2 = dict(STY['smallticks'])
+        kw2.update({
+            'labelleft': True
+        })
+        ax.tick_params(axis='both', **kw1)
+        ax.tick_params(axis='both', **kw2)
     
         #plt.tight_layout()
-        ax.set_ylim(bottom=0.5, top=8)
+        ax.set_ylim(bottom=0.51, top=7.9)
         ax.set_yscale('log')    
         
         ddxx = np.max(rr) * 0.05

@@ -98,11 +98,17 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
     m = CRDA.ALL_MODELS[mid]
     
-    f = m['pxscale_fact']
-    k_cf = m['kappa_fact']
+    # load correcting factors
+    # ScaleCorrectionFactors
+    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+    aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
+    # RedshiftCorrectionFactor
+    r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
+    m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
+    k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
 
-    rr = m['R']['data']
-    da = m['kappa(<R)']['data'] * k_cf
+    rr = m['R']['data'] * px_scf * r_rcf
+    da = m['kappa(<R)']['data'] * k_rcf
     
     rE = getEinsteinR(rr, da)
     
@@ -117,9 +123,13 @@ y = np.array(PNTS['y'])
 fig = plt.figure(**STY['figure_sq'])
 ax = fig.add_subplot(1,1,1)
 
-
-STY['fg_marker1'].pop('markeredgecolor', None)
-ax.scatter(x, y, **STY['fg_marker1'])
+kw = dict(STY['fg_marker1'])
+#kw.pop('markeredgecolor', None)
+#kw.pop('markeredgewidth', None)
+#kw.pop('markersize', None)
+kw.pop('facecolor', None)
+kw['linestyle'] = 'none'
+ax.plot(x, y, **kw)
 
 mi = min([np.min(x),np.min(y)])
 mx = max([np.max(x),np.max(y)])

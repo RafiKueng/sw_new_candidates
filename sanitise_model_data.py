@@ -94,22 +94,21 @@ def collect_data(mid):
 # a canvas of size 500px^2 and meassured distances there in (pixels / 100)
 # and in the original image 1 px = 0.187 arcsec
 #   
-scale_fact = 440./500*0.187
 def correct_scaling(mid):
     
-
+    scf = 440./500*0.187*100
     # version 3 and higher have correct scaling already applied
     if DATA[mid]['gls_ver'] < 3 and DATA[mid]['gls_ver'] >= 0:
-        f1 = ( (scale_fact*100)**2 )
-        f2 = 440./500*0.187*100
+        f1 = ( (scf)**2 )
+        f2 = scf
     else:
         f1 = 1
         f2 = 1
 
     print INT*2,'- correcting scaling f=%5.2f' % f1
     
-    DATA[mid]['scale_fact'] = f1
-    DATA[mid]['pxscale_fact'] = f2
+    DATA[mid]['area_scale_fact'] = f1
+    DATA[mid]['pixel_scale_fact'] = f2
         
     DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f1
     DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f1

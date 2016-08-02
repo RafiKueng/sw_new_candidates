@@ -58,22 +58,28 @@ sizes = { # define them relative
     'big'     : 'large,'
 }
 
+# linewidth
+lw_fg = 2.0
+lw_bg = 1.0
+
+#misc settings
+dpi = 150
 
 
 styles = {
 
     'figure_sq' : {
         'figsize' : (6,6),
-        'dpi'     : 200,
+        'dpi'     : dpi,
     },
 
     'figure_rect' : {
         'figsize' : (8,5),
-        'dpi'     : 200,
+        'dpi'     : dpi,
     },
     
     'figure_save' : {
-        'dpi'       : 200,
+        'dpi'       : dpi,
         'facecolor' : 'w',
         'edgecolor' : 'w',
     },
@@ -83,17 +89,21 @@ styles = {
         'color'     : colors['hilight1'],
         'facecolor' : colors['hilight1'],
         'markeredgecolor' : colors['hilight1'],
+        'markeredgewidth' : 3.0 ,
+        'markersize' : 10.0,
         #'fillstyle' : 'full',
         #'linestyle' : 'none',
     },
 
     'fg_marker2' : {
-        'marker'    : 'o',
+        'marker'    : '+',
         'color'     : colors['hilight2'],
         'facecolor' : colors['hilight2'],
         'markeredgecolor' : colors['hilight2'],
-        #'fillstyle' : 'full',
-        #'linestyle' : 'none',
+        'markeredgewidth' : 3.0 ,
+        'markersize' : 10.0,
+       #'fillstyle' : 'full',
+        'linestyle' : 'none',
     },
 
     'fg_marker3' : {
@@ -109,13 +119,14 @@ styles = {
         'marker'    : '+',
         'color'     : colors['bg_elem'],
         'facecolor' : colors['bg_elem'],
+#        'markersize' : 55.0
         #DEL 'fillstyle' : 'full',
     },
 
     'fg_line1' : {
         'color'           : colors['hilight1'], 
         'linestyle'       : "solid",
-        'linewidth'       : 2.0,
+        'linewidth'       : lw_fg,
 #        'marker'          : None,
 #        'markeredgecolor' : '',
 #        'markeredgewidth' : '',
@@ -126,7 +137,7 @@ styles = {
     'fg_line2' : {
         'color'           : colors['hilight2'], 
         'linestyle'       : "dashed",
-        'linewidth'       : 2.0,
+        'linewidth'       : lw_fg,
 #        'marker'          : 'none',
 #        'markeredgecolor' : '',
 #        'markeredgewidth' : '',
@@ -137,7 +148,7 @@ styles = {
     'fg_line3' : {
         'color'           : colors['hilight3'], 
         'linestyle'       : "dashed",
-        'linewidth'       : 2.0,
+        'linewidth'       : lw_fg,
 #        'marker'          : 'none',
 #        'markeredgecolor' : '',
 #        'markeredgewidth' : '',
@@ -148,13 +159,35 @@ styles = {
     'bg_line' : {
         'color'           : colors['bg_elem'], 
         'linestyle'       : "dotted",
-        'linewidth'       : 2.0,
+        'linewidth'       : lw_fg,
 #        'marker'          : 'none',
 #        'markeredgecolor' : '',
 #        'markeredgewidth' : '',
 #        'markerfacecolor' : '',
 #        'markersize'      : '',
     },
+
+    # used for arrival time and kappa plots 
+    'fg_contour': {
+        'linewidth'     : lw_fg,
+        'colors'        : [colors['hilight1'],],
+        'cmap'          : None,
+        'interpolation' : 'nearest',
+        'aspect'        : 'equal',
+        'origin'        : 'upper',
+        'antialiased'   : True,
+    },
+
+    'bg_contour': {
+        'linewidth'     : lw_bg,
+        'colors'        : [colors['hilight2'],],
+        'cmap'          : None,
+        'interpolation' : 'nearest',
+        'aspect'        : 'equal',
+        'origin'        : 'upper',
+        'antialiased'   : True,
+    },
+
 
     
     
@@ -182,10 +215,38 @@ styles = {
         'fontsize' : sizes['regular']
     },
     
-    'ticks': {  # 
-        'labelsize': sizes['small']
+    # ax.tick_params(
+    'bigticksonly' : {
+        'which' : 'major',
+        'width': 3,
+        'length': 6,
+        'labelsize': sizes['small'],
+        #'labelbottom' : False,
+        'labeltop': False,
+        #'labelleft': False,
+        'labelright': False
     },
-    
+    'bigtickslabel' : {
+        'which' : 'major',
+        'width': 3,
+        'length': 12,
+        'direction': 'inout',
+        'labelsize': sizes['small'],
+        'labelbottom' : True,
+        'labeltop': False,
+        'labelleft': True,
+        'labelright': False
+    },
+    'smallticks' : {
+        'which' : 'minor',
+        'width':  3 * 0.5,
+        'length': 6 * 0.5,
+        'labelsize': sizes['small'],
+        'labelbottom' : False,
+        'labeltop': False,
+        'labelleft': False,
+        'labelright': False
+    },
     
     
     'EXTPNT' : {
@@ -193,6 +254,7 @@ styles = {
         'colors' : [colors['min'],colors['sad'],colors['max']],
         'markers': ['v', '>', '^'],
         'offsets': [(0,3),(1,3),(2,3)], # draw every (start, offset)
+        'linewidth': lw_fg,
     },
 
 }
@@ -219,7 +281,8 @@ def plot_image_positions(ax, imgs):
         m = styles['EXTPNT']['markers'][i] # assign marker style
         # http://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
         de = styles['EXTPNT']['offsets'][i] # draw every (start, offset)
-        
+        lw = styles['EXTPNT']['linewidth']
+
         sy = oy * i
         #plt.axvline(xpos, iypos+sy, iypos+dy+sy, color="k" )
         
@@ -228,6 +291,7 @@ def plot_image_positions(ax, imgs):
         #print iypt, iypb
         ax.plot([xpos, xpos, xpos], [iypos+sy, iypos+dy/2.+sy, iypos+dy+sy],
                  color=c,
+                 linewidth=lw,
                  marker=m,
                  markevery=de,
                  markeredgecolor=c,
