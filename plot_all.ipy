@@ -1,0 +1,15 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul 27 04:55:53 2016
+
+@author: rafik
+"""
+
+%run plot_arrival_spaghetti.py
+%run plot_kappa_encl.py
+%run plot_masses.py
+%run plot_einstein_radius_comparison.py
+#%run plot_kappa_map.py
+%run plot_kappa_map2.py
+%run plot_hires_comparison.py
