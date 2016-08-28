@@ -197,7 +197,7 @@ else:
     sanitise()
     save_pickle(I, pickle_fn, DATA)
 
-save_csv(I, csv_fn, DATA, 'mid')
+#save_csv(I, csv_fn, DATA, 'mid')
     
 print_last_line(I,DATA)
 

@@ -151,7 +151,7 @@ for iD, name, val in sorted([ (v['iD'], k, v) for k,v in DATASETS.items()]):
         fn()
         #save_pickle(pickle_fn, data)
 
-    save_csv(I, csv_fn, data, pkey)
+    #save_csv(I, csv_fn, data, pkey)
     print '-----'
 
 print_last_line(I,DATASETS)

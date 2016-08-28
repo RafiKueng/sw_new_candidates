@@ -139,6 +139,10 @@ def parse_state(mid):
 
 
 def convert_glass_to_dict(state, obj, data):
+    
+    import glass.exmass
+    
+    
     # get the images:
     images = []
     for img in obj.sources[0].images:
@@ -149,6 +153,13 @@ def convert_glass_to_dict(state, obj, data):
         }
         images.append(ii)
 
+    # lucy need those values
+    grids = []
+    for m in state.models:
+        obj,data = m['obj,data'][0]
+        g = obj.basis._to_grid(data['kappa DM'])
+        grids.append(g)
+    
     
     # keys to save in the pickle
     keys = ['M(<R)', 'kappa(R)', 'kappa(<R)', 'R', 'Rlens', 'Sigma(R)']
@@ -224,17 +235,22 @@ def convert_glass_to_dict(state, obj, data):
 #            'symbol': sigmar.symbol
 #        },
         
-        "images": images,
-        "rings": obj.basis.rings,
-        "radial_cell_size": obj.basis.radial_cell_size,
-        "mapextend" :   obj.basis.mapextent,
+        "images"          : images,
+        "ensemble"        : grids,  # the actuall models
         
-        "source_indices": [_.index for _ in obj.sources],
-        "arrival_contour_levels": obj.basis.arrival_contour_levels(data),
-        "arrival_grid": obj.basis.arrival_grid(data),
+        "rings"           : obj.basis.rings,
+        "radial_cell_size": obj.basis.radial_cell_size,
+        "mapextend"       : obj.basis.mapextent,
+        'maprad'          : obj.basis.maprad,
+        'pixrad'          : obj.basis.pixrad,
+
+        
+        "source_indices"         : [_.index for _ in obj.sources],
+        "arrival_contour_levels" : obj.basis.arrival_contour_levels(data),
+        "arrival_grid"           : obj.basis.arrival_grid(data),
         #subdivision = obj.basis.subdivision
-        'source_images': [ {'parity': img.parity, 'pos': img.pos} for img in obj.sources[0].images ],
-        'extra_potentials': [ {'r': _.r} for _ in obj.extra_potentials if isinstance(_, glass.exmass.PointMass) ]
+        'source_images'          : [ {'parity': img.parity, 'pos': img.pos} for img in obj.sources[0].images ],
+        'extra_potentials'       : [ {'r': _.r} for _ in obj.extra_potentials if isinstance(_, glass.exmass.PointMass) ]
 
         
     }
@@ -248,7 +264,7 @@ def convert_glass_to_dict(state, obj, data):
             'symbol': data[k].symbol
         }
     
-    print 'DONE (M_lens=%8.2e [%8.2e ... %8.2e])' % (M_ens_ave, M_min, M_max)
+    print 'DONE (M_lens=%8.2e [%8.2e ... %8.2e], nmodels=%i)' % (M_ens_ave, M_min, M_max, len(grids))
     
     return ddd
 
@@ -415,7 +431,7 @@ else:
     parse_mainloop()
     save_pickle(I, pickle_fn, DATA)
 
-save_csv(I, csv_fn, DATA, 'mid')
+#save_csv(I, csv_fn, DATA, 'mid')
     
 print_last_line(I,DATA)
 

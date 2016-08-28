@@ -20,7 +20,10 @@ DEBUG = False
 def set_mpl_rc():
     mpl.rcParams['font.family'] = 'serif'
     mpl.rcParams['font.size'] = 16
-    
+
+    mpl.rcParams['text.usetex'] = True
+    mpl.rcParams['text.latex.unicode'] = True
+
     mpl.rcParams['mathtext.fontset'] = 'custom'
     mpl.rcParams['mathtext.fontset'] = 'cm'
     mpl.rcParams['mathtext.default'] = "regular"

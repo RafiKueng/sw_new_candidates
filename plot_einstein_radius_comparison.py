@@ -30,6 +30,7 @@ import scipy.optimize as optimize
 from scipy import optimize, interpolate
 
 import create_data as CRDA
+import get_parameterised_form as PARA
 
 
 DBG = SET.DEBUG
@@ -39,7 +40,7 @@ filename = "rE_comp." + SET.imgext
 fnn = join(fpath, filename)
 
 # txt data of simulations
-params_file = join(S['input_dir'], 'parameters.csv')
+#params_file = join(S['input_dir'], 'parameters.csv')
 
 
 if not os.path.exists(fpath):
@@ -72,15 +73,16 @@ def getEinsteinR(x, y):
 
 
 
-with open(params_file) as f:
-    lines = f.readlines()
-    
-PARAMS = {}
-for line in lines:
-    d = [_.strip() for _ in line.split(";")]
-    if len(d)==5 and d[0][:3]=="ASW":
-        PARAMS[d[0]] = float(d[2])
-    print d
+#with open(params_file) as f:
+#    lines = f.readlines()
+#    
+#PARAMS = {}
+#for line in lines:
+#    d = [_.strip() for _ in line.split(";")]
+#    if len(d)==5 and d[0][:3]=="ASW":
+#        PARAMS[d[0]] = float(d[2])
+#    print d
+
 
 
 PNTS = {'x':[],'y':[]}
@@ -112,9 +114,13 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     rE = getEinsteinR(rr, da)
     
-    if asw in PARAMS.keys():
+#    if asw in PARAMS.keys():
+#        PNTS['x'].append(rE)
+#        PNTS['y'].append(PARAMS[asw])
+
+    if mid in PARA.DATA.keys():
         PNTS['x'].append(rE)
-        PNTS['y'].append(PARAMS[asw])
+        PNTS['y'].append(PARA.DATA[mid]['eR'])
 
 
 x = np.array(PNTS['x'])

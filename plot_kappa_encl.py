@@ -94,8 +94,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     # load correcting factors
     # ScaleCorrectionFactors
-    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
-    aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
+    px_scf = m['pixel_scale_fact']  # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+    aa_scf = m['area_scale_fact']   # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
     # RedshiftCorrectionFactor
     r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
     m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
