@@ -245,7 +245,11 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     #set initial parameter values and perform linear regression fit of f to the ensemble
     ini = [1,0.1,0.1]                             #initial values for parameters
     #perform parameter optimisation on residuals
-    lsq = opt.leastsq(residuals,ini)[0]
+    sol = opt.leastsq(residuals,ini)
+    lsq = sol[0]
+    cov = sol[1]
+    r = residuals(lsq)
+    err = np.sum(r*r) / (N*N) * cov
     
     #Print out parameters
     param1 = lsq[0]
@@ -253,9 +257,10 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     param3 = lsq[2]
     #print 'Einstein radius = {0:.3}, Ellipticity = {1:.3}, Position angle of ellipticity = {2:.3}'.format(param1,param2,param3) #prints values of optimised parameters
     print ('Least squares parameters')
-    print ('%.2f' %param1, '%.2f' %param2, '%.2f' %param3)
+    print ('%.2f' %param1, '%.2f' %param2, '%.2f' %param3, '%.2f' %err)
     
-    d = {'eR': param1, 'ellip': param2, "ell_angle": param3}
+    d = {'eR': param1, 'ellip': param2, "ell_angle": param3,
+        "err": err}
     
     DATA[mid] = d
 
