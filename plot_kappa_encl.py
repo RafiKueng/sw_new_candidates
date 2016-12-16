@@ -30,6 +30,7 @@ import parse_candidates as PACA
 
 DBG = SET.DEBUG
 
+MODELS = CRDA.CLAUDE_MODELS
 
 fpath = join(S['output_dir'], "kappa_encl")
 filename = SET.filename_base % "kappa_encl"
@@ -78,7 +79,7 @@ def getEinsteinR(x, y):
 
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
-    mid = CRDA.MAPS['swid2model'].get(swid, "")
+    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
     aswobj = PACA.DATA[asw]
 
     print swid, asw, mid

@@ -31,6 +31,7 @@ import scipy.optimize as opt                #for the least squares fit
 import create_data as CRDA
 import parse_candidates as PACA
 
+MODELS = CRDA.CLAUDE_MODELS
 
 DBG = SET.DEBUG
 DBG =True
@@ -134,7 +135,8 @@ DATA = {}
 
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
-    mid = CRDA.MAPS['swid2model'].get(swid, "")
+    #mid = CRDA.MAPS['swid2model'].get(swid, "")
+    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
     aswobj = PACA.DATA[asw]
 
     print swid, asw, mid

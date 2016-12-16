@@ -35,6 +35,8 @@ import get_parameterised_form as PARA
 
 DBG = SET.DEBUG
 
+MODELS = CRDA.CLAUDE_MODELS
+
 fpath     = join(S['output_dir'], 'rE_comp')
 filename = "rE_comp." + SET.imgext
 fnn = join(fpath, filename)
@@ -48,7 +50,8 @@ if not os.path.exists(fpath):
 
 
 def getEinsteinR(x, y):
-    poly = interpolate.PiecewisePolynomial(x,y[:,np.newaxis])
+    #poly = interpolate.PiecewisePolynomial(x,y[:,np.newaxis])
+    poly = interpolate.PPoly(x,y[:,np.newaxis])
     
     def one(x):
         return poly(x)-1
@@ -91,7 +94,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     print swid, asw
     
-    mid = CRDA.MAPS['swid2model'].get(swid, "")
+    #mid = CRDA.MAPS['swid2model'].get(swid, "")
+    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
     
     if not mid:
         print "   no mid, skipping"

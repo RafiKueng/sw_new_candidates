@@ -28,6 +28,7 @@ import matplotlib.cm as cm
 import create_data as CRDA
 import parse_candidates as PACA
 
+MODELS = CRDA.CLAUDE_MODELS
 
 DBG = SET.DEBUG
 #DBG =True
@@ -50,7 +51,7 @@ def arrival_plot(model, ax):
     px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
     #aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
     # RedshiftCorrectionFactor
-    r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
+    r_rcf  = m['dis_fact'] or 1      # corrects lengths for wrong redshifts
     #m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     #k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
 
@@ -109,7 +110,7 @@ def overlay_input_points(model, ax):
     px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
     #aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
     # RedshiftCorrectionFactor
-    r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
+    r_rcf  = m['dis_fact'] or 1     # corrects lengths for wrong redshifts
     #m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     #k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
     f = px_scf * r_rcf
@@ -140,7 +141,10 @@ def overlay_input_points(model, ax):
 #
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
-    mid = CRDA.MAPS['swid2model'].get(swid, "")
+    #mid = CRDA.MAPS['swid2model'].get(swid, "")
+    
+    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
+    
     aswobj = PACA.DATA[asw]
 
     print swid, asw, mid
@@ -163,7 +167,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
 
-    print "   "," | ".join(['%3.3f'%_ for _ in [px_scf, aa_scf, r_rcf, m_rcf, k_rcf]])
+    #print "   "," | ".join(['%3.3f'%_ for _ in [px_scf, aa_scf, r_rcf, m_rcf, k_rcf]])
 
     print m['source_indices']
     print m['arrival_contour_levels']

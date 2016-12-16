@@ -62,6 +62,34 @@ def create_recent_models():
     print "DONE"
 
 
+CLAUDE_MODELS = {}
+
+def create_claude_models():
+    print I,"create claude models",
+    
+    with open('claude_lenses.csv') as f:
+        lines = f.readlines()
+    for line in lines:
+        elems = [_.strip() for _ in line.split(',')]
+        if len(elems)==3 and len(elems[0])>1:
+            swid, asw, mid = elems
+            
+            if not asw in PACA.MAP.keys():
+                print "\nasw not found in paca!", mid, asw, swid,
+                continue
+            if not mid in samd.DATA.keys():
+                print "\nmid not found in samd!", mid, asw, swid,
+                continue
+            if samd.DATA[mid]['sig_fact'] is None:
+                print "\nmid has no messured z", mid, asw, swid,
+                continue
+            
+            data = samd.DATA[mid]
+            data['swid'] = PACA.MAP.get(asw, None)
+            CLAUDE_MODELS[mid] = data
+    
+    print "DONE"
+
 
 
 LENS_CANDIDATES = {}
@@ -72,7 +100,14 @@ def create_lens_candidates():
     print "DONE"
 
 
-
+    
+def get_map(data):
+    m = {}
+    m['swid2model'] = dict(((m['swid'], k) for k,m in data.items()))
+    m['asw2model'] = dict(((m['asw'], k) for k,m in data.items() if m.get('asw')))
+    return m
+    
+    
 
 MAPS = {}
 
@@ -81,8 +116,8 @@ def create_maps():
     MAPS['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
     MAPS['asw2swid'] = dict((k, v['swid']) for k, v in PACA.DATA.items())
     
-    MAPS['swid2model'] = dict(((m['swid'], k) for k,m in ONLY_RECENT_MODELS.items()))
-    MAPS['asw2model'] = dict(((m['asw'], k) for k,m in ONLY_RECENT_MODELS.items() if m.get('asw')))
+    #MAPS['swid2model'] = dict(((m['swid'], k) for k,m in ONLY_RECENT_MODELS.items()))
+    #MAPS['asw2model'] = dict(((m['asw'], k) for k,m in ONLY_RECENT_MODELS.items() if m.get('asw')))
     
     MAPS['asw2all_models'] = dict(((m['asw'], []) for k,m in ALL_MODELS.items() if m.get('asw')))
     for k,m in ALL_MODELS.items():
@@ -97,10 +132,11 @@ def create_maps():
 
 
 def define_datasets():
-    reg(0, 'all_models', ALL_MODELS, create_all_models, pkey='mid')
+    reg(0,'all_models', ALL_MODELS, create_all_models, pkey='mid')
     reg(1,'only_recent_models', ONLY_RECENT_MODELS, create_recent_models,pkey='mid')
-    reg(2,'lens_candidates', LENS_CANDIDATES, create_lens_candidates, pkey='asw')
-    reg(3,'maps', MAPS, create_maps, pkey=None)
+    reg(2,'claude_models', CLAUDE_MODELS, create_claude_models, pkey='mid')
+    reg(3,'lens_candidates', LENS_CANDIDATES, create_lens_candidates, pkey='asw')
+    reg(4,'maps', MAPS, create_maps, pkey=None)
 
 
 def reg(iD, name, data, fn, pkey):
