@@ -90,6 +90,38 @@ def create_claude_models():
     
     print "DONE"
 
+    
+    
+SELECTED_MODELS = {}
+
+def create_selected_models():
+    print I,"create selected models",
+
+    with open('input/selected_models.csv') as f:
+        lines = f.readlines()
+    
+    for line in lines:
+        elems = [_.strip() for _ in line.split(',')]
+        if len(elems)==2 and len(elems[0])>1:
+            swid, mid = elems
+            asw = PACA.MAP.get(swid, None)
+            
+            if not asw in PACA.MAP.keys():
+                print "\nasw not found in paca!", mid, asw, swid,
+                continue
+            if not mid in samd.DATA.keys():
+                print "\nmid not found in samd!", mid, asw, swid,
+                continue
+            if samd.DATA[mid]['sig_fact'] is None:
+                print "\nmid has no messured z", mid, asw, swid,
+                continue
+            
+            data = samd.DATA[mid]
+            data['swid'] = PACA.MAP.get(asw, None)
+            CLAUDE_MODELS[mid] = data
+    
+    print "DONE"
+    
 
 
 LENS_CANDIDATES = {}
@@ -135,8 +167,9 @@ def define_datasets():
     reg(0,'all_models', ALL_MODELS, create_all_models, pkey='mid')
     reg(1,'only_recent_models', ONLY_RECENT_MODELS, create_recent_models,pkey='mid')
     reg(2,'claude_models', CLAUDE_MODELS, create_claude_models, pkey='mid')
-    reg(3,'lens_candidates', LENS_CANDIDATES, create_lens_candidates, pkey='asw')
-    reg(4,'maps', MAPS, create_maps, pkey=None)
+    reg(3,'selected_models', SELECTED_MODELS, create_selected_models, pkey='mid')
+    reg(4,'lens_candidates', LENS_CANDIDATES, create_lens_candidates, pkey='asw')
+    reg(5,'maps', MAPS, create_maps, pkey=None)
 
 
 def reg(iD, name, data, fn, pkey):
