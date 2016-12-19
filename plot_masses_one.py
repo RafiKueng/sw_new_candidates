@@ -165,7 +165,8 @@ kw.pop('facecolor', None)
 for i, _ in enumerate(data.items()):
     label, _ = _
     swid = _['swid']
-    if swid[2:4] in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+    #if swid[2:4] in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+    if swid in SET.HILIGHT_SWID: continue
 
     m_stellar = _['m_stellar']
     m_stellar_min = _['m_s_jr']
@@ -184,7 +185,8 @@ for i, _ in enumerate(data.items()):
 for i, _ in enumerate(data.items()):
     label, _ = _
     swid = _['swid']
-    if swid[2:4] not in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+    #if swid[2:4] not in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+    if swid not in SET.HILIGHT_SWID: continue
 
     m_stellar = _['m_stellar']
     m_stellar_min = _['m_s_jr']

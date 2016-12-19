@@ -10,6 +10,13 @@ import os
 import logging
 import cPickle as pickle
 
+import settings as SET
+reload(SET)
+SET.set_mpl_rc()
+STY = SET.styles
+S = SET.settings
+
+
 import numpy as np
 import scipy as sp
 #import scipy.misc
@@ -29,8 +36,8 @@ import download_orginals as DORG # import triggers download
 _ = GSAC.I + DORG.I
 del _
 
-import settings as _S
-from settings import settings as S #, INT, save_pickle, load_pickle, save_csv
+#import settings as _S
+#from settings import settings as S #, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI
 
 
@@ -47,7 +54,7 @@ plt.ioff()
 #CRDA.ONLY_RECENT_MODELS
 #CRDA.ALL_MODELS
 
-_path = _S.sworg_path
+_path = SET.sworg_path
 _fn = "%s.png" # placeholder is asw name, should be the same as in DORG!
 
 
@@ -802,7 +809,8 @@ DEBUG=False
 if DEBUG:
     swidAswMid = [("SW05", 'ASW0007k4r', "N7LTELSYTM")]
 else:
-    swids = ['SW02', 'SW05', 'SW09', 'SW28', 'SW29']
+    #swids = ['SW02', 'SW05', 'SW09', 'SW28', 'SW29']
+    swids = SET.HILIGHT_SWID
     swidAswMid = []
     for swid in swids:
         swidAswMid.append((swid, swid2asw[swid], swid2model[swid]))
@@ -821,7 +829,7 @@ for ii, _ in enumerate(swidAswMid):
     orgimg_path = os.path.join(_path, _fn%asw)
     if not os.path.isfile(orgimg_path):
         DORG.download_from_spacewarps(asw)
-    state_path = os.path.join(_S.state_path, _S.state_fn%mid)
+    state_path = os.path.join(SET.state_path, SET.state_fn%mid)
     
     orgimg = sp.misc.imread(orgimg_path)
     
@@ -882,7 +890,7 @@ for ii, _ in enumerate(swidAswMid):
     roiH.register(analH.update)
     
     # load data if available
-    fn = os.path.join(S['input_dir'], 'regions_%s.pickle'%(asw,mid))
+    fn = os.path.join(S['input_dir'], 'regions_%s.pickle'%(asw))
     if os.path.isfile(fn):
         with open(fn, 'rb') as f:
             p = pickle.load(f)
@@ -913,7 +921,8 @@ for ii, _ in enumerate(swidAswMid):
     dpi=150
     doplots = [
         ('nsynth', analH.synimg),
-        ('srcimg', analH.srcimg)
+        ('srcimg', analH.srcimg),
+        ('roiimg', roiH.maskimg)
     ]
     for name, var in doplots:
         fig = plt.figure(figsize=(8,8), dpi=dpi)
