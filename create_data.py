@@ -12,6 +12,8 @@ import sys, os, csv
 import cPickle as pickle
 from os.path import join
 
+import settings as SET
+reload(SET)
 from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
 
@@ -118,7 +120,7 @@ def create_selected_models():
             
             data = samd.DATA[mid]
             data['swid'] = PACA.MAP.get(asw, None)
-            CLAUDE_MODELS[mid] = data
+            SELECTED_MODELS[mid] = data
     
     print "DONE"
     
@@ -135,8 +137,8 @@ def create_lens_candidates():
     
 def get_map(data):
     m = {}
-    m['swid2model'] = dict(((m['swid'], k) for k,m in data.items()))
-    m['asw2model'] = dict(((m['asw'], k) for k,m in data.items() if m.get('asw')))
+    m['swid2mid'] = dict(((m['swid'], k) for k,m in data.items()))
+    m['asw2mid'] = dict(((m['asw'], k) for k,m in data.items() if m.get('asw')))
     return m
     
     
@@ -159,6 +161,50 @@ def create_maps():
     MAPS['swid2all_models'] = dict(((MAPS['asw2swid'][s], m) for s, m in MAPS['asw2all_models'].items()))
     print "DONE"
 
+    
+
+##############################################################################
+
+# this would be a more generalised approach, but we don't use it due to time
+# constraints (would need more time to program than it's worth it...)
+
+_dataset = None
+_data    = None
+_maps    = None
+'''
+def GET_DATASET(dataset_str = SET.DATASET):
+    
+    _dataset = DATASETS[dataset_str]
+
+    _data = _dataset['data']
+    
+    _maps = {}
+    _maps.update(MAPS)
+    _maps.update(get_map(_data))
+    
+    return _data, _maps
+
+
+def GET_MODEL(swid):
+
+    if _dataset is None:
+        print "define a dataset to use first calling GET_DATASET"
+        return False
+        
+    return 
+'''
+
+def get_dataset_data(dataset_str = None):
+    reload(SET)
+    
+    if dataset_str is None:
+        dataset_str = SET.DATASET_TO_USE
+    print "-"*80
+    print "using dataset:", dataset_str
+    print "-"*80
+    data = DATASETS[dataset_str]['data']
+    maps = get_map(data)
+    return data, maps
 
 ##############################################################################
 

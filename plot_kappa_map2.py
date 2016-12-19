@@ -31,11 +31,14 @@ import create_data as CRDA
 import parse_candidates as PACA
 
 
+MODELS, MAPS = CRDA.get_dataset_data()
+
+
 DBG = SET.DEBUG
 #DBG=True
 
 
-fpath = join(S['output_dir'], "kappa_map")
+fpath = join(S['output_dir'], "kappa_map2")
 filename = SET.filename_base % "kappa_map"
 
 
@@ -56,8 +59,7 @@ if not os.path.exists(fpath):
 
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
-    mid = CRDA.MAPS['swid2model'].get(swid, "")
-    aswobj = PACA.DATA[asw]
+    mid = MAPS['swid2mid'].get(swid, "")
 
     print swid, asw, mid
     
@@ -69,6 +71,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
     m = CRDA.ALL_MODELS[mid]
+    aswobj = PACA.DATA[asw]
 
 
     delta  = 0.05  # contour level spacing in log space

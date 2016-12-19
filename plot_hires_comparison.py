@@ -24,7 +24,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 
-import scipy.interpolate as interp
+import scipy.interpolate as interpolate
 import scipy.optimize as optimize
 
 #import create_data as CRDA
@@ -118,7 +118,9 @@ def load_data_from_pickles():
 
 
 def getEinsteinR(x, y):
-    poly = interp.PiecewisePolynomial(x,y[:,np.newaxis])
+    #poly = interp.PiecewisePolynomial(x,y[:,np.newaxis])
+    poly = interpolate.BPoly.from_derivatives(x,y[:,np.newaxis])
+    
     
     def one(x):
         return poly(x)-1

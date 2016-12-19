@@ -8,8 +8,6 @@ Created on Thu Jul 14 03:39:18 2016
 
 import os
 from os.path import join
-import glob
-import pickle
 
 # reminder: settings before mpl
 import settings as SET
@@ -23,11 +21,11 @@ S = SET.settings
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.transforms as transforms
+#import matplotlib.transforms as transforms
 
-import scipy.interpolate as interp
+import scipy.interpolate as interpolate
 import scipy.optimize as optimize
-from scipy import optimize, interpolate
+#from scipy import optimize, interpolate
 
 import create_data as CRDA
 import get_parameterised_form as PARA
@@ -35,7 +33,7 @@ import get_parameterised_form as PARA
 
 DBG = SET.DEBUG
 
-MODELS = CRDA.CLAUDE_MODELS
+MODELS, MAPS = CRDA.get_dataset_data()
 
 fpath     = join(S['output_dir'], 'rE_comp')
 filename = "rE_comp." + SET.imgext
@@ -51,7 +49,7 @@ if not os.path.exists(fpath):
 
 def getEinsteinR(x, y):
     #poly = interpolate.PiecewisePolynomial(x,y[:,np.newaxis])
-    poly = interpolate.PPoly(x,y[:,np.newaxis])
+    poly = interpolate.BPoly.from_derivatives(x,y[:,np.newaxis])
     
     def one(x):
         return poly(x)-1
@@ -95,12 +93,11 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     print swid, asw
     
     #mid = CRDA.MAPS['swid2model'].get(swid, "")
-    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
+    mid = MAPS['swid2mid'].get(swid, "")
     
     if not mid:
         print "   no mid, skipping"
         continue
-
 
     m = CRDA.ALL_MODELS[mid]
     
@@ -146,13 +143,13 @@ mx = max([np.max(x),np.max(y)])
 
 ax.plot([mi, mx], [mi, mx] , **STY['bg_line'])
 
-ax.set_xlabel('r_E model', **STY['label'])
-ax.set_ylabel('r_E parametr', **STY['label'])
+ax.set_xlabel('$r_E$ model', **STY['label'])
+ax.set_ylabel('$r_E$ parametr', **STY['label'])
 
 plt.tight_layout()
 fig.savefig(fnn, **STY['figure_save'])
 
-plt.show()
+#plt.show()
 
     
     

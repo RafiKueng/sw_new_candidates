@@ -28,7 +28,8 @@ import matplotlib.cm as cm
 import create_data as CRDA
 import parse_candidates as PACA
 
-MODELS = CRDA.CLAUDE_MODELS
+
+MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
 #DBG =True
@@ -142,21 +143,18 @@ def overlay_input_points(model, ax):
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     #mid = CRDA.MAPS['swid2model'].get(swid, "")
+    mid = MAPS['swid2mid'].get(swid, "")
     
-    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
-    
-    aswobj = PACA.DATA[asw]
-
     print swid, asw, mid
     
     if not mid:
         print "   no mid, skipping"
         continue
 
-    #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
-    imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
-    
     m = CRDA.ALL_MODELS[mid]
+    aswobj = PACA.DATA[asw]
+
+    imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
     # load correcting factors
     # ScaleCorrectionFactors

@@ -43,7 +43,7 @@ import create_data as CRDA
 from parse_candidates import MAP as ASW2SWID   #, MAP as SWID2ASW
 
 MODELS = CRDA.ALL_MODELS
-SUBSET_MODELS = CRDA.CLAUDE_MODELS
+SUBSET_MODELS, MAPS = CRDA.get_dataset_data()
 
 I = getI(__file__)
 
@@ -80,7 +80,7 @@ for asw in intersect:
     #mid = ASW2MID[asw]
     swid = ASW2SWID[asw]
     #mid = CRDA.MAPS['swid2model'].get(swid, "")
-    mid = CRDA.get_map(SUBSET_MODELS)['swid2model'].get(swid, "")
+    mid = MAPS['swid2mid'].get(swid, "")
     
     if not len(mid) > 0:
         print "did not find", asw, swid

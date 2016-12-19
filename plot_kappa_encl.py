@@ -30,7 +30,7 @@ import parse_candidates as PACA
 
 DBG = SET.DEBUG
 
-MODELS = CRDA.CLAUDE_MODELS
+MODELS, MAPS = CRDA.get_dataset_data()
 
 fpath = join(S['output_dir'], "kappa_encl")
 filename = SET.filename_base % "kappa_encl"
@@ -50,7 +50,8 @@ if not os.path.exists(fpath):
 
 
 def getEinsteinR(x, y):
-    poly = interpolate.PiecewisePolynomial(x,y[:,np.newaxis])
+    # poly = interpolate.PiecewisePolynomial(x,y[:,np.newaxis])
+    poly = interpolate.BPoly.from_derivatives(x,y[:,np.newaxis])
     
     def one(x):
         return poly(x)-1
@@ -79,8 +80,7 @@ def getEinsteinR(x, y):
 
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
-    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
-    aswobj = PACA.DATA[asw]
+    mid = MAPS['swid2mid'].get(swid, "")
 
     print swid, asw, mid
     
@@ -92,6 +92,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
     m = CRDA.ALL_MODELS[mid]
+    aswobj = PACA.DATA[asw]
     
     # load correcting factors
     # ScaleCorrectionFactors

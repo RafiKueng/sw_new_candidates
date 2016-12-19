@@ -31,7 +31,7 @@ import scipy.optimize as opt                #for the least squares fit
 import create_data as CRDA
 import parse_candidates as PACA
 
-MODELS = CRDA.CLAUDE_MODELS
+MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
 DBG =True
@@ -136,8 +136,7 @@ DATA = {}
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     #mid = CRDA.MAPS['swid2model'].get(swid, "")
-    mid = CRDA.get_map(MODELS)['swid2model'].get(swid, "")
-    aswobj = PACA.DATA[asw]
+    mid = MAPS['swid2mid'].get(swid, "")
 
     print swid, asw, mid
     
@@ -145,11 +144,12 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print "   no mid, skipping"
         continue
     
-    
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
     m = CRDA.ALL_MODELS[mid]
+    aswobj = PACA.DATA[asw]
 
+    
     ensem  = m['ensemble']       #ensem = the ensemble of 200 free-form mass distributions for the lens
     pixrad = m['pixrad']         #pixrad = radius in number of pixels
     R      = m['maprad']         #maprad = radius from central point to central point of outer tile (in arcseconds)

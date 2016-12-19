@@ -21,17 +21,16 @@ import numpy as np
 #import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.colors
-#import matplotlib.transforms as transforms
-#from scipy import optimize, interpolate
 from scipy import interpolate
 
 import create_data as CRDA
-# from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
 import parse_candidates as PACA
 
 
+MODELS, MAPS = CRDA.get_dataset_data()
+
 DBG = SET.DEBUG
-DBG=True
+#DBG = True
 
 
 fpath = join(S['output_dir'], "kappa_map")
@@ -55,11 +54,10 @@ if not os.path.exists(fpath):
 
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
-    mid = CRDA.MAPS['swid2model'].get(swid, "")
-    aswobj = PACA.DATA[asw]
+    #mid = CRDA.MAPS['swid2model'].get(swid, "")
+    mid = MAPS['swid2mid'].get(swid, "")
 
     print swid, asw, mid
-    
     if not mid:
         print "   no mid, skipping"
         continue
@@ -68,9 +66,10 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
     m = CRDA.ALL_MODELS[mid]
+    aswobj = PACA.DATA[asw]
 
 
-    delta  = np.log10( 2 ** 0.25)  # contour level spacing in log space
+    delta  = np.log10( 2 ** 0.25 )  # contour level spacing in log space
     #rscale = m['pxscale_fact']
 
     # ScaleCorrectionFactors
