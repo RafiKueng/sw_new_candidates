@@ -249,6 +249,14 @@ styles = {
         'fontsize' : sizes['regular']
     },
     
+    'inplot_caption_text':{
+        'size'     : 16,
+        'color'    : 'white',
+        'backgroundcolor': "black",
+        'family': 'sans-serif',
+        'bbox' : {'facecolor':'black', 'edgecolor':'none', 'pad':10},
+    },
+    
     # ax.tick_params(
     'bigticksonly' : {
         'which' : 'major',
@@ -443,6 +451,12 @@ def del_cache(I,fn):
         pass
 
 
-    
+from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
+def add_inline_label(ax, t, loc=2):
+    fp = styles['inplot_caption_text']
+    _at = AnchoredText(t, loc=loc, prop=fp)
+    ax.add_artist(_at)
+    return _at
+
     
 

@@ -927,6 +927,8 @@ for ii, _ in enumerate(swidAswMid):
     for name, var in doplots:
         fig = plt.figure(figsize=(8,8), dpi=dpi)
         axF = fig.add_subplot(1, 1, 1)
+        SET.add_inline_label(axF, "%s" % swid)
+
         axF.xaxis.set_visible(False)
         axF.yaxis.set_visible(False)
         axF.imshow(var, interpolation="none", origin='upper')
