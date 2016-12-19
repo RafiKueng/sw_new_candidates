@@ -143,6 +143,7 @@ def get_map(data):
     
     
 
+    
 MAPS = {}
 
 def create_maps():
