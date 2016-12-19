@@ -50,6 +50,7 @@ colors = { # http://colorbrewer2.org/
     'fg_area2' : "#b3cde3",
     'fg_area3' : "#decbe4",
     'bg_area'  : "lightgrey",
+    'bg_area2'  : "darkgrey",
 
     'min': "red",
     'sad': "dodgerblue",
@@ -208,6 +209,31 @@ styles = {
         #'linestyle': u':', 
         #'color'    : None,
     },
+
+    'bg_area2' : {
+        'facecolor': colors['bg_area2'],
+        'edgecolors': 'none',
+        'linewidths': None,
+        #'linestyle': u':', 
+        #'color'    : None,
+    },
+
+    'err_area1' : {
+        'facecolor': colors['hilight1'],
+        'edgecolor': 'none',
+        'linewidth': None,
+        'alpha'    : 0.8,
+        'zorder'   : 99,
+    },
+
+    'err_area2' : {
+        'facecolor': colors['hilight2'],
+        'edgecolor': 'none',
+        'linewidth': None,
+        'alpha'    : 0.4,
+        'zorder'   : 98,
+    },
+
     
     'text': {
         'ha':'left',

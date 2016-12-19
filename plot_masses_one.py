@@ -19,6 +19,7 @@ from settings import getI, INT
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
 from moster import moster
 
@@ -151,36 +152,72 @@ ax.fill_between(most, rng_log, rng_max, **STY['bg_area'])
 
 # black line
 #ax.plot(rng,rng,'k:')
-ax.fill_between(rng_log, rng_log, rng_min, **STY['bg_area'])
+ax.fill_between(rng_log, rng_log, rng_min, **STY['bg_area2'])
 
 
 # brackground points
 kw={}
 kw.update(STY['fg_marker2'])
 kw.pop('facecolor', None)
-ax.plot(M_stellar, M_lens, **kw)
+#ax.plot(M_stellar, M_lens, **kw)
+ 
+   
+for i, _ in enumerate(data.items()):
+    label, _ = _
+    swid = _['swid']
+    if swid[2:4] in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+
+    m_stellar = _['m_stellar']
+    m_stellar_min = _['m_s_jr']
+    m_stellar_max = _['m_s_sr']
+    m_lens = _['m_lens']
+    m_lens_max = _['m_lens_max']
+    m_lens_min = _['m_lens_min']
+
+    # draw rectangle as error area
+    lowleft = (m_stellar_min, m_lens_min)
+    width   = m_stellar_max-m_stellar_min
+    height  = m_lens_max-m_lens_min
+    ax.add_patch(Rectangle(lowleft, width, height, **STY['err_area2']))
+
     
-
-
 for i, _ in enumerate(data.items()):
     label, _ = _
     swid = _['swid']
     if swid[2:4] not in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+
     m_stellar = _['m_stellar']
+    m_stellar_min = _['m_s_jr']
+    m_stellar_max = _['m_s_sr']
     m_lens = _['m_lens']
     m_lens_max = _['m_lens_max']
     m_lens_min = _['m_lens_min']
 
     # coloured point
     #ax.plot(m_stellar, m_lens, **fgmarker)
-    yerr = np.array([[m_lens-m_lens_min], [m_lens_max-m_lens]])
-    if DBG:
-        yerr = 5*yerr
-    STY['fg_marker1'].pop('facecolor', None)
-    ax.errorbar(m_stellar, m_lens, yerr=yerr, **STY['fg_marker1'])
+    
+#    yerr = np.array([[m_lens-m_lens_min], [m_lens_max-m_lens]])
+#    if DBG:
+#        yerr = 5*yerr
+#    STY['fg_marker1'].pop('facecolor', None)
+#    ax.errorbar(m_stellar, m_lens, yerr=yerr, **STY['fg_marker1'])
+
+    # draw rectangle as error area
+    lowleft = (m_stellar_min, m_lens_min)
+    width   = m_stellar_max-m_stellar_min
+    height  = m_lens_max-m_lens_min
+    ax.add_patch(Rectangle(lowleft, width, height, **STY['err_area1']))
+    
     
     #ax.annotate('%s' % swid, xy=(m_stellar,m_lens), textcoords='data', size="x-small")
-    ax.annotate('%s' % swid, xy=(m_stellar,m_lens), xytext=(3,1), textcoords='offset points', size="x-small")
+    ax.annotate('%s' % swid,
+                xy=(m_stellar,m_lens),
+                ha='center',
+                va='center',
+                #xytext=(3,1),
+                #textcoords='offset points',
+                size="x-small",
+                zorder=100)
     
 #plt.title("Stellar vs Lensing Mass")
 #plt.title(label)
