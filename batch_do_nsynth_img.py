@@ -53,8 +53,10 @@ _fn = "%s.png" # placeholder is asw name, should be the same as in DORG!
 
 data = ['ASW0007k4r']
 
+MODELS, MAPS = CRDA.get_dataset_data()
+
 swid2asw = dict((v['swid'], k) for k, v in PACA.DATA.items())
-swid2model = dict(((m['swid'], k) for k,m in CRDA.ONLY_RECENT_MODELS.items()))
+swid2model = dict(((m['swid'], k) for k,m in MODELS.items()))
 asw2model = dict(((m['asw'], k) for k,m in CRDA.ALL_MODELS.items() if m.get('asw')))
 
 swidAswMid = [(swid, asw, asw2model[asw]) for swid, asw in swid2asw.items() if asw2model.get(asw)]
@@ -796,7 +798,7 @@ class Analysis(object):
             self.update()
 
             
-DEBUG=True
+DEBUG=False
 if DEBUG:
     swidAswMid = [("SW05", 'ASW0007k4r', "N7LTELSYTM")]
 else:
@@ -825,7 +827,7 @@ for ii, _ in enumerate(swidAswMid):
     
     fig = plt.figure()
     
-    fig.suptitle("working on %s ( %03i/%03i )" % (asw, ii, nn), fontsize='14')
+    fig.suptitle("working on %s - %s( %03i/%03i )" % (asw, mid, ii, nn), fontsize='14')
 #    ax1 = fig.add_subplot(1, 4, 1)
 #    ax2 = fig.add_subplot(1, 4, 2)
 #    ax3 = fig.add_subplot(1, 4, 3)
@@ -880,7 +882,7 @@ for ii, _ in enumerate(swidAswMid):
     roiH.register(analH.update)
     
     # load data if available
-    fn = '%s_%s_regions.pickle'%(asw,mid)
+    fn = os.path.join(S['input_dir'], 'regions_%s.pickle'%(asw,mid))
     if os.path.isfile(fn):
         with open(fn, 'rb') as f:
             p = pickle.load(f)
