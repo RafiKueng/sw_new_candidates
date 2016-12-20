@@ -232,16 +232,25 @@ for coll in DATA.values():
         rE_min  = getEinsteinR(rr, mn)
         rE_max  = getEinsteinR(rr, mx)
         
-        print_rE = True
+        
+        
+        print_rE = False
+        print_rE_line = True
+        
+        
+        
         if not rE_mean:
             # print "ALERT!!!! did not found an rE.. we should handle this.."
             # rE_mean = xmax/2
             print_rE = False
     
+        if print_rE_line:
+            #ax.axvline(rE_mean, 0, rEpos, **STY['fg_line3'])
+            ax.axvline(rE_mean, 0, 1, **STY['fg_line3'])
+
         if print_rE:
             #rE_pos = max(round(ymax*0.75), 3)
             
-            ax.axvline(rE_mean, 0, rEpos, **STY['fg_line3'])
             
             if rE_mean > 0.75*xmax:
                 ha = "right" 
@@ -277,16 +286,18 @@ for coll in DATA.values():
         #m['images'].append({'pos':0+0j, 'type':'max', 'angle':0})
         SET.plot_image_positions(ax, m['images'] + [{'pos':0,'type':'max'},] )
 
-        kw1 = dict(STY['bigtickslabel'])
-        kw1.update({
-            'top': False
-        })
-        kw2 = dict(STY['smallticks'])
-        kw2.update({
-            'labelleft': True
-        })
-        ax.tick_params(axis='both', **kw1)
-        ax.tick_params(axis='both', **kw2)
+#        kw1 = dict(STY['bigtickslabel'])
+#        kw1.update({
+#            'top': False
+#        })
+#        kw2 = dict(STY['smallticks'])
+#        kw2.update({
+#            'labelleft': True
+#        })
+#        ax.tick_params(axis='both', **kw1)
+#        ax.tick_params(axis='both', **kw2)
+
+        ax.tick_params(STY['big_majorticks'])
     
         #plt.tight_layout()
         ax.set_ylim(bottom=0.51, top=7.9)
@@ -296,14 +307,18 @@ for coll in DATA.values():
         ax.set_xlim(left=-ddxx, right=np.max(rr)+ddxx)
         
     
-        plt.xlabel(r'image radius [px]', **STY['label'])
-        plt.ylabel(r'$\kappa_{<R}$ [1]', **STY['label'])
+        plt.xlabel(r'Image radius [px]', **STY['label'])
+        plt.ylabel(r'Enclosed radius $\kappa_{<R}$ [1]', **STY['label'])
     
         formatter = mpl.ticker.FuncFormatter(
             lambda x, p: str(int(round(x))) if x>=1 else str(round(x,1))
         )
         ax.yaxis.set_major_formatter(formatter)
         ax.yaxis.set_minor_formatter(formatter)
+        
+        
+        SET.add_inline_label(ax, asw, loc=1 , color='bright')
+
     
         plt.tight_layout()
         

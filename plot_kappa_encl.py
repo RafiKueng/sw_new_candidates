@@ -155,8 +155,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print_rE = False
 
     if print_rE_line:
-        ax.axvline(rE_mean, 0, rEpos, **STY['fg_line2'])
-        ax.axvline(rE_mean, 0, 1, **STY['fg_line2'])
+        #ax.axvline(rE_mean, 0, rEpos, **STY['fg_line3'])
+        ax.axvline(rE_mean, 0, 1, **STY['fg_line3'])
 
     if print_rE:
         #rE_pos = max(round(ymax*0.5), 2)

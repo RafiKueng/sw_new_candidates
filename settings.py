@@ -334,7 +334,7 @@ styles = {
     'EXTPNT' : {
         'names'  : ["min", "sad", "max"],
         'colors' : [colors['min'],colors['sad'],colors['max']],
-        'markers': ['v', '>', '^'],
+        'markers': ['v', '_', '^'],
         'offsets': [(0,3),(1,3),(2,3)], # draw every (start, offset)
         'linewidth': lw_fg,
     },
@@ -345,9 +345,13 @@ styles = {
 
 # Image marker postitions
 # coordinates relative to plot!
-iypos = 0.875 # general y postion of the image marker line
-dy = 0.066  # length of the line 
-oy = 0.015   # offset between lines
+#iypos = 0.875 # general y postion of the image marker line
+#dy = 0.066  # length of the line 
+#oy = 0.015   # offset between lines
+
+iypos = 0.95 # general y postion of the image marker line
+dy = 0.030  # length of the line 
+oy = 0.000   # vertical offset between lines / types of points
 
 
 def plot_image_positions(ax, imgs):
