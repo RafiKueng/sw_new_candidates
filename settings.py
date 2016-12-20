@@ -14,7 +14,7 @@ import matplotlib as mpl
 import matplotlib.transforms as transforms
 
 DEBUG = False
-#DEBUG = True
+DEBUG = True
 
 DATASET_TO_USE = "selected_models"
 HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
@@ -256,12 +256,15 @@ styles = {
         'color'    : 'black',
         'backgroundcolor': "none",
         'family': 'sans-serif',
+        'zorder': 99,
         'bbox' : {
                   'color':'white',
 #                  'facecolor':'none',
 #                  'edgecolor':'none',
                   'pad':10,
-                  'alpha':0.75},
+                  'alpha':0.75,
+                  'zorder': 99,
+                  },
     },
 
     'inplot_caption_text_dark':{
@@ -269,12 +272,15 @@ styles = {
         'color'    : 'white',
         'backgroundcolor': "none",
         'family': 'sans-serif',
+        'zorder': 99,
         'bbox' : {
                   'color':'black',
 #                  'facecolor':'none',
 #                  'edgecolor':'none',
                   'pad':10,
-                  'alpha':0.75},
+                  'alpha':0.75,
+                  'zorder': 99,
+                  },
     },
 
 #    # ax.tick_params(
@@ -526,11 +532,44 @@ def del_cache(I,fn):
 
 
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
-def add_inline_label(ax, t, loc=2, color="dark"):
+
+def add_inline_label(ax, t, loc=2, color="bright"):
     fp = styles['inplot_caption_text_'+color]
-    _at = AnchoredText(t, loc=loc, prop=fp, frameon=False)
-    ax.add_artist(_at)
-    return _at
+    at = AnchoredText(t, loc=loc, prop=fp, frameon=False) #, zorder=999)
+    at.zorder = 999
+    ax.add_artist(at)
+    return at
 
     
+    
+from mpl_toolkits.axes_grid.anchored_artists import AnchoredSizeBar
+
+def add_size_bar(ax, text, length=1, loc=8, color="bright"):
+#    fp = styles['inplot_caption_text_'+color]
+#    fontprop = mpl.font_manager.FontProperties(**fp)
+    if color=="bright":
+        col = "black"
+    elif color=="dark":
+        col = "white"
+    else:
+        col = color
+        
+    asb = AnchoredSizeBar(ax.transData,
+                          length,
+                          text,
+                          size_vertical=length*0.1,
+                          loc=4,
+                          pad=0.1, borderpad=0.5, sep=5,
+                          prop=mpl.font_manager.FontProperties(
+                               size=12,
+                               ),
+#                          prop = fontprop,
+                          color=col,
+                          frameon=False
+                          )
+#    from matplotlib.offsetbox import TextArea
+#    ta = TextArea("string", textprops=fp)
+#    asb.txt_label = ta
+    ax.add_artist(asb)
+    return asb
 

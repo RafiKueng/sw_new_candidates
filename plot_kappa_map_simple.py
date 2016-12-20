@@ -182,6 +182,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.grid()
     
     SET.add_inline_label(ax, swid, color='bright')
+    SET.add_size_bar(ax, r"1$^{\prime}$", length=1, color="bright")
     
     fig.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])

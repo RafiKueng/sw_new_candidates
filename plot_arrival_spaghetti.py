@@ -69,14 +69,14 @@ def arrival_plot(model, ax):
             loglev=clevels
             kw.update(STY['bg_contour'])
             kw.update({
-                'zorder' : -100,
+                'zorder' : -89,
             })
             ax.contour(g, loglev, **kw)
 
         if lev:
             kw.update(STY['fg_contour'])
             kw.update({
-                'zorder' : 100,
+                'zorder' : 89,
             })
             ax.contour(g, lev, **kw)
 
@@ -128,7 +128,7 @@ def overlay_input_points(model, ax):
         #['min', 'sad', 'max', 'unk'].index(parity)
         # tp = ['c', 'g', 'r', 'm'][img['parity']]
         tp = STY['EXTPNT']['colors'][img['parity']]
-        print img['pos'], tp
+        #print img['pos'], tp
         ax.plot([img['pos'].real*f], [img['pos'].imag*f], marker='o', color=tp, zorder=110)
 
     #mark origin
@@ -167,10 +167,10 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
     #print "   "," | ".join(['%3.3f'%_ for _ in [px_scf, aa_scf, r_rcf, m_rcf, k_rcf]])
 
-    print m['source_indices']
-    print m['arrival_contour_levels']
-    print np.average(m['arrival_grid'])
-    print m['mapextend']
+    #print m['source_indices']
+    #print m['arrival_contour_levels']
+    #print np.average(m['arrival_grid'])
+    #print m['mapextend']
 
     fig = plt.figure(**STY['figure_sq'])
     ax = fig.add_subplot(111)
@@ -182,7 +182,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.tick_params(**STY['no_labels'])
     ax.grid()
     
-    SET.add_inline_label(ax, swid, color="bright")
+    tmp1 = SET.add_inline_label(ax, swid, color="bright")
+    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$", length=1, color="bright")
     
     plt.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])

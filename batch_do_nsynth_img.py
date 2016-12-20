@@ -16,6 +16,7 @@ SET.set_mpl_rc()
 STY = SET.styles
 S = SET.settings
 
+DBG = SET.DEBUG
 
 import numpy as np
 import scipy as sp
@@ -805,16 +806,22 @@ class Analysis(object):
             self.update()
 
             
-DEBUG=False
-if DEBUG:
-    swidAswMid = [("SW05", 'ASW0007k4r', "N7LTELSYTM")]
-else:
-    #swids = ['SW02', 'SW05', 'SW09', 'SW28', 'SW29']
-    swids = SET.HILIGHT_SWID
-    swidAswMid = []
-    for swid in swids:
-        swidAswMid.append((swid, swid2asw[swid], swid2model[swid]))
+#if DEBUG:
+#    swidAswMid = [("SW05", 'ASW0007k4r', "N7LTELSYTM")]
+#else:
+#    #swids = ['SW02', 'SW05', 'SW09', 'SW28', 'SW29']
+#    swids = SET.HILIGHT_SWID
+#    swidAswMid = []
+#    for swid in swids:
+#        swidAswMid.append((swid, swid2asw[swid], swid2model[swid]))
 
+        
+swids = SET.HILIGHT_SWID
+swidAswMid = []
+for swid in swids:
+    swidAswMid.append((swid, swid2asw[swid], swid2model[swid]))
+
+        
 path = os.path.join(S['output_dir'], 'nsynth')
 if not os.path.exists(path):
     os.makedirs(path)
@@ -924,18 +931,27 @@ for ii, _ in enumerate(swidAswMid):
         ('srcimg', analH.srcimg),
         ('roiimg', roiH.maskimg)
     ]
+    
+    arcsec_p_pix = 0.187
+    
     for name, var in doplots:
         fig = plt.figure(figsize=(8,8), dpi=dpi)
         axF = fig.add_subplot(1, 1, 1)
-        SET.add_inline_label(axF, "%s" % swid)
 
         axF.xaxis.set_visible(False)
         axF.yaxis.set_visible(False)
         axF.imshow(var, interpolation="none", origin='upper')
+        
+        SET.add_inline_label(axF, "%s" % swid, color='dark')
+        SET.add_size_bar(axF, r"1$^{\prime}$", length=1./arcsec_p_pix, color='dark')
+        
         fig.set_tight_layout(True)
         fig.savefig(ffn%name, dpi=dpi)
         fig.clear()
         plt.close()
+        
+    if DBG:
+        break
 
 
 ### MAIN #####################################################################
