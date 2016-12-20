@@ -39,7 +39,7 @@ DBG = SET.DEBUG
 
 
 fpath = join(S['output_dir'], "kappa_map_interpol")
-filename = SET.filename_base % "kappa_map"
+filename = SET.filename_base % "kappa_map_interpol"
 
 
 # rE text label position

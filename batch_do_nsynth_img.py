@@ -58,6 +58,7 @@ plt.ioff()
 _path = SET.sworg_path
 _fn = "%s.png" # placeholder is asw name, should be the same as in DORG!
 
+filename = SET.filename_base
 
 data = ['ASW0007k4r']
 
@@ -831,7 +832,7 @@ for ii, _ in enumerate(swidAswMid):
     
     log.info("working on %s %s %s ( %03i/%03i )", swid, asw, mid, ii, nn)
 
-    ffn = os.path.join(path, "%s_%s_%s.png" % (asw, mid, '%s'))    
+    ffn = os.path.join(path, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
     orgimg_path = os.path.join(_path, _fn%asw)
     if not os.path.isfile(orgimg_path):
