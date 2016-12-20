@@ -228,6 +228,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.yaxis.set_major_formatter(formatter)
     ax.yaxis.set_minor_formatter(formatter)
 
+    SET.add_inline_label(ax, swid, loc=1 , color='bright')
+
     plt.tight_layout()
     
     plt.savefig(imgname, **STY['figure_save'])
