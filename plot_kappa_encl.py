@@ -29,7 +29,7 @@ import parse_candidates as PACA
 
 
 DBG = SET.DEBUG
-DBG = True
+#DBG = True
 
 MODELS, MAPS = CRDA.get_dataset_data()
 
