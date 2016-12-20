@@ -178,8 +178,11 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     arrival_plot(m, ax)
     overlay_input_points(m, ax)
     
-    ax.tick_params(**STY['bigticksonly'])
+    ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['no_labels'])
     ax.grid()
+    
+    SET.add_inline_label(ax, swid, color="bright")
     
     plt.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])

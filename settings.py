@@ -14,7 +14,7 @@ import matplotlib as mpl
 import matplotlib.transforms as transforms
 
 DEBUG = False
-#DEBUG = True
+DEBUG = True
 
 DATASET_TO_USE = "selected_models"
 HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
@@ -277,40 +277,39 @@ styles = {
                   'alpha':0.75},
     },
 
-    
-    # ax.tick_params(
-    'bigticksonly' : {
-        'which' : 'major',
-        'width': 3,
-        'length': 6,
-        'labelsize': sizes['small'],
-        #'labelbottom' : False,
-        'labeltop': False,
-        #'labelleft': False,
-        'labelright': False
-    },
-    'bigtickslabel' : {
-        'which' : 'major',
-        'width': 3,
-        'length': 12,
-        'direction': 'inout',
-        'labelsize': sizes['small'],
-        'labelbottom' : True,
-        'labeltop': False,
-        'labelleft': True,
-        'labelright': False
-    },
-    'smallticks' : {
-        'which' : 'minor',
-        'width':  3 * 0.5,
-        'length': 6 * 0.5,
-        'labelsize': sizes['small'],
-        'labelbottom' : False,
-        'labeltop': False,
-        'labelleft': False,
-        'labelright': False
-    },
-    
+#    # ax.tick_params(
+#    'bigticksonly' : {
+#        'which' : 'major',
+#        'width': 3,
+#        'length': 6,
+#        'labelsize': sizes['small'],
+#        #'labelbottom' : False,
+#        'labeltop': False,
+#        #'labelleft': False,
+#        'labelright': False
+#    },
+#    'bigtickslabel' : {
+#        'which' : 'major',
+#        'width': 3,
+#        'length': 12,
+#        'direction': 'inout',
+#        'labelsize': sizes['small'],
+#        'labelbottom' : True,
+#        'labeltop': False,
+#        'labelleft': True,
+#        'labelright': False
+#    },
+#    'smallticks' : {
+#        'which' : 'minor',
+#        'width':  3 * 0.5,
+#        'length': 6 * 0.5,
+#        'labelsize': sizes['small'],
+#        'labelbottom' : False,
+#        'labeltop': False,
+#        'labelleft': False,
+#        'labelright': False
+#    },
+
     'big_majorticks' : {
         'which' : 'major',
         'width': 3,
