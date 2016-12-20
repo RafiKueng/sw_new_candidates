@@ -29,6 +29,7 @@ import parse_candidates as PACA
 
 
 DBG = SET.DEBUG
+DBG = True
 
 MODELS, MAPS = CRDA.get_dataset_data()
 
@@ -145,17 +146,22 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     rE_max  = getEinsteinR(rr, mx)
     #a_re_mean = np.array([rE_mean, rE_mean])
     
-    print_rE = True
+    print_rE = False
+    print_rE_line = True
+    
     if not rE_mean:
         # print "ALERT!!!! did not found an rE.. we should handle this.."
         # rE_mean = xmax/2
         print_rE = False
 
+    if print_rE_line:
+        ax.axvline(rE_mean, 0, rEpos, **STY['fg_line2'])
+        ax.axvline(rE_mean, 0, 1, **STY['fg_line2'])
+
     if print_rE:
         #rE_pos = max(round(ymax*0.5), 2)
         
         #plt.plot(np.array([rE_mean, rE_mean]), [0,rE_pos], '--', color=(0,0.5,0))
-        ax.axvline(rE_mean, 0, rEpos, **STY['fg_line2'])
         
         if rE_mean > 0.75*xmax:
             ha = "right" 
@@ -213,8 +219,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.set_xlim(left=-ddxx, right=np.max(rr)+ddxx)
     
 
-    plt.xlabel(r'image radius [arcsec]', **STY['label'])
-    plt.ylabel(r'$\kappa_{<R}$ [1]', **STY['label'])
+    plt.xlabel(r'Image radius [arcsec]', **STY['label'])
+    plt.ylabel(r'Enclosed kappa $\kappa_{<R}$ [1]', **STY['label'])
 
     formatter = mpl.ticker.FuncFormatter(
         lambda x, p: str(int(round(x))) if x>=1 else str(round(x,1))
