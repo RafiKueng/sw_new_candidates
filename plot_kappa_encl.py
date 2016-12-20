@@ -203,12 +203,16 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     SET.plot_image_positions(ax, m['images'] + [{'pos':0,'type':'max'},] )
 
-    kw2 = dict(STY['smallticks'])
-    kw2.update({
-               'labelleft': True
-               })
-    ax.tick_params(axis='both', **STY['bigtickslabel'])
-    ax.tick_params(axis='both', **kw2)
+#    kw2 = dict(STY['smallticks'])
+#    kw2.update({
+#               'labelleft': True
+#               })
+#    ax.tick_params(axis='both', **STY['bigtickslabel'])
+#    ax.tick_params(axis='both', **kw2)
+
+    ax.tick_params(**STY['ticks_bottom_left'])
+    ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['labels_bottom_left'])
 
 
     #plt.tight_layout()
@@ -219,8 +223,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.set_xlim(left=-ddxx, right=np.max(rr)+ddxx)
     
 
-    plt.xlabel(r'Image radius [arcsec]', **STY['label'])
-    plt.ylabel(r'Enclosed kappa $\kappa_{<R}$ [1]', **STY['label'])
+    plt.xlabel(r'Image radius $r$ [arcsec]', **STY['label'])
+    plt.ylabel(r'Enclosed kappa $\kappa_{< R}$ [1]', **STY['label'])
 
     formatter = mpl.ticker.FuncFormatter(
         lambda x, p: str(int(round(x))) if x>=1 else str(round(x,1))

@@ -310,6 +310,15 @@ styles = {
 #        'labelright': False
 #    },
 
+    'ticks_bottom_left' : {
+        'axis' : 'both',
+        'which' : 'both',
+        'bottom' : True,
+        'top': False,
+        'left': True,
+        'right': False
+    },
+
     'big_majorticks' : {
         'which' : 'major',
         'width': 3,
@@ -328,6 +337,12 @@ styles = {
         'labelleft': False,
         'labelright': False
                                
+    },
+    'labels_bottom_left': {
+        'labelbottom' : True,
+        'labeltop': False,
+        'labelleft': True,
+        'labelright': False
     },
     
     
