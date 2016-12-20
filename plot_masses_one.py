@@ -18,6 +18,7 @@ from settings import getI, INT
 
 
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
@@ -25,7 +26,7 @@ from moster import moster
 
 
 DBG = SET.DEBUG
-DBG = False
+#DBG = False
 
 
 path     = join(S['output_dir'], 'mlens_vs_mstel_one')
@@ -69,6 +70,7 @@ for asw in symdiff:
     
 if DBG:
     intersect = ['ASW0007k4r','ASW0008swn']
+
 
 # collect data
 M_stellar = []
@@ -168,12 +170,13 @@ for i, _ in enumerate(data.items()):
     #if swid[2:4] in ['05', '42', '28', '58', '02','19','09','29','57']: continue
     if swid in SET.HILIGHT_SWID: continue
 
+
     m_stellar = _['m_stellar']
     m_stellar_min = _['m_s_jr']
     m_stellar_max = _['m_s_sr']
     m_lens = _['m_lens']
     m_lens_max = _['m_lens_max']
-    m_lens_min = _['m_lens_min']
+    m_lens_min = _['m_lens_min'] 
 
     # draw rectangle as error area
     lowleft = (m_stellar_min, m_lens_min)
@@ -223,17 +226,29 @@ for i, _ in enumerate(data.items()):
     
 #plt.title("Stellar vs Lensing Mass")
 #plt.title(label)
-ax.set_xlabel('Stellar Mass $M_{\odot}$', **STY['label'])
-ax.set_ylabel('Lensing Mass $M_{lens}$', **STY['label'])
+#ax.set_xlabel('Stellar Mass $M_{stel}$ [ $\log ( 10^{-10} M_{\odot} )$ ]', **STY['label'])
+#ax.set_ylabel('Lensing Mass $M_{lens}$ [ $\log ( 10^{-10} M_{\odot} )$ ]', **STY['label'])
+ax.set_xlabel('Stellar Mass $M_{stel}$ [ $10^{-10} M_{\odot}$ ]', **STY['label'])
+ax.set_ylabel('Lensing Mass $M_{lens}$ [ $10^{-10} M_{\odot}$ ]', **STY['label'])
 
 #axis limits
 ax.set_xlim(xmin=2.5e8, xmax=9.5e11)
 ax.set_ylim(ymin=2.5e10, ymax=9.5e13)
+
 ax.set_xscale("log", nonposx='clip')
 ax.set_yscale("log", nonposy='clip')
 
-ax.tick_params(**STY['bigtickslabel'])
-ax.tick_params(**STY['smallticks'])
+
+# recale the ticks
+scale = 10**10
+#ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(np.log10(x/scale)))
+ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scale))
+ax.xaxis.set_major_formatter(ticks_rescaled)
+ax.yaxis.set_major_formatter(ticks_rescaled)
+
+
+ax.tick_params(**STY['big_majorticks'])
+ax.tick_params(**STY['big_minorticks'])
 
 plt.tight_layout()
 fig.savefig(ffn, **STY['figure_save'])

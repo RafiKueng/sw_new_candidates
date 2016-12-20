@@ -18,6 +18,7 @@ from settings import getI, INT
 
 
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 from moster import moster
@@ -175,17 +176,25 @@ for i, _ in enumerate(data.items()):
     
     #plt.title("Stellar vs Lensing Mass")
     #plt.title(label)
-    ax.set_xlabel('Stellar Mass $M_{\odot}$', **STY['label'])
-    ax.set_ylabel('Lensing Mass $M_{lens}$', **STY['label'])
+    ax.set_xlabel('Stellar Mass $M_{stel}$ [ $10^{-10} M_{\odot}$ ]', **STY['label'])
+    ax.set_ylabel('Lensing Mass $M_{lens}$ [ $10^{-10} M_{\odot}$ ]', **STY['label'])
     
     #axis limits
     ax.set_xlim(xmin=2.5e8, xmax=9.5e11)
     ax.set_ylim(ymin=2.5e10, ymax=9.5e13)
     ax.set_xscale("log", nonposx='clip')
     ax.set_yscale("log", nonposy='clip')
+
+    # recale the ticks
+    scale = 10**10
+    #ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(np.log10(x/scale)))
+    ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scale))
+    ax.xaxis.set_major_formatter(ticks_rescaled)
+    ax.yaxis.set_major_formatter(ticks_rescaled)
+
     
-    ax.tick_params(**STY['bigtickslabel'])
-    ax.tick_params(**STY['smallticks'])
+    ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['big_minorticks'])
     
     plt.tight_layout()
     fig.savefig(ffn, **STY['figure_save'])

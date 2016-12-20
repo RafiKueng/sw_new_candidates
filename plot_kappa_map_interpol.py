@@ -153,8 +153,10 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
         
     ax.set_aspect('equal')
+    
     ax.tick_params(**STY['big_majorticks'])
     ax.tick_params(**STY['no_labels'])
+    
     ax.grid()
 
     SET.add_inline_label(ax, swid, color='bright')

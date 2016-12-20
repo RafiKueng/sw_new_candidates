@@ -14,7 +14,7 @@ import matplotlib as mpl
 import matplotlib.transforms as transforms
 
 DEBUG = False
-DEBUG = True
+#DEBUG = True
 
 DATASET_TO_USE = "selected_models"
 HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
@@ -320,6 +320,7 @@ styles = {
     },
 
     'big_majorticks' : {
+        'axis'  : 'both',
         'which' : 'major',
         'width': 3,
         'length': 6,
@@ -329,6 +330,20 @@ styles = {
         #'labelleft': False,
         #'labelright': False
     },
+    'big_minorticks' : {
+        'axis': 'both',
+        'which' : 'minor',
+        'width':  3 * 0.5,
+        'length': 6 * 0.5,
+#        'labelsize': sizes['small'],
+#        'labelbottom' : False,
+#        'labeltop': False,
+#        'labelleft': False,
+#        'labelright': False
+    },
+
+
+
     'no_labels': {
 #        'axis':'x',          # changes apply to the x-axis
 #        'which':'both',      # both major and minor ticks are affected

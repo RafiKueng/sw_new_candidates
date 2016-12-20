@@ -1,6 +1,10 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
+
+This is OUTDATED. Use ...simple for non interpolating version, or interp for
+an interpolating one
+
 Created on Thu Jul 21 23:26:01 2016
 
 @author: rafik
@@ -172,9 +176,14 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
 
     ax.set_aspect('equal')
-    ax.tick_params(**STY['bigticksonly'])
+    
+    ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['no_labels'])
+
     ax.grid()
     
+    SET.add_inline_label(ax, swid, color='bright')
+
     fig.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])
         
