@@ -38,7 +38,7 @@ DBG = SET.DEBUG
 #DBG=True
 
 
-fpath = join(S['output_dir'], "kappa_map2")
+fpath = join(S['output_dir'], "kappa_map_interpol")
 filename = SET.filename_base % "kappa_map"
 
 
@@ -74,7 +74,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     aswobj = PACA.DATA[asw]
 
 
-    delta  = 0.05  # contour level spacing in log space
+    delta  = 0.2  # contour level spacing in log space
     #clevels = 20
     vmin = None
     vmax = 1
@@ -153,8 +153,11 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
         
     ax.set_aspect('equal')
-    ax.tick_params(**STY['bigticksonly'])
+    ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['no_labels'])
     ax.grid()
+
+    SET.add_inline_label(ax, swid, color='bright')
     
     fig.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])

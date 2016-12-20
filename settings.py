@@ -185,6 +185,7 @@ styles = {
         'aspect'        : 'equal',
         'origin'        : 'upper',
         'antialiased'   : True,
+        'linestyles'    : 'solid',
     },
 
     'bg_contour': {
@@ -195,6 +196,7 @@ styles = {
         'aspect'        : 'equal',
         'origin'        : 'upper',
         'antialiased'   : True,
+        'linestyles'    : [(5,(3,3)),],
     },
 
 
@@ -249,13 +251,32 @@ styles = {
         'fontsize' : sizes['regular']
     },
     
-    'inplot_caption_text':{
-        'size'     : 16,
-        'color'    : 'white',
-        'backgroundcolor': "black",
+    'inplot_caption_text_bright':{
+        'size'     : 42,
+        'color'    : 'black',
+        'backgroundcolor': "none",
         'family': 'sans-serif',
-        'bbox' : {'facecolor':'black', 'edgecolor':'none', 'pad':10},
+        'bbox' : {
+                  'color':'white',
+#                  'facecolor':'none',
+#                  'edgecolor':'none',
+                  'pad':10,
+                  'alpha':0.75},
     },
+
+    'inplot_caption_text_dark':{
+        'size'     : 42,
+        'color'    : 'white',
+        'backgroundcolor': "none",
+        'family': 'sans-serif',
+        'bbox' : {
+                  'color':'black',
+#                  'facecolor':'none',
+#                  'edgecolor':'none',
+                  'pad':10,
+                  'alpha':0.75},
+    },
+
     
     # ax.tick_params(
     'bigticksonly' : {
@@ -288,6 +309,26 @@ styles = {
         'labeltop': False,
         'labelleft': False,
         'labelright': False
+    },
+    
+    'big_majorticks' : {
+        'which' : 'major',
+        'width': 3,
+        'length': 6,
+        #'labelsize': sizes['small'],
+        #'labelbottom' : False,
+        #'labeltop': False,
+        #'labelleft': False,
+        #'labelright': False
+    },
+    'no_labels': {
+#        'axis':'x',          # changes apply to the x-axis
+#        'which':'both',      # both major and minor ticks are affected
+        'labelbottom' : False,
+        'labeltop': False,
+        'labelleft': False,
+        'labelright': False
+                               
     },
     
     
@@ -452,9 +493,9 @@ def del_cache(I,fn):
 
 
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
-def add_inline_label(ax, t, loc=2):
-    fp = styles['inplot_caption_text']
-    _at = AnchoredText(t, loc=loc, prop=fp)
+def add_inline_label(ax, t, loc=2, color="dark"):
+    fp = styles['inplot_caption_text_'+color]
+    _at = AnchoredText(t, loc=loc, prop=fp, frameon=False)
     ax.add_artist(_at)
     return _at
 
