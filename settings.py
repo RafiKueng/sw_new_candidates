@@ -14,7 +14,7 @@ import matplotlib as mpl
 import matplotlib.transforms as transforms
 
 DEBUG = False
-DEBUG = True
+#DEBUG = True
 
 DATASET_TO_USE = "selected_models"
 HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
