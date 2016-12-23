@@ -283,38 +283,7 @@ styles = {
                   },
     },
 
-#    # ax.tick_params(
-#    'bigticksonly' : {
-#        'which' : 'major',
-#        'width': 3,
-#        'length': 6,
-#        'labelsize': sizes['small'],
-#        #'labelbottom' : False,
-#        'labeltop': False,
-#        #'labelleft': False,
-#        'labelright': False
-#    },
-#    'bigtickslabel' : {
-#        'which' : 'major',
-#        'width': 3,
-#        'length': 12,
-#        'direction': 'inout',
-#        'labelsize': sizes['small'],
-#        'labelbottom' : True,
-#        'labeltop': False,
-#        'labelleft': True,
-#        'labelright': False
-#    },
-#    'smallticks' : {
-#        'which' : 'minor',
-#        'width':  3 * 0.5,
-#        'length': 6 * 0.5,
-#        'labelsize': sizes['small'],
-#        'labelbottom' : False,
-#        'labeltop': False,
-#        'labelleft': False,
-#        'labelright': False
-#    },
+# ax.tick_params
 
     'ticks_bottom_left' : {
         'axis' : 'both',
@@ -325,6 +294,16 @@ styles = {
         'right': False
     },
 
+    'no_ticks' : {
+        'axis' : 'both',
+        'which' : 'both',
+        'bottom' : False,
+        'top': False,
+        'left': False,
+        'right': False
+    },
+
+    
     'big_majorticks' : {
         'axis'  : 'both',
         'which' : 'major',
@@ -557,7 +536,7 @@ def add_size_bar(ax, text, length=1, loc=8, color="bright"):
     asb = AnchoredSizeBar(ax.transData,
                           length,
                           text,
-                          size_vertical=length*0.1,
+#                          size_vertical=length*0.1,
                           loc=4,
                           pad=0.1, borderpad=0.5, sep=5,
                           prop=mpl.font_manager.FontProperties(
