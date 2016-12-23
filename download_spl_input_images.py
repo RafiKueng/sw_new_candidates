@@ -34,7 +34,7 @@ import create_data as CRDA
 MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
-DBG = True
+#DBG = True
 
 #imgdir = join(S['output_dir'],'spl_images')
 
@@ -139,21 +139,17 @@ def get_images(data):
 
         im = misc.imread(tmp_path)
 
-        if not 'arcsec_in_px' in _:
-
-            # calculate the scaling
-            cfg_maxdist = np.max([ np.abs(x['pos']) for x in _['images']])
-            img_maxdist = find_point.getMaxDistImg(im=im)
-            
-            if DBG:
-                print "\nmax dists"
-                print cfg_maxdist, img_maxdist, _['pixel_scale_fact']
-            cfg_maxdist *= _['pixel_scale_fact']
-            
-            # get pixel length of one arcsec
-            _['arcsec_in_px'] = img_maxdist[0] / cfg_maxdist
+        # calculate the scaling
+        cfg_maxdist = np.max([ np.abs(x['pos']) for x in _['images']])
+        img_maxdist = find_point.getMaxDistImg(im=im)
         
-        arcsec_in_px = _['arcsec_in_px']
+        if DBG:
+            print "\nmax dists"
+            print cfg_maxdist, img_maxdist, _['pixel_scale_fact']
+        cfg_maxdist *= _['pixel_scale_fact']
+        
+        # get pixel length of one arcsec
+        arcsec_in_px = img_maxdist[0] / cfg_maxdist
         
         # plot using mpl for same style
         fig = plt.figure(**STY['figure_sq'])
@@ -164,8 +160,8 @@ def get_images(data):
         ax.tick_params(**STY['no_ticks'])
         ax.tick_params(**STY['no_labels'])
         
-        tmp1 = SET.add_inline_label(ax, swid, color="dark")
-        tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$", length=arcsec_in_px, color="dark")
+        SET.add_inline_label(ax, swid, color="dark")
+        SET.add_size_bar(ax, r"1$^{\prime}$", length=arcsec_in_px, color="dark")
         
         plt.tight_layout()
         fig.savefig(imgname, **STY['figure_save'])

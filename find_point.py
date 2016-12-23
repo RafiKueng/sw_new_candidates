@@ -57,10 +57,14 @@ def getMaxDistImg(fname = fname, im=None):
     dists = []
     maxposes = [_ for _ in points if _[0]=='max']
     
-    for pos in points:
-        x = maxposes[0][1]
-        y = pos[1]
-        dists.append(np.sqrt(np.sum((x-y)**2)))
+    try:
+        for pos in points:
+            x = maxposes[0][1]
+            y = pos[1]
+            dists.append(np.sqrt(np.sum((x-y)**2)))
+    except:
+        print "!"*80
+        pass
     
     return max(dists), dists
 

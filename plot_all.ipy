@@ -16,4 +16,7 @@ Created on Wed Jul 27 04:55:53 2016
 %run plot_masses_one.py
 #%run plot_masses.py
 
+
+%run download_spl_input_images.py
+
 %run print_latex_model_assignment.py
