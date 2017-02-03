@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """
+Small modification for the plot for the SwissCosmoDays2017 presentation
+
 Created on Sun Nov  1 21:51:21 2015
 
 @author: rafik
@@ -27,7 +29,7 @@ DBG = SET.DEBUG
 #DBG = True
 
 
-path     = join(S['output_dir'], 'mlens_vs_mstel')
+path     = join(S['output_dir'], 'scd17_mlens_vs_mstel')
 filename = SET.filename_base % 'mstel_vs_mtot'
 overwrite = True
 

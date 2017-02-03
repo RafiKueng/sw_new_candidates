@@ -24,14 +24,27 @@ from matplotlib.patches import Rectangle
 
 from moster import moster
 
+from mpltools import style
+style.use('dark_background')
 
 DBG = SET.DEBUG
-#DBG = False
+#DBG = True
 
 
-path     = join(S['output_dir'], 'mlens_vs_mstel_one')
+path     = join(S['output_dir'], 'scd17_mlens_vs_mstel_one')
 filename = 'mstel_vs_mtot_one.png'
 overwrite = True
+
+
+sty_figsave = STY['figure_save']
+sty_figsave.pop('facecolor', None)
+sty_figsave.pop('edgecolor', None)
+
+STY['bg_area']['facecolor'] = '#333333'
+STY['bg_area2']['facecolor'] = '#666666'
+
+STY['err_area2']['alpha'] = 1
+STY['err_area1']['alpha'] = 1
 
 #areastyle = styles['forbiddenarea']
 #fgmarker = styles['hilight_marker']
@@ -188,8 +201,9 @@ for i, _ in enumerate(data.items()):
 for i, _ in enumerate(data.items()):
     label, _ = _
     swid = _['swid']
-    #if swid[2:4] not in ['05', '42', '28', '58', '02','19','09','29','57']: continue
-    if swid not in SET.HILIGHT_SWID: continue
+    
+    if swid[2:4] not in ['05', '42']: continue
+    #if swid not in SET.HILIGHT_SWID: continue
 
     m_stellar = _['m_stellar']
     m_stellar_min = _['m_s_jr']
@@ -251,7 +265,7 @@ ax.tick_params(**STY['big_majorticks'])
 ax.tick_params(**STY['big_minorticks'])
 
 plt.tight_layout()
-fig.savefig(ffn, **STY['figure_save'])
+fig.savefig(ffn, **sty_figsave)
 
 if DBG:
     plt.show()
