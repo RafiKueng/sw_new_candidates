@@ -35,7 +35,7 @@ MODELS, MAPS = CRDA.get_dataset_data()
 
 
 DBG = SET.DEBUG
-#DBG=True
+DBG = True
 
 
 fpath = join(S['output_dir'], "kappa_map_interpol")
@@ -105,10 +105,12 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         # kw['vmin'] = vmin
     #if vmax is not None:
         # kw['vmax'] = vmax
-
-    grid = scipy.ndimage.zoom(grid_org, 3, order=3)
-    mask = scipy.ndimage.zoom(grid_org==0, 3, order=0)
-    grid[grid<=10**vmin]=10**vmin
+    zoomlvl = 3
+    grid = scipy.ndimage.zoom(grid_org, zoomlvl, order=3)
+    #mask = scipy.ndimage.zoom(grid_org==0, zoomlvl, order=0)
+    mask = grid_org==0  # actually there is no need to zoom the mask if 
+                        # we use imshow with extent
+    grid[grid<=10**vmin] = 10**vmin
     grid_log = np.log10(grid)
 
     
@@ -138,9 +140,10 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     Cup = ax.contour(grid_log, levels=clev_up, **kw)
     kw.update(STY['bg_contour'])
     Cdn = ax.contour(grid_log, levels=clev_dn, **kw)
-    if False:
-        ax.clabel(Cup, inline=1, fontsize=10)
-        ax.clabel(Cdn, inline=1, fontsize=10)
+    
+#    if False:
+#        ax.clabel(Cup, inline=1, fontsize=10)
+#        ax.clabel(Cdn, inline=1, fontsize=10)
         
     cc= matplotlib.colors.ColorConverter()
     r,g,b = cc.to_rgb(SET.colors['bg_elem'])
