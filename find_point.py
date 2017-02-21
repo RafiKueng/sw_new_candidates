@@ -10,6 +10,11 @@ import re
 
 fname = "004741.cfg"
 
+class FoundNoMaxError(Exception):
+    pass
+class FoundManyMaxError(Exception):
+    pass
+
 def getMaxDistCFG(fname):
     with open(fname) as f:
         lines = f.readlines()
@@ -56,6 +61,11 @@ def getMaxDistImg(fname = fname, im=None):
     
     dists = []
     maxposes = [_ for _ in points if _[0]=='max']
+
+    if len(maxposes) < 1:
+          raise FoundNoMaxError("Found no max")
+    if len(maxposes) > 1:
+          raise FoundManyMaxError("Found many max")
     
     try:
         for pos in points:
@@ -77,6 +87,8 @@ if __name__ == "__main__":
     #fname1 = "ASW0001c3j_5R6UYQZUTI_input.png"
     fname_cfg = "004741.cfg"
     fname_img = "ASW0004dv8_004741_input.png"
+    
+    
     
     print getMaxDistImg(fname_img)[0]
     print getMaxDistCFG(fname_cfg)[0]

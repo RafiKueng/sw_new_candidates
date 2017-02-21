@@ -32,7 +32,8 @@ import parse_candidates as PACA
 MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
-#DBG =True
+DBG = True
+DBG_swid = "SW42"
 
 itemname = "arrival_spaghetti"
 fpath = join(S['output_dir'], itemname)
@@ -147,6 +148,9 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     print swid, asw, mid
     
+    if DBG and not swid==DBG_swid:
+        continue
+
     if not mid:
         print "   no mid, skipping"
         continue
@@ -165,7 +169,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
 
-    #print "   "," | ".join(['%3.3f'%_ for _ in [px_scf, aa_scf, r_rcf, m_rcf, k_rcf]])
+    print "   "," | ".join(['%3.3f'%_ for _ in [px_scf, aa_scf, r_rcf, m_rcf, k_rcf]])
 
     #print m['source_indices']
     #print m['arrival_contour_levels']
@@ -183,13 +187,13 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.grid()
     
     tmp1 = SET.add_inline_label(ax, swid, color="bright")
-    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$", length=1, color="bright")
+    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$", length=1, height=0.1, color="bright")
     
     plt.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])
     
     if DBG:
-        plt.show()
+        #plt.show()
         break
     plt.close()
     

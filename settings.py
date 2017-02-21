@@ -252,7 +252,7 @@ styles = {
     },
     
     'inplot_caption_text_bright':{
-        'size'     : 42,
+        'size'     : 36,
         'color'    : 'black',
         'backgroundcolor': "none",
         'family': 'sans-serif',
@@ -261,14 +261,14 @@ styles = {
                   'color':'white',
 #                  'facecolor':'none',
 #                  'edgecolor':'none',
-                  'pad':10,
+                  'pad':7,
                   'alpha':0.75,
                   'zorder': 99,
                   },
     },
 
     'inplot_caption_text_dark':{
-        'size'     : 42,
+        'size'     : 36,
         'color'    : 'white',
         'backgroundcolor': "none",
         'family': 'sans-serif',
@@ -277,7 +277,7 @@ styles = {
                   'color':'black',
 #                  'facecolor':'none',
 #                  'edgecolor':'none',
-                  'pad':10,
+                  'pad':7,
                   'alpha':0.75,
                   'zorder': 99,
                   },
@@ -522,33 +522,85 @@ def add_inline_label(ax, t, loc=2, color="bright"):
     
     
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredSizeBar
+import matplotlib.colors as colors
 
-def add_size_bar(ax, text, length=1, loc=8, color="bright"):
-#    fp = styles['inplot_caption_text_'+color]
-#    fontprop = mpl.font_manager.FontProperties(**fp)
-    if color=="bright":
-        col = "black"
-    elif color=="dark":
-        col = "white"
-    else:
-        col = color
+def add_size_bar(ax, text, length=1,
+                 height=None,
+                 heightIsInPx = False,
+                 loc=4,
+                 theme = "bright",
+                 barcol = "white", txtcol = "white", bgcol = "black", # theme overrides color
+                 alpha = 0.5,
+                 pad = 0.5,       # padding around fraction of font size
+                 borderpad = 1,   # distance to the border (fraction of font size)
+                 sep = 5,         # separation between scalebar and number (in points)
+                 frameon=False    # draw background
+                 ):
+
+    try:
+        if theme=="bright":
+            barcol = "black"
+            txtcol = "black"
+            bgcol = "white"
+        elif theme=="dark":
+            barcol = "white"
+            txtcol = "white"
+            bgcol = "black"
+        else:
+            barcol = "black"
+            txtcol = "black"
+            bgcol = "white"
+            
+    except NameError:
+        pass
         
+    if height and heightIsInPx:
+        scale = 1
+        height = height * scale
+        
+    kw = {
+        'loc'          : loc,
+        'pad': pad, 'borderpad': borderpad, 'sep': sep,
+        'prop': mpl.font_manager.FontProperties(
+                    size=16,
+                ),
+#        'color'        : txtcol,
+        'frameon'      : frameon
+    }
+    
+    if height:
+        kw.update({'size_vertical': height})
+
+    
     asb = AnchoredSizeBar(ax.transData,
                           length,
                           text,
-#                          size_vertical=length*0.1,
-                          loc=4,
-                          pad=0.1, borderpad=0.5, sep=5,
-                          prop=mpl.font_manager.FontProperties(
-                               size=12,
-                               ),
-#                          prop = fontprop,
-                          color=col,
-                          frameon=False
-                          )
-#    from matplotlib.offsetbox import TextArea
-#    ta = TextArea("string", textprops=fp)
-#    asb.txt_label = ta
+                          **kw)
+
+    
+    # color the actual scalebar (override)
+    rect = asb.size_bar.get_children()[0]
+    rect.set_fill(True)
+    rect.set_facecolor(barcol)
+    rect.set_edgecolor(barcol)
+    
+    # modify text
+    txtarea = asb.txt_label
+    txtelem = txtarea.get_children()[0]
+    txtelem.set_color(txtcol)
+    #txtelem.set_fontsize()
+    
+    # color the background
+    asb._drawFrame = frameon
+    col = bgcol
+    alp = alpha
+    col = tuple(list(colors.to_rgba(col))[:3] + [alp,])
+       
+    asb.patch.set_facecolor(col)
+    asb.patch.set_edgecolor(tuple(list(colors.to_rgba(col))[:3] + [0,])) # increase alpha for border around
+    
+
     ax.add_artist(asb)
+
     return asb
 

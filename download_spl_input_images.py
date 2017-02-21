@@ -35,6 +35,7 @@ MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
 #DBG = True
+DBG_swid = "SW42"
 
 #imgdir = join(S['output_dir'],'spl_images')
 
@@ -42,6 +43,12 @@ itemname = "spl-input"
 fpath = join(S['output_dir'], itemname)
 #filename = "{_[swid]}_{_[asw]}_{_[mid]}_%s." + SET.imgext
 filename = SET.filename_base % itemname
+
+
+OVERRIDE = {
+    'SW57': (83.0, np.sqrt(-0.56267**2+1.4179**2))  # meassured from saddle to saddle point
+    }
+
 
 
 ### MAIN #####################################################################
@@ -83,6 +90,9 @@ def get_images(data):
         swid = _.get('swid', "SWXX")
         typ = _['type']
         
+        if DBG and not swid==DBG_swid:
+            continue
+        
         print "(%3.0f%%) getting %-10s images for mid:%-10s asw:%s swid:%s)" % (100.0*i/n_models, img, mid, asw, swid)
         
 #        imgdir  = fpath % img_name
@@ -108,23 +118,24 @@ def get_images(data):
         tmp_path = join(fpath, "_tmp_" + filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
 
         if isfile(tmp_path) and not DBG:
-            print 'SKIPPING (already present)'
-            continue
-        
-        r = rq.get(url, stream=True)
-        
-        if r.status_code >= 300: # reuqests takes care of redirects!
-            print 'ERROR:', r.status_code
-            continue
+            print 'SKIPPING DL (already present)'
 
-        if 'content-type' in r.headers and 'json' in r.headers['content-type']:
-            print 'ERROR: no valid png file (json)' 
-            continue
-
-        with open(tmp_path, 'w') as f:
-            for chunk in r.iter_content(1024*4):
-                f.write(chunk)
-        print 'written,',
+        else:
+        
+            r = rq.get(url, stream=True)
+            
+            if r.status_code >= 300: # reuqests takes care of redirects!
+                print 'ERROR:', r.status_code
+                continue
+    
+            if 'content-type' in r.headers and 'json' in r.headers['content-type']:
+                print 'ERROR: no valid png file (json)' 
+                continue
+    
+            with open(tmp_path, 'w') as f:
+                for chunk in r.iter_content(1024*4):
+                    f.write(chunk)
+            print 'downloaded,',
         
 #            # cut the image to square, overwriting the orginal
 #            i1 = Image.open(path)
@@ -141,12 +152,26 @@ def get_images(data):
 
         # calculate the scaling
         cfg_maxdist = np.max([ np.abs(x['pos']) for x in _['images']])
-        img_maxdist = find_point.getMaxDistImg(im=im)
+        try:
+            img_maxdist = find_point.getMaxDistImg(im=im)
+        except find_point.FoundNoMaxError:
+            print "found no max",
+            
+            if swid in OVERRIDE.keys():
+                print " OVERRIDING"
+                img_maxdist = [OVERRIDE[swid][0],]
+                cfg_maxdist = OVERRIDE[swid][1]
+            else:
+                print " skipping"
+                continue
         
         if DBG:
             print "\nmax dists"
-            print cfg_maxdist, img_maxdist, _['pixel_scale_fact']
-        cfg_maxdist *= _['pixel_scale_fact']
+            print "  cfg:", cfg_maxdist
+            print "  img:", img_maxdist
+            print "  (scalefact:", _['pixel_scale_fact'],")"
+            print "  (dis_fact :", _['dis_fact'],")"
+        cfg_maxdist *= _['pixel_scale_fact'] * _['dis_fact']
         
         # get pixel length of one arcsec
         arcsec_in_px = img_maxdist[0] / cfg_maxdist
@@ -161,15 +186,31 @@ def get_images(data):
         ax.tick_params(**STY['no_labels'])
         
         SET.add_inline_label(ax, swid, color="dark")
-        SET.add_size_bar(ax, r"1$^{\prime}$", length=arcsec_in_px, color="dark")
+        
+        asb = SET.add_size_bar(
+                    ax,
+                    r"1$^{\prime}$",
+                    length=arcsec_in_px,
+                    height=10,
+                    heightIsInPx = False,
+                    loc=4,
+                    theme="dark",
+                    alpha = 0.5,
+                    pad = 0.5,       # padding around fraction of font size
+                    borderpad = 1,   # distance to the border (fraction of font size)
+                    sep = 5,         # separation between scalebar and number (in points)
+                    frameon=True
+                    )
         
         plt.tight_layout()
         fig.savefig(imgname, **STY['figure_save'])
         
         if DBG:
             plt.show()
+            return asb
             break
             
+        plt.close(fig)
         print 'done'
             
         #if DBG: break
@@ -180,7 +221,7 @@ def get_images(data):
 
 I = SET.getI(__file__)
 SET.print_first_line(I)
-tmp = main()
+asb = main()
 SET.print_last_line(I)
 
 

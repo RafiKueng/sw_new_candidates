@@ -67,6 +67,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print "   no mid, skipping"
         continue
     
+    if not swid=="SW09": continue
+    
     #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
@@ -105,8 +107,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         # kw['vmin'] = vmin
     #if vmax is not None:
         # kw['vmax'] = vmax
-    zoomlvl = 3
-    grid = scipy.ndimage.zoom(grid_org, zoomlvl, order=3)
+    zoomlvl = 5
+    grid = scipy.ndimage.zoom(grid_org, zoomlvl, order=0)
     #mask = scipy.ndimage.zoom(grid_org==0, zoomlvl, order=0)
     mask = grid_org==0  # actually there is no need to zoom the mask if 
                         # we use imshow with extent
@@ -152,7 +154,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     img[:, :, 1] = g
     img[:, :, 2] = b
     img[:, :, 3] = mask # alpha channel
-    ax.imshow(img, extent=[-R,R,-R,R], interpolation='nearest', zorder=2)
+    #ax.imshow(img, extent=[-R,R,-R,R], interpolation='nearest', zorder=2)
 
         
     ax.set_aspect('equal')
