@@ -282,6 +282,15 @@ styles = {
                   'zorder': 99,
                   },
     },
+                
+    'scalebar' : {
+        'loc'      : 4,
+        'alpha'    : 0.75,
+        'pad'      : 0.5,   # padding around fraction of font size
+        'borderpad': 1,     # distance to the border (fraction of font size)
+        'sep'      : 5,     # separation between scalebar and number (in points)
+        'frameon'  : True   # draw background
+    },
 
 # ax.tick_params
 
@@ -526,7 +535,7 @@ import matplotlib.colors as colors
 
 def add_size_bar(ax, text, length=1,
                  height=None,
-                 heightIsInPx = False,
+                 heightIsInPx = True,   # the height is given in arb unit, not plotting units
                  loc=4,
                  theme = "bright",
                  barcol = "white", txtcol = "white", bgcol = "black", # theme overrides color
@@ -572,7 +581,13 @@ def add_size_bar(ax, text, length=1,
         kw.update({'size_vertical': height})
 
     
-    asb = AnchoredSizeBar(ax.transData,
+    if heightIsInPx:
+        trans = transforms.blended_transform_factory(
+                ax.transData, ax.transAxes)
+    else:
+        trans = ax.transData
+
+    asb = AnchoredSizeBar(trans,
                           length,
                           text,
                           **kw)

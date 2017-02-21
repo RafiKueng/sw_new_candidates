@@ -193,13 +193,8 @@ def get_images(data):
                     length=arcsec_in_px,
                     height=10,
                     heightIsInPx = False,
-                    loc=4,
                     theme="dark",
-                    alpha = 0.5,
-                    pad = 0.5,       # padding around fraction of font size
-                    borderpad = 1,   # distance to the border (fraction of font size)
-                    sep = 5,         # separation between scalebar and number (in points)
-                    frameon=True
+                    **STY['scalebar']
                     )
         
         plt.tight_layout()

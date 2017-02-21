@@ -32,7 +32,7 @@ import parse_candidates as PACA
 MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
-DBG = True
+#DBG = True
 DBG_swid = "SW42"
 
 itemname = "arrival_spaghetti"
@@ -187,13 +187,19 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.grid()
     
     tmp1 = SET.add_inline_label(ax, swid, color="bright")
-    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$", length=1, height=0.1, color="bright")
+    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$",
+                            length=1,
+                            height=0.01,
+                            heightIsInPx = True,
+                            theme = "bright",
+                            **STY['scalebar']
+                            )
     
     plt.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])
     
     if DBG:
-        #plt.show()
+        plt.show()
         break
     plt.close()
     
