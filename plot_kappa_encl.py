@@ -30,6 +30,7 @@ import parse_candidates as PACA
 
 DBG = SET.DEBUG
 #DBG = True
+DBG_swid = "SW42"
 
 MODELS, MAPS = CRDA.get_dataset_data()
 
@@ -89,6 +90,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print "   no mid, skipping"
         continue
     
+    if DBG and not DBG_swid==swid: continue
+    
     #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
@@ -113,7 +116,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 #        print "   no redshifts given, skipping"
 #        continue
 
-    rr = m['R']['data']         * px_scf * r_rcf
+    rr = m['R']['data']         * px_scf # * r_rcf
     da = m['kappa(<R)']['data'] * k_rcf
     mn = m['kappa(<R)']['min']  * k_rcf
     mx = m['kappa(<R)']['max']  * k_rcf
@@ -123,7 +126,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ymin = np.min(mn)
     ymax = np.max(mx)
 
-    fig = plt.figure(**STY['figure_sq'])
+    fig = plt.figure(**STY['figure_sq_small'])
     ax = fig.add_subplot(1,1,1)
 
     # the x coords of this transformation are data, and the
@@ -212,6 +215,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
     ax.tick_params(**STY['ticks_bottom_left'])
     ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['big_minorticks'])
     ax.tick_params(**STY['labels_bottom_left'])
 
 
@@ -234,13 +238,13 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 
     SET.add_inline_label(ax, swid, loc=1 , color='bright')
 
-    plt.tight_layout()
+    fig.tight_layout()
     
-    plt.savefig(imgname, **STY['figure_save'])
+    fig.savefig(imgname, **STY['figure_save'])
 
     if DBG:
         plt.show()
         break
     
-    plt.close()
+    plt.close(fig)
 

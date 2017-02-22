@@ -32,7 +32,7 @@ import parse_candidates as PACA
 MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
-DBG = True
+#DBG = True
 DBG_swid = "SW42"
 
 itemname = "arrival_spaghetti"
@@ -53,7 +53,7 @@ def arrival_plot(model, ax):
     px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
     #aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
     # RedshiftCorrectionFactor
-    r_rcf  = m['dis_fact'] or 1      # corrects lengths for wrong redshifts
+    #r_rcf  = m['dis_fact'] or 1      # corrects lengths for wrong redshifts
     #m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     #k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
 
@@ -176,7 +176,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     #print np.average(m['arrival_grid'])
     #print m['mapextend']
 
-    fig = plt.figure(**STY['figure_sq'])
+    fig = plt.figure(**STY['figure_sq_small'])
     ax = fig.add_subplot(111)
     
     arrival_plot(m, ax)
@@ -187,7 +187,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     #ax.grid()
     
     tmp1 = SET.add_inline_label(ax, swid, color="bright")
-    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$",
+    tmp2 = SET.add_size_bar(ax, r"1$^{\prime\prime}$",
                             length=1,
                             height=0.01,
                             heightIsInPx = True,

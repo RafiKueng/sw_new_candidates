@@ -35,7 +35,8 @@ from stelmass.angdiam import kappa_factor
 
 
 DBG = SET.DEBUG
-# DBG= True
+#DBG= True
+DBG_mid = 7025
 
 fpath     = join(S['output_dir'], 'hires_comparison')
 filename = "{_[asw]}_{_[mid]}_{_[mode]}_hires_comparison." + SET.imgext
@@ -171,6 +172,9 @@ for coll in DATA.values():
             print "   no mid, skipping"
             continue
         
+        if DBG and not mid==DBG_mid: continue
+
+        
         #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
         imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid, 'mode':mode }))
         
@@ -207,7 +211,7 @@ for coll in DATA.values():
         ymin = np.min(mn)
         ymax = np.max(mx)
     
-        fig = plt.figure(**STY['figure_rect'])
+        fig = plt.figure(**STY['figure_rect_med'])
         ax = fig.add_subplot(1,1,1)
     
         # the x coords of this transformation are data, and the
@@ -303,7 +307,7 @@ for coll in DATA.values():
         ax.set_ylim(bottom=0.51, top=7.9)
         ax.set_yscale('log')    
         
-        ddxx = np.max(rr) * 0.05
+        ddxx = np.max(rr) * 0.05 / 2.0
         ax.set_xlim(left=-ddxx, right=np.max(rr)+ddxx)
         
     
@@ -317,12 +321,13 @@ for coll in DATA.values():
         ax.yaxis.set_minor_formatter(formatter)
         
         
-        SET.add_inline_label(ax, asw, loc=1 , color='bright')
+        SET.add_inline_label(ax, asw, loc=7 , color='bright')
 
     
         plt.tight_layout()
         
         if DBG:
+            plt.savefig(imgname, **STY['figure_save'])
             plt.show()
             break
         
@@ -330,8 +335,7 @@ for coll in DATA.values():
         
         plt.close()
 
-    if DBG:
-        break
+#    if DBG: break
 
 
 

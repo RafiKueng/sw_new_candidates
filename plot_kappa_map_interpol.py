@@ -35,7 +35,8 @@ MODELS, MAPS = CRDA.get_dataset_data()
 
 
 DBG = SET.DEBUG
-DBG = True
+#DBG = True
+DBG_swid=02
 
 
 fpath = join(S['output_dir'], "kappa_map_interpol")
@@ -67,7 +68,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print "   no mid, skipping"
         continue
     
-    if DBG and not swid=="SW05": continue
+    if DBG and not swid==DBG_swid: continue
     
     #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
@@ -76,8 +77,6 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     aswobj = PACA.DATA[asw]
 
 
-    delta  = 0.2  # contour level spacing in log space
-    #clevels = 20
     vmin = None
     vmax = 1
 
@@ -91,7 +90,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
  
 
     # SET UP DATA
-    R = m['mapextend'] * px_scf #* r_rcf
+    R = m['mapextend'] * px_scf
     extent = np.array([-R,R,-R,R])
 
     # prepare data
@@ -103,12 +102,11 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         grid_org += 10**vmin
     else:
         vmin = np.log10(np.amin(m['kappa'][w]))
-        #print 'min?', np.amin(data['kappa'] != 0)
-        # kw['vmin'] = vmin
-    #if vmax is not None:
-        # kw['vmax'] = vmax
+
+    # upscale and interpolate spline order
     zoomlvl = 3
-    grid = scipy.ndimage.zoom(grid_org, zoomlvl, order=0)
+    order   = 0
+    grid = scipy.ndimage.zoom(grid_org, zoomlvl, order=order)
     #mask = scipy.ndimage.zoom(grid_org==0, zoomlvl, order=0)
     mask = grid_org==0  # actually there is no need to zoom the mask if 
                         # we use imshow with extent
@@ -118,30 +116,44 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
     kw = {
         'extent': [-R,R,-R,R],
-        'vmin': vmin,
-        'vmax': vmax
+#        'vmin': vmin,
+#        'vmax': vmax
     }
     matplotlib.rcParams['contour.negative_linestyle'] = 'solid'
     
-    ma = np.nanmax(grid_log)
-    mi = np.nanmin(grid_log)
-    ab = ma if ma>-mi else -mi
-    clev_up = np.arange(0, ab+1e-10, delta)
-    clev_dn = -clev_up[:0:-1]
-    clevels = np.concatenate((clev_dn, clev_up))
-#    clev_up = 10**clev_up
-#    clev_dn = 10**clev_dn
+#    ma = np.nanmax(grid_log)
+#    mi = np.nanmin(grid_log)
+#    ab = ma if ma>-mi else -mi
+
+
+    delta     = 0.2
+    ncontours = 3    # there will actually be (n-1)*2 regions
+    clev_up = np.arange(delta, ncontours*delta, delta)
+    clevels = np.concatenate((sorted(-clev_up), [0,], clev_up))
 
 
     # plot
-    fig = plt.figure(**STY['figure_sq'])
+    fig = plt.figure(**STY['figure_sq_small'])
     ax = fig.add_subplot(1,1,1)
 
 
-    kw.update(STY['fg_contour'])
-    Cup = ax.contour(grid_log, levels=clev_up, **kw)
-    kw.update(STY['bg_contour'])
-    Cdn = ax.contour(grid_log, levels=clev_dn, **kw)
+#    kw.update(STY['fg_contour'])
+#    Cup = ax.contour(grid_log, levels=clev_up, **kw)
+#    kw.update(STY['bg_contour'])
+#    Cdn = ax.contour(grid_log, levels=clev_dn, **kw)
+    kw.update(STY['filled_contours'])
+    #grid_log[grid_log<-0.6] = -0.6
+
+    Cdn = ax.contourf(grid_log, levels=clevels, **kw)
+#    ax.imshow(grid_log,
+#              extent=[-R,R,-R,R],
+#              interpolation='nearest',
+#              cmap = "coolwarm",
+#              vmin = clevels[0], vmax=clevels[-1],
+#              )
+    
+    kw.update(STY['main_contour'])
+    Cdn = ax.contour(grid_log, levels=[0,], **kw)
     
 #    if False:
 #        ax.clabel(Cup, inline=1, fontsize=10)
@@ -162,7 +174,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     ax.tick_params(**STY['no_ticks'])
     ax.tick_params(**STY['no_labels'])
     
-    ax.grid()
+    #ax.grid()
 
     SET.add_inline_label(ax, swid, color='bright')
     tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$",

@@ -26,7 +26,7 @@ from moster import moster
 
 
 DBG = SET.DEBUG
-#DBG = False
+#DBG = True
 
 
 path     = join(S['output_dir'], 'mlens_vs_mstel_one')
@@ -135,7 +135,7 @@ if os.path.exists(ffn) and not overwrite:
     #continue
 
 # setup plot
-fig = plt.figure(**STY['figure_sq'])
+fig = plt.figure(**STY['figure_sq_big'])
 ax = fig.add_subplot(111)
 
 # plot range for additional stuff
@@ -221,7 +221,7 @@ for i, _ in enumerate(data.items()):
                 va='center',
                 #xytext=(3,1),
                 #textcoords='offset points',
-                size="x-small",
+                #size="x-small",
                 zorder=100)
     
 #plt.title("Stellar vs Lensing Mass")
@@ -229,7 +229,7 @@ for i, _ in enumerate(data.items()):
 #ax.set_xlabel('Stellar Mass $M_{stel}$ [ $\log ( 10^{-10} M_{\odot} )$ ]', **STY['label'])
 #ax.set_ylabel('Lensing Mass $M_{lens}$ [ $\log ( 10^{-10} M_{\odot} )$ ]', **STY['label'])
 ax.set_xlabel('Stellar Mass $M_{stel}$ [ $10^{10} M_{\odot}$ ]', **STY['label'])
-ax.set_ylabel('Lensing Mass $M_{lens}$ [ $10^{10} M_{\odot}$ ]', **STY['label'])
+ax.set_ylabel('Lensing Mass $M_{lens}$ [ $10^{12} M_{\odot}$ ]', **STY['label'])
 
 #axis limits
 ax.set_xlim(xmin=2.5e8, xmax=9.5e11)
@@ -240,11 +240,13 @@ ax.set_yscale("log", nonposy='clip')
 
 
 # recale the ticks
-scale = 10**10
+scalex = 10**10
+scaley = 10**12
 #ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(np.log10(x/scale)))
-ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scale))
-ax.xaxis.set_major_formatter(ticks_rescaled)
-ax.yaxis.set_major_formatter(ticks_rescaled)
+ticks_rescaledx = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scalex))
+ticks_rescaledy = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scaley))
+ax.xaxis.set_major_formatter(ticks_rescaledx)
+ax.yaxis.set_major_formatter(ticks_rescaledy)
 
 
 ax.tick_params(**STY['big_majorticks'])

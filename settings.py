@@ -56,9 +56,9 @@ colors = { # http://colorbrewer2.org/
     'bg_area'  : "lightgrey",
     'bg_area2'  : "darkgrey",
 
-    'min': "red",
-    'sad': "dodgerblue",
-    'max': "green"
+    'min': "dodgerblue",
+    'sad': "green",
+    'max': "red"
 }
 
 sizes = { # define them relative
@@ -74,18 +74,48 @@ lw_bg = 1.0
 #misc settings
 dpi = 150
 
+cm = 0.393701  # cm / inch, so write values in
+               # cm like:  5 * CM
+cm *= 3   # add a general scale factor (to minimize the effect of borders ect..)
 
 styles = {
 
-    'figure_sq' : {
-        'figsize' : (6,6),
+#    'figure_sq' : {
+#        'figsize' : (6,6),
+#        'dpi'     : dpi,
+#    },
+#
+#    'figure_rect' : {
+#        'figsize' : (8,5),
+#        'dpi'     : dpi,
+#    },
+
+        
+    # define figure sizes in cm
+    # small: 3 per pagewidth
+    # med: two per pagewidth (one columnwidth)
+    # big: full pagewidth size plot
+    
+    'figure_sq_small' : {
+        'figsize' : (5.5*cm, 5.5*cm),
         'dpi'     : dpi,
     },
 
-    'figure_rect' : {
-        'figsize' : (8,5),
+    'figure_sq_med' : {
+        'figsize' : (8*cm, 8*cm),
         'dpi'     : dpi,
     },
+
+    'figure_sq_big' : {
+        'figsize' : (15*cm, 15*cm),
+        'dpi'     : dpi,
+    },
+
+    'figure_rect_med' : {
+        'figsize' : (8*cm, 5.5*cm),
+        'dpi'     : dpi,
+    },
+
     
     'figure_save' : {
         'dpi'       : dpi,
@@ -196,9 +226,28 @@ styles = {
         'aspect'        : 'equal',
         'origin'        : 'upper',
         'antialiased'   : True,
-        'linestyles'    : "solid", #[(5,(3,3)),],
+        'linestyles'    : [(5,(3,3)),],
     },
 
+    'main_contour': {
+        'linewidth'     : lw_fg,
+        'colors'        : 'black',
+        'cmap'          : None,
+        'interpolation' : 'nearest',
+        'aspect'        : 'equal',
+        'origin'        : 'upper',
+        'antialiased'   : True,
+        'linestyles'    : [(5,(3,3)),],
+    },
+
+    'filled_contours': {
+        'cmap'          : "coolwarm",
+        'interpolation' : 'nearest',
+        'aspect'        : 'equal',
+        'origin'        : 'upper',
+        'antialiased'   : True,
+        'extend'        : 'both',
+    },
 
     
     
@@ -327,8 +376,8 @@ styles = {
     'big_minorticks' : {
         'axis': 'both',
         'which' : 'minor',
-        'width':  3 * 0.5,
-        'length': 6 * 0.5,
+        'width':  3 ,# * 0.5,
+        'length': 6 ,#* 0.5,
 #        'labelsize': sizes['small'],
 #        'labelbottom' : False,
 #        'labeltop': False,
@@ -373,8 +422,8 @@ styles = {
 #dy = 0.066  # length of the line 
 #oy = 0.015   # offset between lines
 
-iypos = 0.95 # general y postion of the image marker line
-dy = 0.030  # length of the line 
+iypos = 0.90 # general y postion of the image marker line
+dy = 0.060  # length of the line 
 oy = 0.000   # vertical offset between lines / types of points
 
 

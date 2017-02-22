@@ -171,13 +171,13 @@ def get_images(data):
             print "  img:", img_maxdist
             print "  (scalefact:", _['pixel_scale_fact'],")"
             print "  (dis_fact :", _['dis_fact'],")"
-        cfg_maxdist *= _['pixel_scale_fact'] * _['dis_fact']
+        cfg_maxdist *= _['pixel_scale_fact'] #* _['dis_fact']
         
         # get pixel length of one arcsec
         arcsec_in_px = img_maxdist[0] / cfg_maxdist
         
         # plot using mpl for same style
-        fig = plt.figure(**STY['figure_sq'])
+        fig = plt.figure(**STY['figure_sq_small'])
         ax = fig.add_subplot(111)
         
         ax.imshow(im[:,100:700,:])
@@ -189,9 +189,9 @@ def get_images(data):
         
         asb = SET.add_size_bar(
                     ax,
-                    r"1$^{\prime}$",
+                    r"1$^{\prime\prime}$",
                     length=arcsec_in_px,
-                    height=10,
+                    height=8,
                     heightIsInPx = False,
                     theme="dark",
                     **STY['scalebar']

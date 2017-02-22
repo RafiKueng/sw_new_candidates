@@ -32,6 +32,7 @@ import get_parameterised_form as PARA
 
 
 DBG = SET.DEBUG
+DBG = True
 
 MODELS, MAPS = CRDA.get_dataset_data()
 
@@ -110,7 +111,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
 
-    rr = m['R']['data'] * px_scf * r_rcf
+    rr = m['R']['data'] * px_scf # * r_rcf
     da = m['kappa(<R)']['data'] * k_rcf
     
     rE = getEinsteinR(rr, da)
@@ -122,12 +123,13 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     if mid in PARA.DATA.keys():
         PNTS['x'].append(rE)
         PNTS['y'].append(PARA.DATA[mid]['eR'])
+        print "  %5.3f %5.3f" % (rE, PARA.DATA[mid]['eR'])
 
 
 x = np.array(PNTS['x'])
 y = np.array(PNTS['y'])
 
-fig = plt.figure(**STY['figure_sq'])
+fig = plt.figure(**STY['figure_rect_med'])
 ax = fig.add_subplot(1,1,1)
 
 kw = dict(STY['fg_marker1'])
@@ -143,8 +145,11 @@ mx = max([np.max(x),np.max(y)])
 
 ax.plot([mi, mx], [mi, mx] , **STY['bg_line'])
 
-ax.set_xlabel('$r_E$ model', **STY['label'])
-ax.set_ylabel('$r_E$ parametr', **STY['label'])
+ax.set_xlabel('$r_E$ modeled [arcsec]', **STY['label'])
+ax.set_ylabel('$r_E$ parameterized [arcsec]', **STY['label'])
+
+ax.set_ylim([0,np.ceil(np.max(y))])
+ax.set_aspect('equal')
 
 plt.tight_layout()
 fig.savefig(fnn, **STY['figure_save'])
