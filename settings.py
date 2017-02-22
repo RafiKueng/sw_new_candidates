@@ -196,7 +196,7 @@ styles = {
         'aspect'        : 'equal',
         'origin'        : 'upper',
         'antialiased'   : True,
-        'linestyles'    : [(5,(3,3)),],
+        'linestyles'    : "solid", #[(5,(3,3)),],
     },
 
 

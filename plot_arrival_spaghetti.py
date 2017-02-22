@@ -32,7 +32,7 @@ import parse_candidates as PACA
 MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
-#DBG = True
+DBG = True
 DBG_swid = "SW42"
 
 itemname = "arrival_spaghetti"
@@ -60,7 +60,7 @@ def arrival_plot(model, ax):
     source_indices =         model['source_indices']
     arrival_contour_levels = model['arrival_contour_levels']
     arrival_grid =           model['arrival_grid']
-    R =                      model['mapextend']     * px_scf * r_rcf
+    R =                      model['mapextend']     * px_scf #* r_rcf
 
 
     def plot_one(src_index,g,lev,kw):
@@ -115,7 +115,7 @@ def overlay_input_points(model, ax):
     r_rcf  = m['dis_fact'] or 1     # corrects lengths for wrong redshifts
     #m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     #k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
-    f = px_scf * r_rcf
+    f = px_scf #* r_rcf
 
     source_images = model['source_images']
     extra_potentials = model['extra_potentials']
@@ -182,9 +182,9 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     arrival_plot(m, ax)
     overlay_input_points(m, ax)
     
-    ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['no_ticks'])
     ax.tick_params(**STY['no_labels'])
-    ax.grid()
+    #ax.grid()
     
     tmp1 = SET.add_inline_label(ax, swid, color="bright")
     tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$",

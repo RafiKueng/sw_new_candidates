@@ -67,7 +67,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         print "   no mid, skipping"
         continue
     
-    if not swid=="SW09": continue
+    if DBG and not swid=="SW05": continue
     
     #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
     imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
@@ -91,7 +91,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
  
 
     # SET UP DATA
-    R = m['mapextend'] * px_scf * r_rcf
+    R = m['mapextend'] * px_scf #* r_rcf
     extent = np.array([-R,R,-R,R])
 
     # prepare data
@@ -107,7 +107,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         # kw['vmin'] = vmin
     #if vmax is not None:
         # kw['vmax'] = vmax
-    zoomlvl = 5
+    zoomlvl = 3
     grid = scipy.ndimage.zoom(grid_org, zoomlvl, order=0)
     #mask = scipy.ndimage.zoom(grid_org==0, zoomlvl, order=0)
     mask = grid_org==0  # actually there is no need to zoom the mask if 
@@ -123,10 +123,10 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     }
     matplotlib.rcParams['contour.negative_linestyle'] = 'solid'
     
-    ma = np.nanmax(grid)
-    mi = np.nanmin(grid)
+    ma = np.nanmax(grid_log)
+    mi = np.nanmin(grid_log)
     ab = ma if ma>-mi else -mi
-    clev_up = np.arange(0,ab+1e-10,delta)
+    clev_up = np.arange(0, ab+1e-10, delta)
     clev_dn = -clev_up[:0:-1]
     clevels = np.concatenate((clev_dn, clev_up))
 #    clev_up = 10**clev_up
@@ -148,7 +148,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
 #        ax.clabel(Cdn, inline=1, fontsize=10)
         
     cc= matplotlib.colors.ColorConverter()
-    r,g,b = cc.to_rgb(SET.colors['bg_elem'])
+    r,g,b = cc.to_rgb("gray")
     img = np.zeros(mask.shape + (4,))
     img[:, :, 0] = r
     img[:, :, 1] = g
@@ -159,13 +159,19 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
         
     ax.set_aspect('equal')
     
-    ax.tick_params(**STY['big_majorticks'])
+    ax.tick_params(**STY['no_ticks'])
     ax.tick_params(**STY['no_labels'])
     
     ax.grid()
 
     SET.add_inline_label(ax, swid, color='bright')
-    SET.add_size_bar(ax, r"1$^{\prime}$", length=1, color="bright")
+    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$",
+                            length=1,
+                            height=0.01,
+                            heightIsInPx = True,
+                            theme = "bright",
+                            **STY['scalebar']
+                            )
     
     fig.tight_layout()
     fig.savefig(imgname, **STY['figure_save'])
