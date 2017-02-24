@@ -16,7 +16,13 @@ SET.set_mpl_rc()
 STY = SET.styles
 S = SET.settings
 
+auto = False
+
 DBG = SET.DEBUG
+#DBG = True
+DBG_swid = "SW05"
+auto = True
+
 
 import numpy as np
 import scipy as sp
@@ -419,6 +425,12 @@ class MasksHandler(object):
             self.cxl.set_xdata(xy[0])
             self.cyl.set_ydata(xy[1])
             
+        self.zoomH.c.shift_to(xy[0], xy[1])
+        
+        self.ax.set_xlim(self.zoomH.c.xlim)
+        self.ax.set_ylim(self.zoomH.c.ylim_r)
+        
+        self.zoomH.update()
         self.selfupdate()
         
         
@@ -535,7 +547,7 @@ class RectangleZoomSelector(object):
             drawtype='box',
             minspanx=None,
             minspany=None,
-            useblit=True,
+            useblit=False,
             #lineprops=None,
             #rectprops=None,
             spancoords='data',
@@ -559,14 +571,28 @@ class RectangleZoomSelector(object):
         self.ax1.figure.canvas.draw()
         
     def set_zoom(self, xy0, xy1):
-        self.c.x0 = xy0[0]
-        self.c.y0 = xy0[1]
-        self.c.x1 = xy1[0]
-        self.c.y1 = xy1[1]
+        log.debug("set zoom")
+        p0x = int(np.floor(xy0[0]))
+        p0y = int(np.floor(xy0[1]))
+        p1x = int(np.ceil(xy1[0]))
+        p1y = int(np.ceil(xy1[1]))
+        dx = p1x-p0x
+        dy = p1y-p0y
+        if abs(dx)>abs(dy):
+            p1y = p0y + dx
+        else:
+            p1x = p0x + dy
+        self.c.x0 = p0x #xy0[0]
+        self.c.y0 = p0y #xy0[1]
+        self.c.x1 = p1x #xy1[0]
+        self.c.y1 = p1y #xy1[1]
     
         self.ax2.set_xlim(self.c.xlim)
         self.ax2.set_ylim(self.c.ylim_r)
         self.update()
+        
+        log.debug("set zoom: p0:%s, p1:%s - dxy: %i %i -  p0xy: %i, %i - p1xy: %i, %i", xy0, xy1, dx, dy, p0x, p0y, p1x, p1y)
+        
         
 
 
@@ -830,7 +856,10 @@ nn=len(swidAswMid)
 for ii, _ in enumerate(swidAswMid):
     swid, asw, mid = _
     
-    log.info("working on %s %s %s ( %03i/%03i )", swid, asw, mid, ii, nn)
+    if DBG and not DBG_swid==swid:
+        continue
+    
+    log.info("\n\n\nworking on %s %s %s ( %03i/%03i )", swid, asw, mid, ii, nn)
 
     ffn = os.path.join(path, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
     
@@ -912,9 +941,15 @@ for ii, _ in enumerate(swidAswMid):
         
     
     #fig.show()
-    
-    plt.show()
-    plt.close()
+    if auto and os.path.isfile(fn):
+        roiH.update()
+        analH.update()
+        plt.close(fig)
+        
+    else:
+        plt.show()
+        plt.close()
+
     
     d = {
         'zoom'  : zoomH.c.tuple,
@@ -926,17 +961,16 @@ for ii, _ in enumerate(swidAswMid):
             with open(fn, 'wb') as f:
                 pickle.dump(d,f)
     
-    dpi=150
     doplots = [
         ('nsynth', analH.synimg),
-        ('srcimg', analH.srcimg),
-        ('roiimg', roiH.maskimg)
+#        ('srcimg', analH.srcimg),
+#        ('roiimg', roiH.maskimg)
     ]
     
     arcsec_p_pix = 0.187
     
     for name, var in doplots:
-        fig = plt.figure(figsize=(8,8), dpi=dpi)
+        fig = plt.figure(**STY['figure_sq_small'])
         axF = fig.add_subplot(1, 1, 1)
 
         axF.xaxis.set_visible(False)
@@ -944,12 +978,20 @@ for ii, _ in enumerate(swidAswMid):
         axF.imshow(var, interpolation="none", origin='upper')
         
         SET.add_inline_label(axF, "%s" % swid, color='dark')
-        SET.add_size_bar(axF, r"1$^{\prime}$", length=1./arcsec_p_pix, color='dark')
+#        SET.add_size_bar(axF, r"1$^{\prime\prime}$", , color='dark')
+        tmp2 = SET.add_size_bar(axF, r"1$^{\prime\prime}$",
+                                length=1./arcsec_p_pix,
+                                height=0.01,
+                                heightIsInPx = True,
+                                theme = "dark",
+                                **STY['scalebar']
+                                )
         
         fig.set_tight_layout(True)
-        fig.savefig(ffn%name, dpi=dpi)
-        fig.clear()
-        plt.close()
+        fig.savefig(ffn%name, **STY['figure_save'])
+        #fig.clear()
+        #plt.show()
+        plt.close(fig)
         
     if DBG:
         break

@@ -177,7 +177,7 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     #ax.grid()
 
     SET.add_inline_label(ax, swid, color='bright')
-    tmp2 = SET.add_size_bar(ax, r"1$^{\prime}$",
+    tmp2 = SET.add_size_bar(ax, r"1$^{\prime\prime}$",
                             length=1,
                             height=0.01,
                             heightIsInPx = True,
