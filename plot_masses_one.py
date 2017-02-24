@@ -228,8 +228,10 @@ for i, _ in enumerate(data.items()):
 #plt.title(label)
 #ax.set_xlabel('Stellar Mass $M_{stel}$ [ $\log ( 10^{-10} M_{\odot} )$ ]', **STY['label'])
 #ax.set_ylabel('Lensing Mass $M_{lens}$ [ $\log ( 10^{-10} M_{\odot} )$ ]', **STY['label'])
-ax.set_xlabel('Stellar Mass $M_{stel}$ [ $10^{10} M_{\odot}$ ]', **STY['label'])
-ax.set_ylabel('Lensing Mass $M_{lens}$ [ $10^{12} M_{\odot}$ ]', **STY['label'])
+#ax.set_xlabel('Stellar Mass $M_{stel}$ [ $10^{10} M_{\odot}$ ]', **STY['label'])
+#ax.set_ylabel('Lensing Mass $M_{lens}$ [ $10^{12} M_{\odot}$ ]', **STY['label'])
+ax.set_xlabel('Stellar Mass $M_{stel}$ [ $M_{\odot}$ ]', **STY['label'])
+ax.set_ylabel('Lensing Mass $M_{lens}$ [ $M_{\odot}$ ]', **STY['label'])
 
 #axis limits
 ax.set_xlim(xmin=2.5e8, xmax=9.5e11)
@@ -243,8 +245,10 @@ ax.set_yscale("log", nonposy='clip')
 scalex = 10**10
 scaley = 10**12
 #ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(np.log10(x/scale)))
-ticks_rescaledx = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scalex))
-ticks_rescaledy = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scaley))
+#ticks_rescaledx = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scalex))
+#ticks_rescaledy = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scaley))
+ticks_rescaledx = mpl.ticker.FuncFormatter(lambda _, pos: '$10^{{{0:g}}}$'.format(np.log10(_)))
+ticks_rescaledy = mpl.ticker.FuncFormatter(lambda _, pos: '$10^{{{0:g}}}$'.format(np.log10(_)))
 ax.xaxis.set_major_formatter(ticks_rescaledx)
 ax.yaxis.set_major_formatter(ticks_rescaledy)
 
