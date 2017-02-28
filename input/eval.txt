@@ -55,7 +55,7 @@ SW41,IQ* , y,n,y,  y,y
 SW42,IQ  , y,y,n,  y,n
 SW43,IQ     , n,n,n,  n,y
 SW44,???    , ?,?,?,  ?,?
-SW45,R      , n,y,y,  n,y  
+SW45,CQ      , n,y,y,  n,y  
 SW46,D    , y,y,n,  y,y   
 SW47,D    , y,n,y,  n,y
 SW48,                       
@@ -64,7 +64,7 @@ SW50,
 SW51,                       
 SW52,                       
 SW53,D    , y,n,y,  n,y   
-SW54,R      , n,y,n,  y,y 
+SW54,CQ   , n,y,n,  y,y 
 SW55,
 SW56,D    , y,n,y,  n,n
 SW57,LQ    , n,y,n,  n,n

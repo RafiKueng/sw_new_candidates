@@ -12,6 +12,8 @@ import create_data as CRDA
 from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
 import parse_candidates as PACA
 
+MODELS, MAPS = CRDA.get_dataset_data()
+
 import moster
 
 
@@ -57,7 +59,7 @@ ss = r"""
 
 for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     
-    mid = CRDA.MAPS['swid2model'].get(swid, "")
+    mid = MAPS['swid2mid'].get(swid, "")
     
     aswobj = PACA.DATA[asw]
     #CRDA.ALL_MODELS[mid]
