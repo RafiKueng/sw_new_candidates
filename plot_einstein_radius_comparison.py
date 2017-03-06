@@ -132,6 +132,13 @@ y = np.array(PNTS['y'])
 fig = plt.figure(**STY['figure_rect_med'])
 ax = fig.add_subplot(1,1,1)
 
+# m = 1 line
+mi = min([np.min(x),np.min(y)])
+mx = max([np.max(x),np.max(y)])
+
+ax.plot([mi, mx], [mi, mx] , **STY['fg_line2'])
+
+
 kw = dict(STY['fg_marker1'])
 #kw.pop('markeredgecolor', None)
 #kw.pop('markeredgewidth', None)
@@ -140,18 +147,62 @@ kw.pop('facecolor', None)
 kw['linestyle'] = 'none'
 ax.plot(x, y, **kw)
 
-mi = min([np.min(x),np.min(y)])
-mx = max([np.max(x),np.max(y)])
 
-ax.plot([mi, mx], [mi, mx] , **STY['bg_line'])
+
+#from scipy.optimize import curve_fit
+#
+#data = np.array([x,y])
+#data.sort()
+#x = data[0]
+#y = data[1]
+#
+#def func(x,m,q):
+#    return m * x # + q
+#
+#w = np.ones(len(x))
+#w[np.argmax(x)] = 0.001
+#w[np.argmax(x)-1] = 0.001
+#
+#popt, pcov = curve_fit(func, x, y, sigma=1/w) # popt = OPTimal Parameters for fit; COVariance matrix
+#sigma = np.sqrt([pcov[0,0], pcov[1,1]]) # sqrt(diag elements) of pcov are the 1 sigma deviations
+#print popt
+#
+#values = np.array([
+#    func(x, popt[0] + sigma[0], popt[1] + sigma[1]), 
+#    func(x, popt[0] + sigma[0], popt[1] - sigma[1]), 
+#    func(x, popt[0] - sigma[0], popt[1] + sigma[1]), 
+#    func(x, popt[0] - sigma[0], popt[1] - sigma[1]), 
+#])
+#fitError = np.std(values, axis=0)
+#
+#xv = np.linspace(0,6,100)
+#curveFit = func(xv,popt[0], popt[1])
+#ax.plot(xv, curveFit, 
+#    linewidth=2.5, 
+#    color = 'green',
+#    alpha = 0.6)
+#
+#curveFit = func(x,popt[0], popt[1])
+#nSigma = 1
+#
+#ax.fill_between(x, curveFit - nSigma*fitError, curveFit + nSigma*fitError,
+#    color = 'purple',
+#    edgecolor = None,
+#    alpha = 0.5,          
+#                )
+
 
 ax.set_xlabel('$r_E$ modeled [arcsec]', **STY['label'])
 ax.set_ylabel('$r_E$ parameterized [arcsec]', **STY['label'])
 
 ax.set_ylim([0,np.ceil(np.max(y))])
-ax.set_aspect('equal')
+#ax.set_aspect('equal')
 
 plt.tight_layout()
+
+plt.locator_params(axis='x', numbins=5)
+plt.locator_params(axis='y', numbins=7)
+
 fig.savefig(fnn, **STY['figure_save'])
 
 #plt.show()

@@ -75,6 +75,18 @@ def collect_data(mid):
     # config, and thus not in PSAC)
     if not DATA[mid]['created_on']: # of None
         data['created_on'] = FIMO.DATA[mid]['created_on']
+        
+    # add the parent of old models if available
+    # this is not in the config file, but in the table downloaded at get old models
+    if not DATA[mid]['parent'] or DATA[mid]['parent']=="":
+        if 'parent' in FIMO.DATA[mid].keys() and not FIMO.DATA[mid]['parent']=="":
+            data['parent'] = FIMO.DATA[mid]['parent']
+        else:
+            data['parent'] = ""
+    else:
+        data['parent'] = DATA[mid]['parent']
+        
+        
     
     if False:
         print INT*3,"(",

@@ -45,11 +45,11 @@ ss = r"""
   
     & \rot{$z_\text{lens}$}
 
-    & \rot{\shortstack[l]{image\\morphology}}
-    
     & \multicolumn{1}{|l|}{\rot{\shortstack[l]{unblended\\images}}}
     & \rot{\shortstack[l]{all images\\discernible}}
     & \rot{\shortstack[l]{isolated\\ lens}}
+
+    & \rot{\shortstack[l]{image\\morphology}}
     
     & \rot{\shortstack[l]{synthetic image\\ reasonable}}
     & \rot{\shortstack[l]{mass map\\ reasonable}}
@@ -116,8 +116,8 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     }
     
     s = """  {swid} & {asw} & {coords} & {zL}
-    & {d0}
     & {d1} & {d2} & {d3}
+    & {d0}
     & {d4} & {d5} & {haloindex} \\\\
     
 """.format(**m)

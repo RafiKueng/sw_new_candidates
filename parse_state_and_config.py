@@ -317,6 +317,7 @@ def parse_cfg(mid):
         'user'       : '',
         'type'       : tp,
         'created_on' : None,
+        'parent'     : "",
     }
     
     
@@ -357,6 +358,7 @@ def parse_cfg(mid):
         _['user']        = jcfg['obj']['author']
         ddd = jcfg['created_at']
         _['created_on'] = ddd[:10]+' '+ddd[11:-1]
+        _['parent']      = jcfg['parent']
         
     # convert to proper datatype MAKE SURE all are listed here!
     StrOrNone = (lambda x: str(x) if x else x)
@@ -371,6 +373,7 @@ def parse_cfg(mid):
         'z_lens_used' : float,
         'created_on'  : StrOrNone,
         'type'        : str,
+        'parent'      : str,
     }
     
     dat = {}

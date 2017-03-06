@@ -78,13 +78,18 @@ def parse_row(row):
     '''
     
     mid     = '%06i' % int(row['result_id'])
+    try:
+        parent  = '%06i' % int(row['parent'])
+    except ValueError:
+        parent = ""
     
     data = {
         'asw': row['model_name'],
         'mid': mid,
         'lensid':'%05i' % int(row['model_id']),
         'created_on': row['created'][0:19],
-        'type': 'old'
+        'type': 'old',
+        'parent' : parent
     }    
     
     return (mid, data)
