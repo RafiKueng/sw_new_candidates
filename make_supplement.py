@@ -24,11 +24,11 @@ S = SET.settings
 #import matplotlib.colors
 #import matplotlib.transforms as transforms
 
-#import create_data as CRDA
-#import parse_candidates as PACA
+import create_data as CRDA
+import parse_candidates as PACA
 
 
-#MODELS, MAPS = CRDA.get_dataset_data()
+MODELS, MAPS = CRDA.get_dataset_data()
 
 
 DBG = SET.DEBUG
@@ -44,32 +44,33 @@ if not os.path.exists(fpath):
 
 
 
-if DBG:
-    swidallmid = {
-        'a1' : ["m1%i" % _ for _ in range(3)],
-        'a2' : ["m2%i" % _ for _ in range(3)],
-        'a3' : ["m3%i" % _ for _ in range(3)],
-        'a4' : ["m4%i" % _ for _ in range(3)],
-    }
-    ALLMOD = {}
-    for swid, midlist in swidallmid.items():
-        for mid in midlist:
-            print swid, mid
-            ALLMOD[mid] = {'swid':swid,'parent':''}
-            
-    ALLMOD['m11']['parent'] = 'm10'
-    ALLMOD['m12']['parent'] = 'm11'
-    ALLMOD['m21']['parent'] = 'm20'
-    ALLMOD['m22']['parent'] = 'm20'
+#if DBG:
+#    swidallmid = {
+#        'a1' : ["m1%i" % _ for _ in range(3)],
+#        'a2' : ["m2%i" % _ for _ in range(3)],
+#        'a3' : ["m3%i" % _ for _ in range(3)],
+#        'a4' : ["m4%i" % _ for _ in range(3)],
+#    }
+#    ALLMOD = {}
+#    for swid, midlist in swidallmid.items():
+#        for mid in midlist:
+#            print swid, mid
+#            ALLMOD[mid] = {'swid':swid,'parent':''}
+#            
+#    ALLMOD['m11']['parent'] = 'm10'
+#    ALLMOD['m12']['parent'] = 'm11'
+#    ALLMOD['m21']['parent'] = 'm20'
+#    ALLMOD['m22']['parent'] = 'm20'
 
 
 def getRoot(mid, path):
     ''' gets the root model and the path to there for each model'''
 
     path.append(mid)
-    if DBG:
-        m = ALLMOD[mid]
-#    m = CRDA.ALL_MODELS[mid]
+#    if DBG:
+#        m = ALLMOD[mid]
+    m = CRDA.ALL_MODELS[mid]
+
     if 'parent' in m and not m['parent'] == "":
         root, path = getRoot(m['parent'], path)
         return root, path
@@ -94,8 +95,8 @@ TREE = {}
     
 
 
-#for swid, mid_list_o in MAPS['swid2all_models']:
-for swid, mid_list_o in swidallmid.items():
+for swid, mid_list_o in CRDA.MAPS['swid2all_models'].items():
+#for swid, mid_list_o in swidallmid.items():
 #    asw = CRDA.MAPS['swid2asw']
 #    aswobj = PACA.DATA[asw]
     
@@ -108,6 +109,10 @@ for swid, mid_list_o in swidallmid.items():
     TREE[swid] = swidtree
     
     for mid in mid_list:
+        print mid
+        if DBG and mid in ['007959', '007953',"008009", "007961"]:
+            continue
+        
         root, path = getRoot(mid,[])
         print "mid; %s root: %s path: %s" % (mid, root, path)
         populateTree(path, swidtree)
@@ -116,11 +121,17 @@ for swid, mid_list_o in swidallmid.items():
 
 def printElem(elem, lvl):
 #    print "  ITEM:", " "*lvl, "element", mid, lvl
-    print "  ITEM:", " "*lvl, "element", mid, lvl
+    D = {
+        'lvl': lvl,
+        'mid': elem,
+        '_'  : " "*lvl,
+    }
+
+    print "  <div class='mid lvl{lvl}'>ITEM: {_} element {mid}, {lvl} </div>".format(**D)
 
 def printSWID(swid):
 #    print "ELEMENT:", swid    
-    print "<div class='swid'>{swid}</div>".format(swid)    
+    print "<div class='swid'>{swid}</div>".format(**{'swid':swid})    
     
 
 def walkTree(tree, lvl):
