@@ -17,6 +17,12 @@ from StringIO import StringIO
 from settings import settings as S, INT, save_pickle, load_pickle, save_csv
 from settings import print_first_line, print_last_line, getI, del_cache
 
+# usually one would only want to use finals (peoble submitted the results)
+# but in rare cases, people used non finals as basis / parents of finals,
+# so the tree wouldn't work.. place those numbers in this list...
+
+onlyUseFinals = True
+NotFinalsToUseNevertheless = ['007953',]
 
 DATA = {}
 
@@ -33,7 +39,7 @@ def fetchSLresults():
     slurl = 'http://mite.physik.uzh.ch/tools/ResultDataTable'
 
     startid = 115 # because the former are rubbish   
-    step = 100 # get somany at a time
+    step = 100    # get somany at a time
     maxid = 15000 #15000 #currently: 13220
     
 
@@ -45,7 +51,7 @@ def fetchSLresults():
         data = '?'+'&'.join([
             "%s-%s" % (i, i+step),
             'type=csv',
-            'only_final=true',
+            'only_final=false',
             'json_str=false'
         ])
         rsp = rq.get(slurl+data)
@@ -62,6 +68,8 @@ def fetchSLresults():
         for row in csvdr:
             mid, data = parse_row(row)
             if not data['asw'].startswith("ASW"):
+                continue
+            if onlyUseFinals and not data['is_final'] and not mid in NotFinalsToUseNevertheless:
                 continue
             DATA[mid] = data
             print INT*2,'- %s' % mid, data
@@ -83,13 +91,16 @@ def parse_row(row):
     except ValueError:
         parent = ""
     
+    isFinal = bool(row['is_final'].lower() == 'true')
+    
     data = {
         'asw': row['model_name'],
         'mid': mid,
         'lensid':'%05i' % int(row['model_id']),
         'created_on': row['created'][0:19],
         'type': 'old',
-        'parent' : parent
+        'parent' : parent,
+        'is_final' : isFinal,
     }    
     
     return (mid, data)

@@ -38,7 +38,7 @@ def sanitise():
     
     DATA.update(PSAC.DATA)
     
-    for mid in DATA.keys():
+    for mid in sorted(DATA.keys()):
 
         print INT,"working on %s" % mid
         
@@ -64,6 +64,10 @@ def collect_data(mid):
     # add the asw id from FIMO
     asw = FIMO.DATA[mid]['asw']
     data['asw'] = asw
+    
+    # look up swid
+    swid = PACA.MAP.get(asw, None)
+    data['swid'] = swid
     
     # add the real/messured redshift of the lens from PACA (candidates.tex)
     # possibly corrected by newer measurements (corrected_redshifts.txt)
@@ -121,6 +125,8 @@ def correct_scaling(mid):
     
     DATA[mid]['area_scale_fact'] = f1
     DATA[mid]['pixel_scale_fact'] = f2
+    
+    DATA[mid]['mapextend'] *= f2
         
     DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f1
     DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f1

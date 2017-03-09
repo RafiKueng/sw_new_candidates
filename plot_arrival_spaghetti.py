@@ -30,10 +30,11 @@ import parse_candidates as PACA
 
 
 MODELS, MAPS = CRDA.get_dataset_data()
+ALL_MODELS = CRDA.ALL_MODELS
 
 DBG = SET.DEBUG
-#DBG = True
-DBG_swid = "SW42"
+DBG = True
+DBG_DO =  ["SW01"] #[ "ENWYZIEIV6", "TGM4U2TZBS"] #"SW42",
 
 itemname = "arrival_spaghetti"
 fpath = join(S['output_dir'], itemname)
@@ -50,7 +51,7 @@ def arrival_plot(model, ax):
     #ylabel          = r'arcsec'
     
     # ScaleCorrectionFactors
-    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+    #px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
     #aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
     # RedshiftCorrectionFactor
     #r_rcf  = m['dis_fact'] or 1      # corrects lengths for wrong redshifts
@@ -60,7 +61,7 @@ def arrival_plot(model, ax):
     source_indices =         model['source_indices']
     arrival_contour_levels = model['arrival_contour_levels']
     arrival_grid =           model['arrival_grid']
-    R =                      model['mapextend']     * px_scf #* r_rcf
+    R =                      model['mapextend']     # * px_scf #* r_rcf
 
 
     def plot_one(src_index,g,lev,kw):
@@ -109,13 +110,13 @@ def overlay_input_points(model, ax):
     overlay_ext_pot = True
     
     # ScaleCorrectionFactors
-    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+    #px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
     #aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
     # RedshiftCorrectionFactor
-    r_rcf  = m['dis_fact'] or 1     # corrects lengths for wrong redshifts
+    #r_rcf  = m['dis_fact'] or 1     # corrects lengths for wrong redshifts
     #m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
     #k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
-    f = px_scf #* r_rcf
+    #f = px_scf #* r_rcf
 
     source_images = model['source_images']
     extra_potentials = model['extra_potentials']
@@ -141,65 +142,79 @@ def overlay_input_points(model, ax):
 #
 # main loop
 #
-for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
-    
-    #mid = CRDA.MAPS['swid2model'].get(swid, "")
-    mid = MAPS['swid2mid'].get(swid, "")
-    
-    print swid, asw, mid
-    
-    if DBG and not swid==DBG_swid:
-        continue
+for swid, asw in sorted(MAPS['swid2asw'].items()):
 
-    if not mid:
-        print "   no mid, skipping"
-        continue
+    for mid in MAPS['swid2mids'].get(swid, []):
 
-    m = CRDA.ALL_MODELS[mid]
-    aswobj = PACA.DATA[asw]
+        #mid = CRDA.MAPS['swid2model'].get(swid, "")
+        #mid = MAPS['swid2mid'].get(swid, "")
+        
+        if DBG and ( not swid in DBG_DO and not mid in DBG_DO ):
+            continue
+    
+        print swid, asw, mid
 
-    imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
+        if not mid:
+            print "   no mid, skipping"
+            continue
     
-    # load correcting factors
-    # ScaleCorrectionFactors
-    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
-    aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
-    # RedshiftCorrectionFactor
-    r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
-    m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
-    k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
-
-    print "   "," | ".join(['%3.3f'%_ for _ in [px_scf, aa_scf, r_rcf, m_rcf, k_rcf]])
-
-    #print m['source_indices']
-    #print m['arrival_contour_levels']
-    #print np.average(m['arrival_grid'])
-    #print m['mapextend']
-
-    fig = plt.figure(**STY['figure_sq_small'])
-    ax = fig.add_subplot(111)
+        m = ALL_MODELS[mid]
+        aswobj = PACA.DATA[asw]
     
-    arrival_plot(m, ax)
-    overlay_input_points(m, ax)
+        imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
+        
+        # load correcting factors
+        # ScaleCorrectionFactors
+        px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+        aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
+        # RedshiftCorrectionFactor
+        r_rcf  = m['dis_fact'] or 1          # corrects lengths for wrong redshifts
+        m_rcf  = m['sig_fact'] or 1          # corrects masses for wrong redshifts
+        k_rcf  = m['kappa_fact'] or 1        # corrects kappa for wrong redshifts
     
-    ax.tick_params(**STY['no_ticks'])
-    ax.tick_params(**STY['no_labels'])
-    #ax.grid()
+        print "   "," | ".join(['%3.3f'%_ for _ in [px_scf, aa_scf, r_rcf, m_rcf, k_rcf]])
     
-    tmp1 = SET.add_inline_label(ax, swid, color="bright")
-    tmp2 = SET.add_size_bar(ax, r"1$^{\prime\prime}$",
-                            length=1,
-                            height=0.01,
-                            heightIsInPx = True,
-                            theme = "bright",
-                            **STY['scalebar']
-                            )
+        #print m['source_indices']
+        #print m['arrival_contour_levels']
+        #print np.average(m['arrival_grid'])
+        print "   ",m['mapextend']
+        print "   ",m['lmt_ver'], " | ", m['gls_ver']
+        
     
-    plt.tight_layout()
-    fig.savefig(imgname, **STY['figure_save'])
-    
-    if DBG:
-        plt.show()
-        break
-    plt.close()
+        fig = plt.figure(**STY['figure_sq_small'])
+        ax = fig.add_subplot(111)
+        
+        arrival_plot(m, ax)
+        overlay_input_points(m, ax)
+        
+        ax.tick_params(**STY['no_ticks'])
+        ax.tick_params(**STY['no_labels'])
+        #ax.grid()
+        
+        if m['mapextend'] > 1.2:
+            Llng = 1
+            Llbl = r"1$^{\prime\prime}$"
+        else:
+            Llng = 0.1
+            Llbl = r"0.1$^{\prime\prime}$"
+            
+        
+        tmp1 = SET.add_inline_label(ax, swid, color="bright")
+        tmp2 = SET.add_size_bar(ax, Llbl,
+                                length=Llng,
+                                height=0.01,
+                                heightIsInPx = True,
+                                theme = "bright",
+                                **STY['scalebar']
+                                )
+        
+        plt.tight_layout()
+        
+        fig.savefig(imgname, **STY['figure_save'])
+        
+        if DBG:
+            #plt.show()
+            #break
+            pass
+        plt.close()
     

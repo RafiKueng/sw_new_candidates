@@ -28,7 +28,8 @@ import create_data as CRDA
 import parse_candidates as PACA
 
 
-MODELS, MAPS = CRDA.get_dataset_data()
+#MODELS, MAPS = CRDA.get_dataset_data()
+MODELS, MAPS = CRDA.get_dataset_data('all_models')
 
 
 DBG = SET.DEBUG
@@ -95,23 +96,24 @@ TREE = {}
     
 
 
-for swid, mid_list_o in CRDA.MAPS['swid2all_models'].items():
+for swid, mids in MAPS['swid2mids'].items():
 #for swid, mid_list_o in swidallmid.items():
 #    asw = CRDA.MAPS['swid2asw']
 #    aswobj = PACA.DATA[asw]
     
 #    print swid, asw, len(mid_list_o)
-    print swid, len(mid_list_o)
+    print swid, len(mids)
 
 #    mid_list = mid_list_o.copy()
-    mid_list = list(mid_list_o)
+    mid_list = list(mids)
     swidtree = {}
     TREE[swid] = swidtree
     
     for mid in mid_list:
         print mid
-        if DBG and mid in ['007959', '007953',"008009", "007961"]:
-            continue
+        # problemcase: 007953
+#        if DBG and mid in ['007959', '007953',"008009", "007961"]:
+#            continue
         
         root, path = getRoot(mid,[])
         print "mid; %s root: %s path: %s" % (mid, root, path)

@@ -135,32 +135,49 @@ def create_lens_candidates():
 
 
     
-def get_map(data):
+def get_maps(data):
     m = {}
-    m['swid2mid'] = dict(((m['swid'], k) for k,m in data.items()))
-    m['asw2mid'] = dict(((m['asw'], k) for k,m in data.items() if m.get('asw')))
+    
+    # those below are outdated, always use the lists!
+#    m['swid2mid'] = dict(((m['swid'], k) for k,m in data.items()))
+#    m['asw2mid'] = dict(((m['asw'], k) for k,m in data.items() if m.get('asw')))
+
+    m['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
+    m['asw2swid'] = dict((k, v['swid']) for k, v in PACA.DATA.items())
+    
+    m['asw2mids'] = dict(((mm['asw'], []) for k,mm in data.items() if mm.get('asw')))
+    for k,mm in data.items():
+        if "asw" in mm:
+            m['asw2mids'][mm['asw']].append(k)
+        else:
+            print "skipping:", k 
+
+    m['swid2mids'] = dict(((mm['swid'], []) for k,mm in data.items() if mm.get('swid')))
+    for k,mm in data.items():
+        if "swid" in mm:
+            m['swid2mids'][mm['swid']].append(k)
     return m
     
     
 
     
-MAPS = {}
-
-def create_maps():
-    print I,"create maps",
-    MAPS['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
-    MAPS['asw2swid'] = dict((k, v['swid']) for k, v in PACA.DATA.items())
-    
-    #MAPS['swid2model'] = dict(((m['swid'], k) for k,m in ONLY_RECENT_MODELS.items()))
-    #MAPS['asw2model'] = dict(((m['asw'], k) for k,m in ONLY_RECENT_MODELS.items() if m.get('asw')))
-    
-    MAPS['asw2all_models'] = dict(((m['asw'], []) for k,m in ALL_MODELS.items() if m.get('asw')))
-    for k,m in ALL_MODELS.items():
-        if "asw" in m:
-            MAPS['asw2all_models'][m['asw']].append(k)
-
-    MAPS['swid2all_models'] = dict(((MAPS['asw2swid'][s], m) for s, m in MAPS['asw2all_models'].items()))
-    print "DONE"
+#MAPS = {}
+#
+#def create_maps():
+#    print I,"create maps",
+#    MAPS['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
+#    MAPS['asw2swid'] = dict((k, v['swid']) for k, v in PACA.DATA.items())
+#    
+#    #MAPS['swid2model'] = dict(((m['swid'], k) for k,m in ONLY_RECENT_MODELS.items()))
+#    #MAPS['asw2model'] = dict(((m['asw'], k) for k,m in ONLY_RECENT_MODELS.items() if m.get('asw')))
+#    
+#    MAPS['asw2all_models'] = dict(((m['asw'], []) for k,m in ALL_MODELS.items() if m.get('asw')))
+#    for k,m in ALL_MODELS.items():
+#        if "asw" in m:
+#            MAPS['asw2all_models'][m['asw']].append(k)
+#
+#    MAPS['swid2all_models'] = dict(((MAPS['asw2swid'][s], m) for s, m in MAPS['asw2all_models'].items()))
+#    print "DONE"
 
     
 
@@ -204,7 +221,7 @@ def get_dataset_data(dataset_str = None):
     print "using dataset:", dataset_str
     print "-"*80
     data = DATASETS[dataset_str]['data']
-    maps = get_map(data)
+    maps = get_maps(data)
     return data, maps
 
 ##############################################################################
@@ -216,7 +233,7 @@ def define_datasets():
     reg(2,'claude_models', CLAUDE_MODELS, create_claude_models, pkey='mid')
     reg(3,'selected_models', SELECTED_MODELS, create_selected_models, pkey='mid')
     reg(4,'lens_candidates', LENS_CANDIDATES, create_lens_candidates, pkey='asw')
-    reg(5,'maps', MAPS, create_maps, pkey=None)
+#    reg(5,'maps', MAPS, create_maps, pkey=None)
 
 
 def reg(iD, name, data, fn, pkey):

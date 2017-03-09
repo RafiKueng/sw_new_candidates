@@ -16,7 +16,7 @@ import matplotlib.transforms as transforms
 DEBUG = False
 #DEBUG = True
 
-DATASET_TO_USE = "selected_models"
+DATASET_TO_USE = "all_models"
 HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
 
 HILIGHT_SWID = ["SW"+_ for _ in HILIGHT_SWID]
