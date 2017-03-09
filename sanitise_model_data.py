@@ -113,8 +113,10 @@ def collect_data(mid):
 def correct_scaling(mid):
     
     scf = 440./500*0.187*100
+    model = DATA[mid]
+    
     # version 3 and higher have correct scaling already applied
-    if DATA[mid]['gls_ver'] < 3 and DATA[mid]['gls_ver'] >= 0:
+    if model['gls_ver'] < 3 and model['gls_ver'] >= 0:
         f1 = ( (scf)**2 )
         f2 = scf
     else:
@@ -123,14 +125,19 @@ def correct_scaling(mid):
 
     print INT*2,'- correcting scaling f=%5.2f' % f1
     
-    DATA[mid]['area_scale_fact'] = f1
-    DATA[mid]['pixel_scale_fact'] = f2
+    model['area_scale_fact'] = f1
+    model['pixel_scale_fact'] = f2
     
-    DATA[mid]['mapextend'] *= f2
+    model['mapextend'] *= f2
+    for _ in model['source_images']: _['pos'] *= f2
+    for _ in model['extra_potentials']: _['r'] *= f2
         
-    DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f1
-    DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f1
-    DATA[mid]['Mtot_max_scaled'] = DATA[mid]['Mtot_max_uncorrected'] * f1
+#
+# REMOVE OLD MASS CALCULATION
+#    
+#    DATA[mid]['Mtot_ave_scaled'] = DATA[mid]['Mtot_ave_uncorrected'] * f1
+#    DATA[mid]['Mtot_min_scaled'] = DATA[mid]['Mtot_min_uncorrected'] * f1
+#    DATA[mid]['Mtot_max_scaled'] = DATA[mid]['Mtot_max_uncorrected'] * f1
         
   
 
@@ -147,14 +154,7 @@ def correct_mass(mid):
     zl_used = model['z_lens_used']          # from PSAC: the parsed config file
     zs_used = model['z_src_used']           # same here
 
-   
-       
-    # f_act = sig_factor(zl_actual,zs_actual)
-    # f_use = sig_factor(zl_used,zs_used)
     
-    # fact = f_act / f_use
-    
-    # TODO refracture: only save the factors, don't actually calcualte any 
     m_cf = sig_factor(zl_actual,zs_actual) / sig_factor(zl_used,zs_used)
     r_cf = dis_factor(zl_actual,zs_actual) / dis_factor(zl_used,zs_used)
     k_cf  = kappa_factor(zl_used, zs_used)
@@ -164,30 +164,39 @@ def correct_mass(mid):
         model['sig_fact'] = m_cf
         model['dis_fact'] = r_cf
         model['kappa_fact'] = k_cf
+        model['z_corrected'] = True
+        
     else:
-        model['sig_fact'] = None
-        model['dis_fact'] = None
-        model['kappa_fact'] = None
+        model['sig_fact'] = 1
+        model['dis_fact'] = 1
+        model['kappa_fact'] = 1
+        model['z_corrected'] = False
 
     
-    
-    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  kappa_fact: %e" % (
-        zl_actual,zl_used,zs_actual,zs_used,
-        k_cf
-    )
+#
+# REMOVE OLD MASS CALCULATION
+#    
+#    print INT*2,"> zl_act: %4.2f  zl_use: %4.2f  zs_act: %4.2f  zs_use: %4.2f  kappa_fact: %e" % (
+#        zl_actual,zl_used,zs_actual,zs_used,
+#        k_cf
+#    )
+#
+#    keys = ['Mtot_ave', 'Mtot_min', 'Mtot_max']
+#    
+#    if zl_actual * zs_actual * zl_used * zs_used > 0:
+#        for k in keys:
+#            org_mass = model[k+'_scaled']
+#            corr_mass = org_mass * m_cf
+#            model[k+'_z_corrected'] = corr_mass
+#            #print INT*2,'> %s: %e -> %e' % (k,model[k+'_scaled'], model[k+'_z_corrected'])
+#    else:
+#        for k in keys:
+#            model[k+'_z_corrected'] = None
+#        #print INT*2,'> no data available!!'
 
-    keys = ['Mtot_ave', 'Mtot_min', 'Mtot_max']
-    
-    if zl_actual * zs_actual * zl_used * zs_used > 0:
-        for k in keys:
-            org_mass = model[k+'_scaled']
-            corr_mass = org_mass * m_cf
-            model[k+'_z_corrected'] = corr_mass
-            #print INT*2,'> %s: %e -> %e' % (k,model[k+'_scaled'], model[k+'_z_corrected'])
-    else:
-        for k in keys:
-            model[k+'_z_corrected'] = None
-        #print INT*2,'> no data available!!'
+
+
+
     print 'DONE (f=%.3f)' % m_cf
 
     

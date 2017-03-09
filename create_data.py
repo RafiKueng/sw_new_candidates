@@ -8,14 +8,14 @@ Created on Fri Oct 30 16:37:03 2015
 """
 
 
-import sys, os, csv
+import sys, os
 import cPickle as pickle
 from os.path import join
 
 import settings as SET
 reload(SET)
-from settings import settings as S, INT, save_pickle, load_pickle, save_csv
-from settings import print_first_line, print_last_line, getI, del_cache
+from settings import settings as S, INT #, save_pickle, load_pickle, save_csv
+#from settings import print_first_line, print_last_line, getI #, del_cache
 
 import get_stellar_pop as gspo
 import parse_candidates as PACA
@@ -48,9 +48,6 @@ def create_recent_models():
         dat = adata['created_on']
         #print INT, '%10s'%mid, asw, dat
     
-        if not adata['Mtot_ave_z_corrected'] > 0.0:
-            continue
-       
         if tmpp.has_key(asw):
             if tmpp[asw]['created_on'] < dat: # if current newer than previous
                 tmpp[asw] = adata
@@ -249,8 +246,8 @@ def reg(iD, name, data, fn, pkey):
 
 ### MAIN #####################################################################
 
-I = getI(__file__)
-print_first_line(I)
+I = SET.getI(__file__)
+SET.print_first_line(I)
 
 define_datasets()
 
@@ -278,7 +275,7 @@ for iD, name, val in sorted([ (v['iD'], k, v) for k,v in DATASETS.items()]):
     csv_fn    = join(S['temp_dir'],  name+'.csv')
     
     if os.path.isfile(pickle_fn):
-        data.update(load_pickle(pickle_fn))
+        data.update(SET.load_pickle(pickle_fn))
         
     else:
         fn()
@@ -287,5 +284,5 @@ for iD, name, val in sorted([ (v['iD'], k, v) for k,v in DATASETS.items()]):
     #save_csv(I, csv_fn, data, pkey)
     print '-----'
 
-print_last_line(I,DATASETS)
+SET.print_last_line(I,DATASETS)
 
