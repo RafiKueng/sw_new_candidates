@@ -16,9 +16,12 @@ import matplotlib.transforms as transforms
 DEBUG = False
 #DEBUG = True
 
-DATASET_TO_USE = "all_models"
-HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
+PRINT_MID = True
 
+DATASET_TO_USE = "selected_models"
+DATASET_TO_USE = "all_models"
+
+HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
 HILIGHT_SWID = ["SW"+_ for _ in HILIGHT_SWID]
 
 
@@ -300,37 +303,113 @@ styles = {
         'fontsize' : sizes['regular']
     },
     
-    'inplot_caption_text_bright':{
-        'size'     : 36,
+    'toplabel_bright': {
+        'fontsize' : 36,
         'color'    : 'black',
         'backgroundcolor': "none",
         'family': 'sans-serif',
-        'zorder': 99,
+        'zorder': 999,
         'bbox' : {
-                  'color':'white',
-#                  'facecolor':'none',
-#                  'edgecolor':'none',
-                  'pad':7,
+                  'boxstyle':'round,pad=0.3',
+#                  'color':'white',
+                  'facecolor':'white',
+                  'edgecolor':'none',
+#                  'pad':7,
                   'alpha':0.75,
-                  'zorder': 99,
+                  'zorder': 998,
                   },
     },
 
-    'inplot_caption_text_dark':{
-        'size'     : 36,
+    'sublabel_bright': {
+        'fontsize' : 26,
+        'color'    : 'black',
+        'backgroundcolor': "none",
+        'family': 'sans-serif',
+        'zorder': 989,
+        'bbox' : {
+                  'boxstyle':'round,pad=0.3',
+#                  'color':'white',
+                  'facecolor':'white',
+                  'edgecolor':'none',
+#                  'pad':3,
+                  'alpha':0.75,
+                  'zorder': 988,
+                  },
+    },
+
+
+
+    'toplabel_dark': {
+        'fontsize' : 36,
         'color'    : 'white',
         'backgroundcolor': "none",
         'family': 'sans-serif',
-        'zorder': 99,
+        'zorder': 999,
         'bbox' : {
-                  'color':'black',
-#                  'facecolor':'none',
-#                  'edgecolor':'none',
-                  'pad':7,
+                  'boxstyle':'round,pad=0.3',
+#                  'color':'white',
+                  'facecolor':'black',
+                  'edgecolor':'none',
+#                  'pad':7,
                   'alpha':0.75,
-                  'zorder': 99,
+                  'zorder': 998,
                   },
     },
+
+    'sublabel_dark': {
+        'fontsize' : 26,
+        'color'    : 'white',
+        'backgroundcolor': "none",
+        'family': 'sans-serif',
+        'zorder': 989,
+        'bbox' : {
+                  'boxstyle':'round,pad=0.3',
+#                  'color':'white',
+                  'facecolor':'black',
+                  'edgecolor':'none',
+#                  'pad':3,
+                  'alpha':0.75,
+                  'zorder': 988,
+                  },
+    },
+
+
+
+
+
+
+    
+#    'inplot_caption_text_bright':{
+#        'size'     : 36,
+#        'color'    : 'black',
+#        'backgroundcolor': "none",
+#        'family': 'sans-serif',
+#        'zorder': 99,
+#        'bbox' : {
+#                  'color':'white',
+##                  'facecolor':'none',
+##                  'edgecolor':'none',
+#                  'pad':7,
+#                  'alpha':0.75,
+#                  'zorder': 99,
+#                  },
+#    },
+#
+#    'inplot_caption_text_dark':{
+#        'size'     : 36,
+#        'color'    : 'white',
+#        'backgroundcolor': "none",
+#        'family': 'sans-serif',
+#        'zorder': 99,
+#        'bbox' : {
+#                  'color':'black',
+##                  'facecolor':'none',
+##                  'edgecolor':'none',
+#                  'pad':7,
+#                  'alpha':0.75,
+#                  'zorder': 99,
+#                  },
+#    },
                 
     'scalebar' : {
         'loc'      : 4,
@@ -569,14 +648,54 @@ def del_cache(I,fn):
 
 
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
+from matplotlib.text import Text
 
-def add_inline_label(ax, t, loc=2, color="bright"):
-    fp = styles['inplot_caption_text_'+color]
-    at = AnchoredText(t, loc=loc, prop=fp, frameon=False) #, zorder=999)
-    at.zorder = 999
-    ax.add_artist(at)
-    return at
+#def add_inline_label(ax, t, loc=2, color="bright"):
+#    fp = styles['inplot_caption_text_'+color]
+#    at = AnchoredText(t, loc=loc, prop=fp, frameon=False) #, zorder=999)
+#    at.zorder = 999
+#    ax.add_artist(at)
+#    return at
+#
 
+
+def add_inline_toplabel(ax, text="", color="bright"):
+
+    fp = styles['toplabel_'+color]
+
+    tx = ax.text(0.95, 0.95,
+                 text,
+                 verticalalignment='top',
+                 horizontalalignment='right',
+                 transform=ax.transAxes,
+                 **fp
+                 )
+
+    return tx
+
+def add_inline_sublabel(ax, text="", color="bright"):
+
+    fp = styles['sublabel_'+color]
+
+    tx = ax.text(0.95, 0.8,
+                 text,
+                 verticalalignment='top',
+                 horizontalalignment='right',
+                 transform=ax.transAxes,
+                 **fp
+                 )
+
+    return tx
+
+
+
+def add_caption_swid(ax, text, color="bright"):
+    add_inline_toplabel(ax, text=text, color=color)
+    
+def add_caption_mid(ax, text, color="bright"):
+    if PRINT_MID:
+        add_inline_sublabel(ax, text=text, color=color)
+    
     
     
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredSizeBar
