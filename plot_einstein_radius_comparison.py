@@ -29,12 +29,14 @@ import scipy.optimize as optimize
 
 import create_data as CRDA
 import get_parameterised_form as PARA
+reload(PARA)
 
 
 DBG = SET.DEBUG
-DBG = True
+#DBG = True
 
-MODELS, MAPS = CRDA.get_dataset_data()
+MODELS, MAPS = CRDA.get_dataset_data('selected_models')
+ALL_MODELS = CRDA.ALL_MODELS
 
 fpath     = join(S['output_dir'], 'rE_comp')
 filename = "rE_comp." + SET.imgext
@@ -89,41 +91,38 @@ def getEinsteinR(x, y):
 
 PNTS = {'x':[],'y':[]}
 
-for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
+for swid, asw in sorted(MAPS['swid2asw'].items()):
     
-    print swid, asw
+    #print swid, asw
     
     #mid = CRDA.MAPS['swid2model'].get(swid, "")
-    mid = MAPS['swid2mid'].get(swid, "")
+    for mid in MAPS['swid2mids'].get(swid, ""):
+        
+        print swid, asw, mid
+        
+        m = ALL_MODELS[mid]
+        
+        # load correcting factors
+        # RedshiftCorrectionFactor
+        r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
+        m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
+        k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
     
-    if not mid:
-        print "   no mid, skipping"
-        continue
-
-    m = CRDA.ALL_MODELS[mid]
+        rr = m['R']['data'] 
+        da = m['kappa(<R)']['data'] * k_rcf
+        
+        rE = getEinsteinR(rr, da)
+        
+    #    if asw in PARAMS.keys():
+    #        PNTS['x'].append(rE)
+    #        PNTS['y'].append(PARAMS[asw])
     
-    # load correcting factors
-    # ScaleCorrectionFactors
-    px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
-    aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
-    # RedshiftCorrectionFactor
-    r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
-    m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
-    k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
-
-    rr = m['R']['data'] * px_scf # * r_rcf
-    da = m['kappa(<R)']['data'] * k_rcf
-    
-    rE = getEinsteinR(rr, da)
-    
-#    if asw in PARAMS.keys():
-#        PNTS['x'].append(rE)
-#        PNTS['y'].append(PARAMS[asw])
-
-    if mid in PARA.DATA.keys():
-        PNTS['x'].append(rE)
-        PNTS['y'].append(PARA.DATA[mid]['eR'])
-        print "  %5.3f %5.3f" % (rE, PARA.DATA[mid]['eR'])
+        if mid in PARA.DATA.keys():
+            PNTS['x'].append(rE)
+            PNTS['y'].append(PARA.DATA[mid]['eR'])
+            print "    %5.3f %5.3f [%5.3f]" % (rE, PARA.DATA[mid]['eR'],k_rcf)
+        else:
+            print "    !!! skipping this mid"
 
 
 x = np.array(PNTS['x'])

@@ -34,7 +34,7 @@ ALL_MODELS = CRDA.ALL_MODELS
 
 DBG = SET.DEBUG
 #DBG = True
-#DBG_DO =  ["SW01"] #[ "ENWYZIEIV6", "TGM4U2TZBS"] #"SW42",
+DBG_DO =  ["SW01"] #[ "ENWYZIEIV6", "TGM4U2TZBS"] #"SW42",
 
 itemname = "arrival_spaghetti"
 fpath = join(S['output_dir'], itemname)

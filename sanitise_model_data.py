@@ -129,8 +129,13 @@ def correct_scaling(mid):
     model['pixel_scale_fact'] = f2
     
     model['mapextend'] *= f2
+    model['maprad'] *= f2
     for _ in model['source_images']: _['pos'] *= f2
+    for _ in model['images']: _['pos'] *= f2
     for _ in model['extra_potentials']: _['r'] *= f2
+    model['R']['data'] *= f2
+    model['R']['min'] *= f2
+    model['R']['max'] *= f2
         
 #
 # REMOVE OLD MASS CALCULATION
@@ -195,7 +200,9 @@ def correct_mass(mid):
 #        #print INT*2,'> no data available!!'
 
 
-
+    # keep a list of items where I apply this coofacts to:
+    # m['kappa(<R)']['data'] *= k_cf
+    
 
     print 'DONE (f=%.3f)' % m_cf
 
