@@ -45,23 +45,25 @@ from create_data import LENS_CANDIDATES as LENSES
 import create_data as CRDA
 from parse_candidates import MAP as ASW2SWID   #, MAP as SWID2ASW
 
-MODELS = CRDA.ALL_MODELS
-SUBSET_MODELS, MAPS = CRDA.get_dataset_data()
+
+SUBSET_MODELS, MAPS = CRDA.get_dataset_data('selected_models')
+ALL_MODELS = CRDA.ALL_MODELS
 
 I = getI(__file__)
 
 # create lookup dict asw -> mid
-ASW2MID = dict( (str(v['asw']),k) for k,v in MODELS.items() )
+# ASW2MID = dict( (str(v['asw']),k) for k,v in ALL_MODELS.items() )
+ALL_MODELS_ASWS = set(sorted([str(__['asw']) for _, __ in ALL_MODELS.items()]))
 
 # get all asw of the models (as set)
-models_asws = set( ASW2MID.keys() )
+models_asws = ALL_MODELS_ASWS #set( ASW2MID.keys() )
 # all asw of the candidates
 lenses_asws = set( LENSES.keys())
 
 # get an overview of how much data is missing
-union = models_asws | lenses_asws     # aka OR (in a or in b)
-intersect = models_asws & lenses_asws # aka AND (in A and B)
-symdiff = models_asws ^ lenses_asws   # aka XOR (in a or in b but not in both)
+union     = models_asws | lenses_asws   # aka OR (in a or in b)
+intersect = models_asws & lenses_asws   # aka AND (in A and B)
+symdiff   = models_asws ^ lenses_asws   # aka XOR (in a or in b but not in both)
 
 print I,"status: total element:  %i / all data available for: %i" %(len(union), len(intersect))
 print INT,"missing:"
@@ -81,47 +83,39 @@ data = {}
 
 for asw in intersect:
 
-    #mid = ASW2MID[asw]
     swid = ASW2SWID[asw]
-    #mid = CRDA.MAPS['swid2model'].get(swid, "")
-    mid = MAPS['swid2mid'].get(swid, "")
+    mids = MAPS['swid2mids'].get(swid, "")  # hack we only want the first entry of the list
     
-    if not len(mid) > 0:
+    if not len(mids) > 0:
         print "did not find", asw, swid
         continue
+    mid = mids[0]
+    _m   = ALL_MODELS[mid]
     
     try:
         m_stellar  = LENSES[asw]['m_s_geom']
-        m_lens     = MODELS[mid]['Mtot_ave_z_corrected']
-        m_lens_max = MODELS[mid]['Mtot_max_z_corrected']
-        m_lens_min = MODELS[mid]['Mtot_min_z_corrected']
+        m_lens     = _m['M(<R)']['data'][-1]
+        m_lens_max = _m['M(<R)']['max'][-1]
+        m_lens_min = _m['M(<R)']['min'][-1]
+        m_rcf      = _m['sig_fact']          # corrects masses for wrong redshifts
+
     except KeyError:
         print "data for %s not found !!!!!" % asw
         exit(1)
     
     label = '%s (%s)' % (swid, asw)
     
-    M_stellar.append(m_stellar)
-    M_lens.append(m_lens)
-    Label.append(label)
-    
     data[label] = {
         'm_stellar':  m_stellar,
-        'm_lens':     m_lens,
-        'm_lens_max': m_lens_max,
-        'm_lens_min': m_lens_min
+        'm_lens':     m_lens     * m_rcf,
+        'm_lens_max': m_lens_max * m_rcf,
+        'm_lens_min': m_lens_min * m_rcf
     }
 
     data[label].update(LENSES[asw])
-    data[label].update(MODELS[mid])
+    data[label].update(ALL_MODELS[mid])
     
     
-    
-
-# make numpy arrays    
-M_stellar = np.array(M_stellar)
-M_lens = np.array(M_lens)
-Label = np.array(Label)
 
 print I,"begin plotting"
 

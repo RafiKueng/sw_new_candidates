@@ -90,10 +90,9 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         
         if DBG and ((swid not in DBG_DO) and (mid not in DBG_DO)): continue
         
-        #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
         imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
         
-        m = CRDA.ALL_MODELS[mid]
+        m      = ALL_MODELS[mid]
         aswobj = PACA.DATA[asw]
         
         # load correcting factors
@@ -237,13 +236,12 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         SET.add_caption_swid(ax, text=swid, color='bright')
         SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='bright')
         
-        fig.tight_layout()
-        
+        fig.tight_layout()        
         fig.savefig(imgname, **STY['figure_save'])
     
         if DBG:
             plt.show()
-            #quit
+            break
         
         plt.close(fig)
 

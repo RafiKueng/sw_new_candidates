@@ -27,16 +27,16 @@ from scipy import interpolate
 import scipy.ndimage
 
 import create_data as CRDA
-# from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
 import parse_candidates as PACA
 
 
 MODELS, MAPS = CRDA.get_dataset_data()
+ALL_MODELS   = CRDA.ALL_MODELS
 
 
 DBG = SET.DEBUG
 #DBG = True
-DBG_swid=02
+DBG_DO = ['SW02',]
 
 
 fpath = join(S['output_dir'], "kappa_map_interpol")
@@ -60,21 +60,16 @@ if not os.path.exists(fpath):
 
 for swid, asw in sorted(MAPS['swid2asw'].items()):
     
-    for mid in MAPS['swid2mids'].get(swid, ""):
+    for mid in sorted(MAPS['swid2mids'].get(swid, "")):
 #    mid = MAPS['swid2mid'].get(swid, "")
 
         print swid, asw, mid
         
-        if not mid:
-            print "   no mid, skipping"
-            continue
+        if DBG and ((swid not in DBG_DO) and (mid not in DBG_DO)): continue
         
-        if DBG and not swid==DBG_swid: continue
-        
-        #imgname = join(fpath, "%s_%s_kappa_encl.png" % (asw, mid))
         imgname = join(fpath, filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
         
-        m = CRDA.ALL_MODELS[mid]
+        m      = ALL_MODELS[mid]
         aswobj = PACA.DATA[asw]
     
     
@@ -82,16 +77,17 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         vmax = 1
     
         # ScaleCorrectionFactors
-        px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
-        aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
+        #px_scf = m['pixel_scale_fact'] # corrects wrong pixel scaling in old version [old_pxl -> arcsec]
+        #aa_scf = m['area_scale_fact']  # corrects areas due to wrong pixel scaling in old version [old_pxl**2 -> arcsec**2]
         # RedshiftCorrectionFactor
         r_rcf  = m['dis_fact']          # corrects lengths for wrong redshifts
         m_rcf  = m['sig_fact']          # corrects masses for wrong redshifts
         k_rcf  = m['kappa_fact']        # corrects kappa for wrong redshifts
-     
+        isZCorr = m['z_corrected']
+
     
         # SET UP DATA
-        R = m['mapextend'] * px_scf
+        R = m['mapextend'] #* px_scf
         extent = np.array([-R,R,-R,R])
     
         # prepare data
@@ -176,15 +172,25 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         ax.tick_params(**STY['no_labels'])
         
         #ax.grid()
+
+        if m['mapextend'] > 1.2:
+            Llng = 1
+            Llbl = r"1$^{\prime\prime}$"
+        else:
+            Llng = 0.1
+            Llbl = r"0.1$^{\prime\prime}$"
     
-        SET.add_inline_label(ax, swid, color='bright')
-        tmp2 = SET.add_size_bar(ax, r"1$^{\prime\prime}$",
-                                length=1,
+        tmp2 = SET.add_size_bar(ax, Llbl,
+                                length=Llng,
                                 height=0.01,
                                 heightIsInPx = True,
                                 theme = "bright",
                                 **STY['scalebar']
                                 )
+
+#        SET.add_inline_label(ax, swid, color='bright')
+        SET.add_caption_swid(ax, text=swid, color='bright')
+        SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='bright')
         
         fig.tight_layout()
         fig.savefig(imgname, **STY['figure_save'])
