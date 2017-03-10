@@ -83,12 +83,13 @@ def get_images(data):
     img = 'input.png' 
     img_name = img[:-4]
         
-    for i, __ in enumerate(data.items()):
+    for i, __ in enumerate(sorted(data.items())):
 
         mid,_ = __
         asw = _['asw']
         swid = _.get('swid', "SWXX")
         typ = _['type']
+        isZCorr = _['z_corrected']
         
         if DBG and not swid==DBG_swid:
             continue
@@ -185,7 +186,9 @@ def get_images(data):
         ax.tick_params(**STY['no_ticks'])
         ax.tick_params(**STY['no_labels'])
         
-        SET.add_inline_label(ax, swid, color="dark")
+#        SET.add_inline_label(ax, swid, color="dark")
+        SET.add_caption_swid(ax, text=swid, color='dark')
+        SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='dark')
         
         asb = SET.add_size_bar(
                     ax,
