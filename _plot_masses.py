@@ -1,4 +1,4 @@
-sy# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Created on Sun Nov  1 21:51:21 2015
 

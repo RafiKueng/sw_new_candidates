@@ -43,6 +43,7 @@ if not os.path.exists(path):
 #from create_data import ONLY_RECENT_MODELS as MODELS, LENS_CANDIDATES as LENSES
 from create_data import LENS_CANDIDATES as LENSES
 import create_data as CRDA
+import parse_candidates  as PACA
 from parse_candidates import MAP as ASW2SWID   #, MAP as SWID2ASW
 
 
@@ -51,12 +52,9 @@ ALL_MODELS = CRDA.ALL_MODELS
 
 I = getI(__file__)
 
-# create lookup dict asw -> mid
-# ASW2MID = dict( (str(v['asw']),k) for k,v in ALL_MODELS.items() )
-ALL_MODELS_ASWS = set(sorted([str(__['asw']) for _, __ in ALL_MODELS.items()]))
-
 # get all asw of the models (as set)
-models_asws = ALL_MODELS_ASWS #set( ASW2MID.keys() )
+ALL_MODELS_ASWS = set(sorted([str(__['asw']) for _, __ in ALL_MODELS.items()]))
+models_asws = ALL_MODELS_ASWS
 # all asw of the candidates
 lenses_asws = set( LENSES.keys())
 
@@ -75,10 +73,6 @@ if DBG:
 
 
 # collect data
-M_stellar = []
-M_lens = []
-Label = []
-
 data = {}
 
 for asw in intersect:
@@ -119,7 +113,7 @@ for asw in intersect:
 
 print I,"begin plotting"
 
-    
+
 #print INT,"(%3.0f%%) plotting %s..." % (100.0*i/len(data.keys()), label),
 
 # filename
@@ -161,7 +155,7 @@ kw.pop('facecolor', None)
 for i, _ in enumerate(data.items()):
     label, _ = _
     swid = _['swid']
-    #if swid[2:4] in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+
     if swid in SET.HILIGHT_SWID: continue
 
 
@@ -182,7 +176,7 @@ for i, _ in enumerate(data.items()):
 for i, _ in enumerate(data.items()):
     label, _ = _
     swid = _['swid']
-    #if swid[2:4] not in ['05', '42', '28', '58', '02','19','09','29','57']: continue
+
     if swid not in SET.HILIGHT_SWID: continue
 
     m_stellar = _['m_stellar']
@@ -218,6 +212,7 @@ for i, _ in enumerate(data.items()):
                 #size="x-small",
                 zorder=100)
     
+
 #plt.title("Stellar vs Lensing Mass")
 #plt.title(label)
 #ax.set_xlabel('Stellar Mass $M_{stel}$ [ $\log ( 10^{-10} M_{\odot} )$ ]', **STY['label'])
@@ -236,8 +231,8 @@ ax.set_yscale("log", nonposy='clip')
 
 
 # recale the ticks
-scalex = 10**10
-scaley = 10**12
+#scalex = 10**10
+#scaley = 10**12
 #ticks_rescaled = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(np.log10(x/scale)))
 #ticks_rescaledx = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scalex))
 #ticks_rescaledy = mpl.ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x/scaley))
