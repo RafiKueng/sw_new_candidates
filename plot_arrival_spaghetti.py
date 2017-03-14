@@ -179,7 +179,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
             Llbl = r"0.1$^{\prime\prime}$"
             
         
-        tmp1 = SET.add_inline_label(ax, swid, color="bright")
+#        tmp1 = SET.add_inline_label(ax, swid, color="bright")
         tmp2 = SET.add_size_bar(ax, Llbl,
                                 length=Llng,
                                 height=0.01,
@@ -187,6 +187,9 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
                                 theme = "bright",
                                 **STY['scalebar']
                                 )
+
+        SET.add_caption_swid(ax, text=swid, color='bright')
+        SET.add_caption_mid(ax, text=mid+("" if m['z_corrected'] else "*"), color='bright')
         
         plt.tight_layout()
         

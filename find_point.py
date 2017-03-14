@@ -56,8 +56,15 @@ def getMaxDistImg(fname = fname, im=None):
         lbl, nlbls = label(pnts)
         for j in range(1, nlbls+1):
             pntpos = np.ma.median(np.array(np.where(lbl==j)), axis=1)
-            print leg[i], pntpos.data
-            points.append((leg[i], pntpos.data))
+            pntvar = np.ma.var(np.array(np.where(lbl==j)), axis=1)
+            print leg[i], pntpos.data, pntvar,
+            # for a real point a variance of ca 15 in each dimension is expected
+            # so we only save those
+            if (pntvar[0] > 7 and pntvar[0] < 20) and (pntvar[1] > 7 and pntvar[1] < 20):
+                points.append((leg[i], pntpos.data))
+                print "save"
+            else:
+                print "skip"
     
     dists = []
     maxposes = [_ for _ in points if _[0]=='max']
@@ -87,11 +94,12 @@ if __name__ == "__main__":
     #fname1 = "ASW0001c3j_5R6UYQZUTI_input.png"
     fname_cfg = "004741.cfg"
     fname_img = "ASW0004dv8_004741_input.png"
+    fname_img = "output/spl-input/_tmp_SW37_ASW00086xq_BYQATMOXCM_spl-input.png"
     
     
     
     print getMaxDistImg(fname_img)[0]
-    print getMaxDistCFG(fname_cfg)[0]
+#    print getMaxDistCFG(fname_cfg)[0]
     
     
 #plt.imshow(minpnt, cmap="gray")
