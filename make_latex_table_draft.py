@@ -9,10 +9,11 @@ Created on Tue Apr 26 10:22:51 2016
 import numpy as np
 
 import create_data as CRDA
-from create_data import ALL_MODELS as MODELS, LENS_CANDIDATES as LENSES
+from create_data import LENS_CANDIDATES as LENSES
 import parse_candidates as PACA
 
-MODELS, MAPS = CRDA.get_dataset_data()
+MODELS, MAPS = CRDA.get_dataset_data("selected_models")
+ALL_MODELS = CRDA.ALL_MODELS
 
 import moster
 
@@ -32,6 +33,8 @@ for l in lns:
                 d[i] = '\OK'
             elif j.startswith("n"):
                 d[i] = '\NO'
+            elif j.startswith("-"):
+                d[i] = '\UK'  # unknown
         if len(d)>=6:
             dd[_[0]] = d
         else:
@@ -47,19 +50,24 @@ ss = r"""
 
     & \multicolumn{1}{|l|}{\rot{\shortstack[l]{unblended\\images}}}
     & \rot{\shortstack[l]{all images\\discernible}}
-    & \rot{\shortstack[l]{isolated\\ lens}}
+    & \rot{\shortstack[l]{isolated\\lens}}
 
-    & \rot{\shortstack[l]{image\\morphology}}
+    & \rot{\shortstack[l]{image\\morpho-\\logy}}
     
-    & \rot{\shortstack[l]{synthetic image\\ reasonable}}
-    & \rot{\shortstack[l]{mass map\\ reasonable}}
-    & \rot{\shortstack[l]{halo-matching\\ index $\haloindex$}}
+    & \rot{\shortstack[l]{synthetic\\image\\reasonable}}
+    & \rot{\shortstack[l]{mass map\\reasonable}}
+    & \rot{\shortstack[l]{halo-\\matching\\index $\haloindex$}}
   \\ \hline
 """
 
-for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
+for swid, asw in sorted(MAPS['swid2asw'].items()):
     
-    mid = MAPS['swid2mid'].get(swid, "")
+    mids = MAPS['swid2mids'].get(swid, None)
+
+    if mids and len(mids)==1:
+        mid = mids[0]
+    else:
+        mid = None
     
     aswobj = PACA.DATA[asw]
     #CRDA.ALL_MODELS[mid]
@@ -72,8 +80,11 @@ for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
     m_ratio = ""
     haloindex = ""
     if mid:
+        
+        #m      = ALL_MODELS[mid]
+
         m_stel = LENSES[asw].get('m_s_geom', None)
-        m_lens = MODELS[mid]['Mtot_ave_z_corrected'] # usually called m_lens in the pipeline
+        m_lens = MODELS[mid]['M(<R)']['data'][-1] # usually called m_lens in the pipeline
         m_moster = moster.inv(m_stel)
         
         zL = "%s" % MODELS[mid]['z_lens_measured']

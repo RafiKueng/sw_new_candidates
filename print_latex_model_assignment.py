@@ -20,7 +20,8 @@ import create_data as CRDA
 import parse_candidates as PACA
 
 
-MODELS, MAPS = CRDA.get_dataset_data()
+MODELS, MAPS = CRDA.get_dataset_data('selected_models')
+ALL_MODELS = CRDA.ALL_MODELS
 
 DBG = SET.DEBUG
 #DBG =True
@@ -35,15 +36,18 @@ if not os.path.exists(fpath):
 
 s1 = ""
 s2 = "% Look up table, SWID -> Index:\n"
-for swid, asw in sorted(CRDA.MAPS['swid2asw'].items()):
+for swid, asw in sorted(MAPS['swid2asw'].items()):
 
-    mid = MAPS['swid2mid'].get(swid, "")
+    mids = MAPS['swid2mids'].get(swid, [])
     
-    print swid, asw, mid
+    print swid, asw, mids
     
-    if not mid:
-        print "   no mid, skipping"
+    if not len(mids)==1:
+        print "   to many/little mids??, skipping", len(mids)
+        #raise Exception("too many mids")
         continue
+
+    mid = mids[0]
     
     fn = SET.filename_base.format(_={'asw':asw, 'mid':mid,'swid':swid})
     fn = fn[:-7]
