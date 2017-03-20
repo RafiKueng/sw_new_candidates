@@ -27,7 +27,8 @@ dd = {}
 for l in lns:
     if l.startswith('SW'):
         _ = l[:-1].split(',') # remove \n
-        d = [x.strip(' *') for x in _[1:]] # remove review marker and white space used for formating
+        swid = _[0].strip(' *+')
+        d = [x.strip(' *+') for x in _[1:]] # remove review marker and white space used for formating
         for i, j in enumerate(d):
             if j.startswith('y'):
                 d[i] = '\OK'
@@ -36,10 +37,10 @@ for l in lns:
             elif j.startswith("-"):
                 d[i] = '\UK'  # unknown
         if len(d)>=6:
-            dd[_[0]] = d
+            dd[swid] = d
         else:
-            print "%s: no complete record found" % (_[0],)
-            dd[_[0]] = ['']*6
+            print "%s: no complete record found" % (swid,)
+            dd[swid] = ['']*6
 
 ss = r"""
 \begin{tabular}{c c c | c c | c c c | c c c}
@@ -75,14 +76,11 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     name = aswobj['name'].split(' ')[1]
 
-    zL = ""    
+    zL = ""
+    m_ratio = None
+    haloindex = None
     
-    m_ratio = ""
-    haloindex = ""
-    if mid:
-        
-        #m      = ALL_MODELS[mid]
-
+    if mid and 'm_s_geom' in LENSES[asw].keys():
         m_stel = LENSES[asw].get('m_s_geom', None)
         m_lens = MODELS[mid]['M(<R)']['data'][-1] # usually called m_lens in the pipeline
         m_moster = moster.inv(m_stel)
@@ -100,14 +98,10 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
                 m_ratio = '%.1e'%r
                 
     
-        
-    print "haloindex", haloindex
-    
     try:
         haloindex = "%3.2f" % haloindex
     except:
-        pass
-
+        haloindex = "\UK"
     
     m = {
         'asw':    asw,
@@ -123,7 +117,6 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         'd3' : dd[swid][3],
         'd4' : dd[swid][4],
         'd5' : dd[swid][5],
-
     }
     
     s = """  {swid} & {asw} & {coords} & {zL}
@@ -133,7 +126,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
 """.format(**m)
 
-    #print s
+    print s.replace('\n', ' ')
     ss += s
 
 ss += """

@@ -101,7 +101,7 @@ def create_selected_models():
     
     for line in lines:
         elems = [_.strip() for _ in line.split(',')]
-        if len(elems)==2 and len(elems[0])>1:
+        if len(elems)==2 and len(elems[0])>1 and len(elems[1])>1:
             swid, mid = elems
             asw = PACA.MAP.get(swid, None)
             
