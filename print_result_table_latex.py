@@ -34,8 +34,9 @@ for l in lns:
                 d[i] = '\OK'
             elif j.startswith("n"):
                 d[i] = '\NO'
-            elif j.startswith("-"):
+            elif j.startswith("-") or j == "":
                 d[i] = '\UK'  # unknown
+               
         if len(d)>=6:
             dd[swid] = d
         else:
@@ -76,7 +77,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     name = aswobj['name'].split(' ')[1]
 
-    zL = ""
+    zL = "\UK"
     m_ratio = None
     haloindex = None
     
