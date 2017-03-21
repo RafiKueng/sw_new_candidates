@@ -1,8 +1,14 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jul 27 04:55:53 2016
+create all the plots.
+check the settings for the dataset to use
 
+this shouldn't be run like this, but is more a receipt
+on which scripts to run in which order
+
+
+Created on Wed Jul 27 04:55:53 2016
 @author: rafik
 """
 
@@ -10,16 +16,15 @@ Created on Wed Jul 27 04:55:53 2016
 %run plot_einstein_radius_comparison.py
 %run plot_hires_comparison.py
 %run plot_kappa_encl.py
-#%run plot_kappa_map_simple.py
-#%run plot_kappa_map.py
 %run plot_kappa_map_interpol.py
 %run plot_masses_one.py
 %run plot_masses_per_swid.py
 
-
 %run download_spl_input_images.py
 
-%run print_latex_model_assignment.py
-%run make_latex_table_draft.py
+%run print_model_assignment_latex.py
+%run print_result_table_latex.py
 
 %run batch_do_nsynth_img.py
+
+%run make_supplement.py
