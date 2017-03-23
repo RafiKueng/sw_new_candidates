@@ -34,7 +34,7 @@ def getMaxDistImg(fname = fname, im=None):
     determine all extremalpoints,
     identify max (red)
     calulate all dists to max,
-    return max dist, and list of dists
+    return max dist, and list of dists, maxpoint
     """
 
     leg = ['max', 'sad', 'min'] # legend.. id of type of extremal point
@@ -75,15 +75,15 @@ def getMaxDistImg(fname = fname, im=None):
           raise FoundManyMaxError("Found many max")
     
     try:
+        x = maxposes[0][1]
         for pos in points:
-            x = maxposes[0][1]
             y = pos[1]
             dists.append(np.sqrt(np.sum((x-y)**2)))
     except:
         print "!"*80
         pass
     
-    return max(dists), dists
+    return max(dists), dists, maxposes[0][1]
 
     
     

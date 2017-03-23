@@ -36,7 +36,7 @@ ALL_MODELS   = CRDA.ALL_MODELS
 
 DBG = SET.DEBUG
 #DBG = True
-DBG_DO = ['SW02',]
+DBG_DO = ['SW42',]
 
 
 fpath = join(S['output_dir'], "kappa_map_interpol")

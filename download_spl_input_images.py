@@ -83,13 +83,13 @@ def get_images(data):
     img = 'input.png' 
     img_name = img[:-4]
         
-    for i, __ in enumerate(sorted(data.items())):
+    for i, blob in enumerate(sorted(data.items())):
 
-        mid,_ = __
-        asw = _['asw']
-        swid = _.get('swid', "SWXX")
-        typ = _['type']
-        isZCorr = _['z_corrected']
+        mid, M = blob
+        asw = M['asw']
+        swid = M.get('swid', "SWXX")
+        typ = M['type']
+        isZCorr = M['z_corrected']
         
         if DBG and not swid==DBG_swid:
             continue
@@ -152,9 +152,10 @@ def get_images(data):
         im = misc.imread(tmp_path)
 
         # calculate the scaling
-        cfg_maxdist = np.max([ np.abs(x['pos']) for x in _['images']])
+        cfg_maxdist = np.max([ np.abs(x['pos']) for x in M['images']])
         try:
-            img_maxdist = find_point.getMaxDistImg(im=im)
+            MDIobj = find_point.getMaxDistImg(im=im)
+            img_maxdist, dists, maxpoint = MDIobj
         except find_point.FoundNoMaxError:
             print "found no max",
             
@@ -166,22 +167,66 @@ def get_images(data):
                 print " skipping"
                 continue
         
+        # add the data here for debug purposes
+        M['img_maxdist'] = img_maxdist
+        M['cfg_maxdist'] = cfg_maxdist
+        
         if DBG:
             print "\nmax dists"
             print "  cfg:", cfg_maxdist
             print "  img:", img_maxdist
-            print "  (scalefact:", _['pixel_scale_fact'],")"
-            print "  (dis_fact :", _['dis_fact'],")"
-        cfg_maxdist *= _['pixel_scale_fact'] #* _['dis_fact']
+            print "  max:", maxpoint
+            print "  rat:", img_maxdist / cfg_maxdist
+            print "  (scalefact:", M['pixel_scale_fact'],")"
+            #print "  (dis_fact :", M['dis_fact'],")"
+        cfg_maxdist *= M['pixel_scale_fact'] #* _['dis_fact']
         
         # get pixel length of one arcsec
-        arcsec_in_px = img_maxdist[0] / cfg_maxdist
+        arcsec_in_px = img_maxdist / cfg_maxdist
         
         # plot using mpl for same style
         fig = plt.figure(**STY['figure_sq_small'])
         ax = fig.add_subplot(111)
         
-        ax.imshow(im[:,100:700,:])
+        #ax.imshow(im[:,100:700,:])
+        
+        R = M['mapextend']
+        Rinpx = int(R * arcsec_in_px)
+        mx, my = maxpoint.astype(int)
+
+        # create bigger image with black border, such that we can cut
+        oshape = np.array(im.shape)
+        nshape = oshape + 2*np.array([Rinpx, Rinpx, 0])
+        nim = np.zeros(nshape, dtype=np.uint8)
+        nim[:,:] = [0,0,0,255] # [255,128,0,255]
+        nim[Rinpx:Rinpx+oshape[0],Rinpx:Rinpx+oshape[1],:] = im # put original image ontop
+        
+#        print nim
+#        ax.imshow(nim[:,:,:])
+
+        x = (mx - Rinpx) + Rinpx  # the offset at the end is due the added border above
+        y = (my - Rinpx) + Rinpx
+        u = (mx + Rinpx) + Rinpx
+        v = (my + Rinpx) + Rinpx
+        
+        print x,y,u,v
+        ax.imshow(nim[x:u,y:v,:])
+        
+#        
+#        a = cfg_maxdist
+#        #xy = (maxpoint[0]*a-30, maxpoint[1]*a-30)
+#        xy = (u, 3)
+#        #Rpx = 60
+#
+#        import matplotlib.patches as patches
+#        ax.add_patch(
+#            patches.Rectangle(
+#                xy, #x,y
+#                Rpx,  #width
+#                Rpx,  # height
+#                fill=False,edgecolor="red",
+#            )
+#        )
         
         ax.tick_params(**STY['no_ticks'])
         ax.tick_params(**STY['no_labels'])
@@ -194,18 +239,20 @@ def get_images(data):
             ax,
             r"1$^{\prime\prime}$",
             length=arcsec_in_px,
-            height=8,
-            heightIsInPx = False,
+            height=0.01,
+            heightIsInPx = True,
             theme="dark",
             **STY['scalebar']
         )
-        
+
+
         plt.tight_layout()
         fig.savefig(imgname, **STY['figure_save'])
         
         if DBG:
             plt.show()
-            return asb
+            #return asb
+            return cfg_maxdist, img_maxdist, M
             break
             
         plt.close(fig)
@@ -213,7 +260,7 @@ def get_images(data):
             
         #if DBG: break
     if DBG:
-        return cfg_maxdist, img_maxdist, _
+        return cfg_maxdist, img_maxdist, M
             
 
 
