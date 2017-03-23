@@ -13,13 +13,20 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.transforms as transforms
 
-DEBUG = False
+DEBUG = True
 #DEBUG = True
 
-PRINT_MID = True
 
-DATASET_TO_USE = "selected_models"
-DATASET_TO_USE = "all_models"
+PrintAll = False
+#PrintAll = True
+
+if PrintAll:
+    DATASET_TO_USE = "all_models"
+    PRINT_MID = True
+else:
+    DATASET_TO_USE = "selected_models"
+    PRINT_MID = False
+
 
 HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']
 HILIGHT_SWID = ["SW"+_ for _ in HILIGHT_SWID]
@@ -65,9 +72,13 @@ colors = { # http://colorbrewer2.org/
 }
 
 sizes = { # define them relative
-    'small'   : 'small',
-    'regular' : 'medium',
-    'big'     : 'large,'
+#    'small'   : 'small',
+#    'regular' : 'medium',
+#    'big'     : 'large,'
+    'small'   : 'medium',
+    'regular' : 'large',
+    'big'     : 'x-large',
+    'huge'    : 'xx-large',
 }
 
 # linewidth
@@ -739,7 +750,8 @@ def add_size_bar(ax, text, length=1,
         'loc'          : loc,
         'pad': pad, 'borderpad': borderpad, 'sep': sep,
         'prop': mpl.font_manager.FontProperties(
-                    size=16,
+                    size=sizes['big'],
+                    weight = 'extra bold', #‘ultralight’, ‘light’, ‘normal’, ‘regular’, ‘book’, ‘medium’, ‘roman’, ‘semibold’, ‘demibold’, ‘demi’, ‘bold’, ‘heavy’, ‘extra bold’, ‘black’
                 ),
 #        'color'        : txtcol,
         'frameon'      : frameon
