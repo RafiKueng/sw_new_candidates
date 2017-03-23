@@ -948,8 +948,9 @@ for ii, _ in enumerate(swidAswMid):
 
         p['masks']
         
-
-    if True:  # automatically correct zoom
+    # automatically correct zoom based on mapextend 
+    # this will overwrite the previous settings and be saved in the pickle!!
+    if True:  
         mm = M['mapextend'] /arcsec_p_pix
         zp0 = np.array(p['center']) - np.array(mm,mm)
         zp1 = np.array(p['center']) + np.array(mm,mm)
