@@ -136,6 +136,10 @@ def correct_scaling(mid):
     model['R']['data'] *= f2
     model['R']['min'] *= f2
     model['R']['max'] *= f2
+    
+    model['M(<R)']['data'] *= f1
+    model['M(<R)']['min'] *= f1
+    model['M(<R)']['max'] *= f1
         
 #
 # REMOVE OLD MASS CALCULATION

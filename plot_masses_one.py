@@ -94,8 +94,9 @@ for asw in intersect:
         m_rcf      = _m['sig_fact']          # corrects masses for wrong redshifts
 
     except KeyError:
-        print "data for %s not found !!!!!" % asw
-        exit(1)
+        print "data for %s not found !!!!! %s %s" % (asw, swid, mid)
+        continue
+        #exit(1)
     
     label = '%s (%s)' % (swid, asw)
     
@@ -223,8 +224,8 @@ ax.set_xlabel('Stellar Mass $M_{stel}$ [ $M_{\odot}$ ]', **STY['label'])
 ax.set_ylabel('Lensing Mass $M_{lens}$ [ $M_{\odot}$ ]', **STY['label'])
 
 #axis limits
-ax.set_xlim(xmin=2.5e8, xmax=9.5e11)
-ax.set_ylim(ymin=2.5e10, ymax=9.5e13)
+ax.set_xlim(xmin=2.5e8, xmax=13e11)
+ax.set_ylim(ymin=2.5e10, ymax=13e13)
 
 ax.set_xscale("log", nonposx='clip')
 ax.set_yscale("log", nonposy='clip')
