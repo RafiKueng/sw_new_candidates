@@ -86,6 +86,9 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         m_lens = MODELS[mid]['M(<R)']['data'][-1] # usually called m_lens in the pipeline
         m_moster = moster.inv(m_stel)
         
+        m_rcf = MODELS[mid]['sig_fact']
+        m_lens = m_lens * m_rcf
+        
         zL = "%s" % MODELS[mid]['z_lens_measured']
         
         if m_stel is not None:
