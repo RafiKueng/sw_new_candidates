@@ -17,11 +17,12 @@ STY = SET.styles
 S = SET.settings
 
 auto = False
+auto = True
 
 DBG = SET.DEBUG
 #DBG = True
 DBG_swid = "SW05"
-auto = True
+
 
 
 import numpy as np
@@ -39,6 +40,8 @@ import parse_candidates as PACA
 import create_data as CRDA
 import get_state_and_config as GSAC # import will trigger download!
 import download_orginals as DORG # import triggers download
+
+
 
 _ = GSAC.I + DORG.I
 del _
@@ -69,12 +72,17 @@ filename = SET.filename_base
 data = ['ASW0007k4r']
 
 MODELS, MAPS = CRDA.get_dataset_data()
+ALL_MODELS   = CRDA.ALL_MODELS
 
 swid2asw = dict((v['swid'], k) for k, v in PACA.DATA.items())
 swid2model = dict(((m['swid'], k) for k,m in MODELS.items()))
 asw2model = dict(((m['asw'], k) for k,m in CRDA.ALL_MODELS.items() if m.get('asw')))
 
 swidAswMid = [(swid, asw, asw2model[asw]) for swid, asw in swid2asw.items() if asw2model.get(asw)]
+
+
+
+arcsec_p_pix = 0.187
 
 # this would be a one to many..
 #rawasw = sorted([(m['asw'], k) for k,m in CRDA.ALL_MODELS.items() if m.get('asw')])
@@ -855,6 +863,7 @@ if not os.path.exists(path):
 nn=len(swidAswMid)
 for ii, _ in enumerate(swidAswMid):
     swid, asw, mid = _
+    M = ALL_MODELS[mid]
     
     if DBG and not DBG_swid==swid:
         continue
@@ -939,6 +948,14 @@ for ii, _ in enumerate(swidAswMid):
 
         p['masks']
         
+
+    if True:  # automatically correct zoom
+        mm = M['mapextend'] /arcsec_p_pix
+        zp0 = np.array(p['center']) - np.array(mm,mm)
+        zp1 = np.array(p['center']) + np.array(mm,mm)
+        print "correcting center", mm, zp0, zp1
+        zoomH.set_zoom(zp0,zp1)
+
     
     #fig.show()
     if auto and os.path.isfile(fn):
@@ -967,7 +984,6 @@ for ii, _ in enumerate(swidAswMid):
 #        ('roiimg', roiH.maskimg)
     ]
     
-    arcsec_p_pix = 0.187
     
     for name, var in doplots:
         fig = plt.figure(**STY['figure_sq_small'])
@@ -977,7 +993,11 @@ for ii, _ in enumerate(swidAswMid):
         axF.yaxis.set_visible(False)
         axF.imshow(var, interpolation="none", origin='upper')
         
-        SET.add_inline_label(axF, "%s" % swid, color='dark')
+#        SET.add_inline_label(axF, "%s" % swid, color='dark')
+        isZCorr = M['z_corrected']
+
+        SET.add_caption_swid(axF, text=swid, color='dark')
+        SET.add_caption_mid(axF, text=mid+("" if isZCorr else "*"), color='dark')
 #        SET.add_size_bar(axF, r"1$^{\prime\prime}$", , color='dark')
         tmp2 = SET.add_size_bar(axF, r"1$^{\prime\prime}$",
                                 length=1./arcsec_p_pix,
@@ -999,7 +1019,7 @@ for ii, _ in enumerate(swidAswMid):
 
 ### MAIN #####################################################################
 
-I = getI(__file__)
-print_first_line(I)
-    
-print_last_line(I)
+#I = getI(__file__)
+#print_first_line(I)
+#    
+#print_last_line(I)
