@@ -19,7 +19,6 @@ import moster
 
 
 
-
 with open('input/eval.txt', 'r') as f:
     lns = f.readlines()
 
@@ -44,7 +43,7 @@ for l in lns:
             dd[swid] = ['']*6
 
 ss = r"""
-\begin{tabular}{c c c | c c | c c c | c c c}
+\begin{tabular}{c c c | c | c c c | c | c c | c c c}
   \hline
   SWID & ASW id & model id
   
@@ -58,6 +57,9 @@ ss = r"""
     
     & \rot{\shortstack[l]{synthetic\\image\\reasonable}}
     & \rot{\shortstack[l]{mass map\\reasonable}}
+
+    & \rot{\shortstack[l]{$\lg\frac{\Mstel}{\Msun}$}}
+    & \rot{\shortstack[l]{$\lg\frac{\Mhalo}{\Msun}$}}
     & \rot{\shortstack[l]{halo-\\matching\\index $\haloindex$}}
   \\ \hline
 """
@@ -104,15 +106,21 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     try:
         haloindex = "%3.2f" % haloindex
+        log_m_stel = "%3.1f" % np.log10(m_stel)  # / msun they are already in solar masses
+        log_m_lens = "%3.1f" % np.log10(m_lens)  # dito
     except:
         haloindex = "\UK"
+        log_m_stel = "\UK"
+        log_m_lens = "\UK"
     
     m = {
-        'asw':    asw,
-        'swid':   swid,
+        'asw'      : asw,
+        'swid'     : swid,
         #'mid':    mid,
-        'coords': name,
-        'm_ratio': m_ratio,
+        'coords'   : name,
+        'm_stel'   : log_m_stel,
+        'm_halo'   : log_m_lens,
+        'm_ratio'  : m_ratio,
         'haloindex': haloindex,
         'zL' : zL,
         'd0' : dd[swid][0],
@@ -124,13 +132,12 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     }
     
     s = """  {swid} & {asw} & {coords} & {zL}
-    & {d1} & {d2} & {d3}
-    & {d0}
-    & {d4} & {d5} & {haloindex} \\\\
+    & {d1} & {d2} & {d3} & {d0} & {d4} & {d5}
+    & {m_stel} & {m_halo} & {haloindex} \\\\
     
 """.format(**m)
 
-    print s.replace('\n', ' ')
+    print s.replace('\n', '\t')
     ss += s
 
 ss += """
