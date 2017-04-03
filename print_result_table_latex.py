@@ -45,7 +45,7 @@ for l in lns:
 ss = r"""
 \begin{tabular}{c c c | c | c c c | c | c c | c c c}
   \hline
-  SWID & ASW id & model id
+  SWID & ZooID & CFHTLS Name
   
     & \rot{$z_\text{lens}$}
 
@@ -58,8 +58,8 @@ ss = r"""
     & \rot{\shortstack[l]{synthetic\\image\\reasonable}}
     & \rot{\shortstack[l]{mass map\\reasonable}}
 
-    & \rot{\shortstack[l]{$\lg\frac{\Mstel}{\Msun}$}}
-    & \rot{\shortstack[l]{$\lg\frac{\Mhalo}{\Msun}$}}
+    & \rot{\shortstack[l]{$\log_{10}\frac{\Mstel}{\Msun}$}\hskip-1.5pt}
+    & \rot{\shortstack[l]{$\log_{10}\frac{M_\text{lens}}{\Msun}$}\hskip-2.2pt}
     & \rot{\shortstack[l]{halo-\\matching\\index $\haloindex$}}
   \\ \hline
 """
@@ -78,6 +78,8 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     
     name = aswobj['name'].split(' ')[1]
+    name = "$-$".join(name.split('-'))
+    name = "$+$".join(name.split('+'))
 
     zL = "\UK"
     m_ratio = None

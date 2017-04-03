@@ -103,6 +103,8 @@ def get_images(data):
 
         if not isdir(imgdir):
             makedirs(imgdir)
+        if not isdir(SET.splinp_path):
+            makedirs(SET.splinp_path)
     
         #print imgdir
         #print imgname
@@ -116,7 +118,7 @@ def get_images(data):
             print "ERROR!!!!"
             continue
 
-        tmp_path = join(fpath, "_tmp_" + filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
+        tmp_path = join(SET.splinp_path, "_org_" + filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
 
         if isfile(tmp_path) and not DBG:
             print 'SKIPPING DL (already present)'

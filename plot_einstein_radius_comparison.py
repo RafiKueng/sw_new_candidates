@@ -29,7 +29,7 @@ import scipy.optimize as optimize
 
 import create_data as CRDA
 import get_parameterised_form as PARA
-reload(PARA)
+#reload(PARA)
 
 
 DBG = SET.DEBUG
@@ -117,7 +117,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     #        PNTS['x'].append(rE)
     #        PNTS['y'].append(PARAMS[asw])
     
-        if mid in PARA.DATA.keys():
+        if mid in PARA.DATA.keys() and rE > 0:
             PNTS['x'].append(rE)
             PNTS['y'].append(PARA.DATA[mid]['eR'])
             print "    %5.3f %5.3f [%5.3f]" % (rE, PARA.DATA[mid]['eR'],k_rcf)
@@ -135,7 +135,7 @@ ax = fig.add_subplot(1,1,1)
 mi = min([np.min(x),np.min(y)])
 mx = max([np.max(x),np.max(y)])
 
-ax.plot([mi, mx], [mi, mx] , **STY['fg_line2'])
+ax.plot([0, mx], [0, mx] , **STY['fg_line2'])
 
 
 kw = dict(STY['fg_marker1'])
@@ -194,6 +194,7 @@ ax.plot(x, y, **kw)
 ax.set_xlabel('$r_E$ modeled [arcsec]', **STY['label'])
 ax.set_ylabel('$r_E$ parameterized [arcsec]', **STY['label'])
 
+ax.set_xlim([0,np.ceil(np.max(x))])
 ax.set_ylim([0,np.ceil(np.max(y))])
 #ax.set_aspect('equal')
 

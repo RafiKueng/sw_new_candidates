@@ -321,7 +321,9 @@ for coll in DATA.values():
         ax.yaxis.set_minor_formatter(formatter)
         
         
-        SET.add_inline_label(ax, asw, loc=7 , color='bright')
+        #SET.add_inline_label(ax, asw, loc=7 , color='bright')
+        SET.add_caption_swid(ax, text=asw, color='bright')
+        
 
     
         plt.tight_layout()
