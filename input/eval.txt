@@ -36,8 +36,8 @@ SW18,  D   , y , n , y ,   n,n
 SW19,  IQ  , n , y , n ,   n,y
 SW20,  IQ* , y , y*, y ,   n,y
 SW21,  D*  , y , n , n ,   n,y
-SW22,  D*  , -*, n , n ,   n,y
-SW23,  SQ  , n , y , n ,   -,y
+SW22,  D*  , n*, n , n ,   n,y
+SW23,  SQ  , n , y , n ,   n,y
 SW24,  LQ  , n , y , n ,   y,y
 SW25+,     ,   ,   ,   ,    , 
 SW26,  D   , y , n , y ,   n,n
@@ -48,7 +48,7 @@ SW30+, IQ  , y , n , n ,   n,n
 SW31,  LQ  , n , y , n ,   y,y
 SW32+, IQ  , n , y , n ,   y,y
 SW33,  D   , y , y , n ,   n,y
-SW34,  D   , n , n , y ,   -,y
+SW34,  D   , n , n , y ,   n,y
 SW35,  LQ  , n , y , n ,   y,y
 SW36,  D   , y , y , n ,   n,y
 SW37+, SQ  , n , n , y ,   y,y
@@ -58,7 +58,7 @@ SW40+, SQ  , n , y , y ,   y,y
 SW41,  IQ* , y , n , y ,   y,y
 SW42,  IQ  , y , y , n ,   y,y
 SW43,  IQ  , n , n , n ,   n,y
-SW44,  D   , y , y , n ,   -,y
+SW44,  D   , y , y , n ,   y,y
 SW45,  CQ  , n , y , y ,   n,y
 SW46,  D   , y , y , n ,   y,y
 SW47,  D   , y , n , y ,   n,y
