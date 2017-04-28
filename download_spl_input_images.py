@@ -211,7 +211,7 @@ def get_images(data):
         u = (mx + Rinpx) + Rinpx
         v = (my + Rinpx) + Rinpx
         
-        print x,y,u,v
+        print x,y,u,v, arcsec_in_px
         ax.imshow(nim[x:u,y:v,:])
         
 #        
@@ -237,15 +237,17 @@ def get_images(data):
         SET.add_caption_swid(ax, text=swid, color='dark')
         SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='dark')
         
-        asb = SET.add_size_bar(
-            ax,
-            r"1$^{\prime\prime}$",
-            length=arcsec_in_px,
-            height=0.01,
-            heightIsInPx = True,
-            theme="dark",
-            **STY['scalebar']
-        )
+        # sanity check
+        if arcsec_in_px < 500:
+            asb = SET.add_size_bar(
+                ax,
+                r"1$^{\prime\prime}$",
+                length=arcsec_in_px,
+                height=0.01,
+                heightIsInPx = True,
+                theme="dark",
+                **STY['scalebar']
+            )
 
 
         plt.tight_layout()

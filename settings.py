@@ -18,7 +18,7 @@ DEBUG = False
 
 
 PrintAll = False
-#PrintAll = True
+PrintAll = True
 
 if PrintAll:
     DATASET_TO_USE = "all_models"
@@ -558,6 +558,7 @@ settings = {
     'input_dir': 'input', # input / data files generated manually, used here
     'output_dir': 'output', # where the calculated data is stored
     'temp_dir': 'temp', # use this dir to create temp files, like csv versions of pickle files for checking
+    'tmpl_dir': 'templates', # templatesdir
 
 
 

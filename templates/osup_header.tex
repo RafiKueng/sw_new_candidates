@@ -1,0 +1,47 @@
+\documentclass[a4paper]{article}
+
+\usepackage[a4paper, margin=3cm]{geometry}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{graphicx}
+\usepackage{amsmath}    % Advanced maths commands
+\usepackage{amssymb}    % Extra maths symbols
+\usepackage{hyperref}
+\usepackage{float}
+
+\newlength{\figlength}
+\setlength{\figlength}{0.3332\linewidth}
+
+\usepackage[ampersand]{easylist}
+
+\usepackage{dcolumn}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+
+\usepackage{cancel}
+\usepackage{xifthen}
+
+
+\newcommand{\Msun}{\text{M}_\text{sun}}
+
+
+\newcommand{\nav}[5]{
+%\begin{center}
+\begin{flushright}
+\begin{tabular}{r|l}
+\multicolumn{2}{c}{\hyperref[#5]{index}} \\
+\hline
+#1 & #2 \\
+#3 & #4
+\end{tabular}
+\end{flushright}
+%\end{center}
+}
+
+
+
+\begin{document}
+
+
