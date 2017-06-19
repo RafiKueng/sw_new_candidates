@@ -573,6 +573,7 @@ cfg_path = join(_['asset_dir'], 'models')
 sworg_path = join(_['asset_dir'], 'spacewarps_orginals')
 splinp_path = join(_['asset_dir'], 'spl-input')
 splorgs_path = join(_['asset_dir'], 'splorgs')
+spllog_path = join(_['asset_dir'], 'logfiles')
 
 # where to store the processed state file pickles
 stateconf_cache_path = join(_['cache_dir'], 'stateconf')
