@@ -61,6 +61,7 @@ print "main"
 res = {}
 res2 = []
 res3 = [[] for _ in range(20)]
+res4 = [[] for _ in range(20)]
 
 # this used to be a for loop downloading all the files, but isn't anymore
 # because all the other files are generated in some other way
@@ -172,7 +173,8 @@ for i, blob in enumerate(sorted(data.items())):
     res[mid] = v
     res2.append(v)
     
-    res3[pxr].append(v+[mid,ncpu])
+    res4[pxr].append(v+[mid,ncpu])
+    res3[pxr].append(v)
 
     print 'done'
 #res["_header"] = [
