@@ -35,13 +35,13 @@ MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
 #DBG = True
-DBG_swid = "SW42"
+#DBG_swid = "SW42"
 DBG_swid = "SW01"
 DBG_mid = ["004758", '007350', "EUTVAVV6XJ"]
 
 #imgdir = join(S['output_dir'],'spl_images')
 
-itemname = "spl-input"
+itemname = "org_synth_img"
 fpath = join(S['output_dir'], itemname)
 #filename = "{_[swid]}_{_[asw]}_{_[mid]}_%s." + SET.imgext
 filename = SET.filename_base % itemname
@@ -51,6 +51,8 @@ OVERRIDE = {
     'SW57': (83.0, np.sqrt(-0.56267**2+1.4179**2))  # meassured from saddle to saddle point
     }
 
+
+IS_IPOL = {}
 
 
 ### MAIN #####################################################################
@@ -82,8 +84,8 @@ def get_images(data):
 
     # this used to be a for loop downloading all the files, but isn't anymore
     # because all the other files are generated in some other way
-    img = 'input.png' 
-    img_name = img[:-4]
+    #img = 'input.png' 
+    #img_name = img[:-4]
         
     for i, blob in enumerate(sorted(data.items())):
 
@@ -100,7 +102,7 @@ def get_images(data):
             #print "skip no mid", mid, DBG_mid
             continue
         
-        print "(%3.0f%%) getting %-10s image for mid:%-10s asw:%s swid:%s)" % (100.0*i/n_models, img, mid, asw, swid)
+        print "(%3.0f%%) getting synthimage for mid:%-10s asw:%s swid:%s)" % (100.0*i/n_models, mid, asw, swid)
         
         
 #        imgdir  = fpath % img_name
@@ -110,28 +112,32 @@ def get_images(data):
 
         if not isdir(imgdir):
             makedirs(imgdir)
-        if not isdir(SET.splinp_path):
-            makedirs(SET.splinp_path)
+        if not isdir(SET.splorgs_path):
+            makedirs(SET.splorgs_path)
     
         #print imgdir
         #print imgname
         #continue
         
-        if typ == "new":
-            url = "http://labs.spacewarps.org/media/spaghetti/%s/%s/%s" % (mid[0:2],mid[2:], img)
-        elif typ == "old":
-            url = 'http://mite.physik.uzh.ch/result/' + '%06i/' % int(mid) + img
-        else:
-            print "ERROR!!!!"
-            continue
-
-        tmp_path = join(SET.splinp_path, "_org_" + filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
-
-        if isfile(tmp_path) and not DBG:
-            print 'SKIPPING DL (already present)'
-
-        else:
+        # get second only if first failed
         
+        for img in ["img3_ipol.png", "img3.png"]:
+            if typ == "new":
+                url = "http://labs.spacewarps.org/media/spaghetti/%s/%s/%s" % (mid[0:2],mid[2:], img)
+            elif typ == "old":
+                url = 'http://mite.physik.uzh.ch/result/' + '%06i/' % int(mid) + img
+            else:
+                print "ERROR!!!!"
+                continue
+    
+            tmp_path = join(SET.splorgs_path, "_org_" + filename.format(_={'asw':asw, 'mid':mid,'swid':swid}))
+    
+# this doesn't work anymore because of the IS_IPOL
+#            if isfile(tmp_path) and not DBG:
+#                print 'SKIPPING DL (already present)'
+#    
+#            else:
+            
             r = rq.get(url, stream=True)
             
             if r.status_code >= 300: # reuqests takes care of redirects!
@@ -146,81 +152,98 @@ def get_images(data):
                 for chunk in r.iter_content(1024*4):
                     f.write(chunk)
             print 'downloaded,',
+            
+            # save if this is the ipol variant
+            IS_IPOL[mid]= img=="img3_ipol.png"
+            break
         
 #            # cut the image to square, overwriting the orginal
 #            i1 = Image.open(path)
 #            if not img == 'input.png':
-#                i1 = i1.crop([172, 62, 477+172, 477+62])
-#            else:
-#                i1 = i1.crop([100, 0, 600+100, 600+0])
 #            i1.save(path)
 #            #i1.save(path[:-3] + 'eps')
 #            print "cut,",
             
-
+        # continue if we didn't get any image:
+        if not isfile(tmp_path):
+            continue
         im = misc.imread(tmp_path)
 
-        # calculate the scaling
-        cfg_maxdist = np.max([ np.abs(x['pos']) for x in M['images']])
-        try:
-            MDIobj = find_point.getMaxDistImg(im=im)
-            img_maxdist, dists, maxpoint = MDIobj
-        except find_point.FoundNoMaxError:
-            print "found no max",
-            
-            if swid in OVERRIDE.keys():
-                print " OVERRIDING"
-                img_maxdist = [OVERRIDE[swid][0],]
-                cfg_maxdist = OVERRIDE[swid][1]
-            else:
-                print " skipping"
-                continue
-        
-        # add the data here for debug purposes
-        M['img_maxdist'] = img_maxdist
-        M['cfg_maxdist'] = cfg_maxdist
-        
-        if DBG:
-            print "\nmax dists"
-            print "  cfg:", cfg_maxdist
-            print "  img:", img_maxdist
-            print "  max:", maxpoint
-            print "  rat:", img_maxdist / cfg_maxdist
-#            print "  (scalefact:", M['pixel_scale_fact'],")"
-            #print "  (dis_fact :", M['dis_fact'],")"
-        
-        #cfg_maxdist *= M['pixel_scale_fact'] #* _['dis_fact']
-        
-        # get pixel length of one arcsec
-        arcsec_in_px = img_maxdist / cfg_maxdist
-        
+#        # calculate the scaling
+#        cfg_maxdist = np.max([ np.abs(x['pos']) for x in M['images']])
+#        try:
+#            MDIobj = find_point.getMaxDistImg(im=im)
+#            img_maxdist, dists, maxpoint = MDIobj
+#        except find_point.FoundNoMaxError:
+#            print "found no max",
+#            
+#            if swid in OVERRIDE.keys():
+#                print " OVERRIDING"
+#                img_maxdist = [OVERRIDE[swid][0],]
+#                cfg_maxdist = OVERRIDE[swid][1]
+#            else:
+#                print " skipping"
+#                continue
+#        
+#        # add the data here for debug purposes
+#        M['img_maxdist'] = img_maxdist
+#        M['cfg_maxdist'] = cfg_maxdist
+#        
+#        if DBG:
+#            print "\nmax dists"
+#            print "  cfg:", cfg_maxdist
+#            print "  img:", img_maxdist
+#            print "  max:", maxpoint
+#            print "  rat:", img_maxdist / cfg_maxdist
+##            print "  (scalefact:", M['pixel_scale_fact'],")"
+#            #print "  (dis_fact :", M['dis_fact'],")"
+#        
+#        #cfg_maxdist *= M['pixel_scale_fact'] #* _['dis_fact']
+#        
+#        # get pixel length of one arcsec
+#        arcsec_in_px = img_maxdist / cfg_maxdist
+#        
         # plot using mpl for same style
         fig = plt.figure(**STY['figure_sq_small'])
         ax = fig.add_subplot(111)
-        
-        #ax.imshow(im[:,100:700,:])
-        
-        R = M['mapextend']
-        Rinpx = int(R * arcsec_in_px)
-        mx, my = maxpoint.astype(int)
-
-        # create bigger image with black border, such that we can cut
-        oshape = np.array(im.shape)
-        nshape = oshape + 2*np.array([Rinpx, Rinpx, 0])
-        nim = np.zeros(nshape, dtype=np.uint8)
-        nim[:,:] = [0,0,0,255] # [255,128,0,255]
-        nim[Rinpx:Rinpx+oshape[0],Rinpx:Rinpx+oshape[1],:] = im # put original image ontop
-        
-#        print nim
-#        ax.imshow(nim[:,:,:])
-
-        x = (mx - Rinpx) + Rinpx  # the offset at the end is due the added border above
-        y = (my - Rinpx) + Rinpx
-        u = (mx + Rinpx) + Rinpx
-        v = (my + Rinpx) + Rinpx
-        
-        print x,y,u,v, arcsec_in_px
-        ax.imshow(nim[x:u,y:v,:])
+#        
+#        #ax.imshow(im[:,100:700,:])
+#        
+#        R = M['mapextend']
+#        Rinpx = int(R * arcsec_in_px)
+#        mx, my = maxpoint.astype(int)
+#
+#        # create bigger image with black border, such that we can cut
+#        oshape = np.array(im.shape)
+#        nshape = oshape + 2*np.array([Rinpx, Rinpx, 0])
+#        nim = np.zeros(nshape, dtype=np.uint8)
+#        nim[:,:] = [0,0,0,255] # [255,128,0,255]
+#        nim[Rinpx:Rinpx+oshape[0],Rinpx:Rinpx+oshape[1],:] = im # put original image ontop
+#        
+##        print nim
+##        ax.imshow(nim[:,:,:])
+#
+#        x = (mx - Rinpx) + Rinpx  # the offset at the end is due the added border above
+#        y = (my - Rinpx) + Rinpx
+#        u = (mx + Rinpx) + Rinpx
+#        v = (my + Rinpx) + Rinpx
+#        
+#        print x,y,u,v, arcsec_in_px
+        if IS_IPOL[mid]:
+            x = 0
+            u = 600
+            y = 100
+            v = 700
+        else:
+            x = 62
+            u = 477+62
+            y = 172
+            v = 477+172
+#                i1 = i1.crop([172, 62, 477+172, 477+62])
+#            else:
+#                i1 = i1.crop([100, 0, 600+100, 600+0])
+           
+        ax.imshow(im[x:u,y:v,:])
         
 #        
 #        a = cfg_maxdist
@@ -246,16 +269,16 @@ def get_images(data):
         SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='dark')
         
         # sanity check
-        if arcsec_in_px < 500:
-            asb = SET.add_size_bar(
-                ax,
-                r"1$^{\prime\prime}$",
-                length=arcsec_in_px,
-                height=0.01,
-                heightIsInPx = True,
-                theme="dark",
-                **STY['scalebar']
-            )
+#        if arcsec_in_px < 500:
+#            asb = SET.add_size_bar(
+#                ax,
+#                r"1$^{\prime\prime}$",
+#                length=arcsec_in_px,
+#                height=0.01,
+#                heightIsInPx = True,
+#                theme="dark",
+#                **STY['scalebar']
+#            )
 
 
         plt.tight_layout()

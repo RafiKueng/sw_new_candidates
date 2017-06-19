@@ -12,19 +12,26 @@ Created on Wed Jul 27 04:55:53 2016
 @author: rafik
 """
 
-%run plot_arrival_spaghetti.py
+
 %run plot_einstein_radius_comparison.py
 %run plot_hires_comparison.py
+
+%run plot_masses_one.py
+
+
+
+%run plot_arrival_spaghetti.py
 %run plot_kappa_encl.py
 %run plot_kappa_map_interpol.py
-%run plot_masses_one.py
 %run plot_masses_per_swid.py
 
 %run download_spl_input_images.py
+%run download_synth_imgs.py
 
 %run print_model_assignment_latex.py
 %run print_result_table_latex.py
 
 %run batch_do_nsynth_img.py
 
-%run make_supplement.py
+%run make_supplement_latex.py
+%run make_supplement_html.py
