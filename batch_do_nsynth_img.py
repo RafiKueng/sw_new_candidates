@@ -17,7 +17,7 @@ STY = SET.styles
 S = SET.settings
 
 auto = False
-auto = True
+#auto = True
 
 DBG = SET.DEBUG
 #DBG = True
@@ -39,7 +39,7 @@ import matplotlib.gridspec as gridspec
 import parse_candidates as PACA
 import create_data as CRDA
 import get_state_and_config as GSAC # import will trigger download!
-import download_orginals as DORG # import triggers download
+import download_spl_input_images as DORG # import triggers download
 
 
 
@@ -681,6 +681,8 @@ class ROIDisplay(object):
 glass_basis('glass.basis.pixels', solver=None)
 exclude_all_priors()
 
+blabla = None
+
 class Analysis(object):
 
     def __init__(self, orgimg, state_fn, zoomH, maskH, roiH, axSynthImg, axSrcImg=None, axSrcImgGray=None, axCount=None, axDiff=None):
@@ -759,6 +761,15 @@ class Analysis(object):
         
         theta = [self.px2arcs(p) for p in pixel]
         d_source = np.array(map(delta_beta, theta))
+        
+        global blabla
+        blabla = {
+            'pix': pix,
+            'piy': piy,
+            'pixel': pixel,
+            'theta': theta,
+            'd_source': d_source
+            }
         
         # range of grid on sourceplane
         r = max(np.max(np.abs(d_source.real)), np.max(np.abs(d_source.imag)))

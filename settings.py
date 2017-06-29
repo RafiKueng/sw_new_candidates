@@ -14,7 +14,7 @@ import matplotlib as mpl
 import matplotlib.transforms as transforms
 
 DEBUG = False
-#DEBUG = True
+DEBUG = True
 
 
 PrintAll = False
