@@ -26,6 +26,9 @@ if PrintAll:
 else:
     DATASET_TO_USE = "selected_models"
     PRINT_MID = False
+    
+PRINT_MID = False
+    
 
 
 HILIGHT_SWID = ['05', '42', '28', '58', '02','19','09','29','57']

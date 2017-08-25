@@ -35,11 +35,15 @@ MODELS, MAPS = CRDA.get_dataset_data()
 
 DBG = SET.DEBUG
 #DBG = True
-DBG_swid = "SW42"
-DBG_swid = "SW01"
-DBG_mid = ["004758", '007350', "EUTVAVV6XJ"]
+#DBG_swid = "SW42"
+DBG_swid = "SW31"
+#DBG_mid = ["004758", '007350', "EUTVAVV6XJ"]
 
 #imgdir = join(S['output_dir'],'spl_images')
+
+
+PRINT_CAPTION = True
+
 
 itemname = "spl-input"
 fpath = join(S['output_dir'], itemname)
@@ -96,9 +100,9 @@ def get_images(data):
         if DBG and not swid==DBG_swid:
             #print "skip no swid", swid, DBG_swid
             continue
-        if DBG and not mid in DBG_mid:
-            #print "skip no mid", mid, DBG_mid
-            continue
+#        if DBG and not mid in DBG_mid:
+#            #print "skip no mid", mid, DBG_mid
+#            continue
         
         print "(%3.0f%%) getting %-10s image for mid:%-10s asw:%s swid:%s)" % (100.0*i/n_models, img, mid, asw, swid)
         
@@ -241,21 +245,22 @@ def get_images(data):
         ax.tick_params(**STY['no_ticks'])
         ax.tick_params(**STY['no_labels'])
         
-#        SET.add_inline_label(ax, swid, color="dark")
-        SET.add_caption_swid(ax, text=swid, color='dark')
-        SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='dark')
-        
-        # sanity check
-        if arcsec_in_px < 500:
-            asb = SET.add_size_bar(
-                ax,
-                r"1$^{\prime\prime}$",
-                length=arcsec_in_px,
-                height=0.01,
-                heightIsInPx = True,
-                theme="dark",
-                **STY['scalebar']
-            )
+        if PRINT_CAPTION:
+    #        SET.add_inline_label(ax, swid, color="dark")
+            SET.add_caption_swid(ax, text=swid, color='dark')
+            SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='dark')
+            
+            # sanity check
+            if arcsec_in_px < 500:
+                asb = SET.add_size_bar(
+                    ax,
+                    r"1$^{\prime\prime}$",
+                    length=arcsec_in_px,
+                    height=0.01,
+                    heightIsInPx = True,
+                    theme="dark",
+                    **STY['scalebar']
+                )
 
 
         plt.tight_layout()

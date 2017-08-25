@@ -36,7 +36,9 @@ ALL_MODELS   = CRDA.ALL_MODELS
 
 DBG = SET.DEBUG
 #DBG = True
-DBG_DO = ['SW42',]
+DBG_DO = ['SW31',]
+
+PRINT_CAPTION = True
 
 
 fpath = join(S['output_dir'], "kappa_map_interpol")
@@ -179,25 +181,27 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         else:
             Llng = 0.1
             Llbl = r"0.1$^{\prime\prime}$"
-    
-        tmp2 = SET.add_size_bar(ax, Llbl,
-                                length=Llng,
-                                height=0.01,
-                                heightIsInPx = True,
-                                theme = "bright",
-                                **STY['scalebar']
-                                )
 
-#        SET.add_inline_label(ax, swid, color='bright')
-        SET.add_caption_swid(ax, text=swid, color='bright')
-        SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='bright')
+
+        if PRINT_CAPTION:
+            tmp2 = SET.add_size_bar(ax, Llbl,
+                                    length=Llng,
+                                    height=0.01,
+                                    heightIsInPx = True,
+                                    theme = "bright",
+                                    **STY['scalebar']
+                                    )
+    
+    #        SET.add_inline_label(ax, swid, color='bright')
+            SET.add_caption_swid(ax, text=swid, color='bright')
+            SET.add_caption_mid(ax, text=mid+("" if isZCorr else "*"), color='bright')
         
         fig.tight_layout()
         fig.savefig(imgname, **STY['figure_save'])
             
         if DBG:
             plt.show()
-            break
+            #break
         
         fig.clear()
         plt.close()
