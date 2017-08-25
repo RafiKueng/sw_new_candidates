@@ -102,15 +102,9 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         m_lens_min = MODELS[mid]['M(<R)']['min'][-1] * m_rcf
 
     if mid and 'm_s_geom' in LENSES[asw].keys():
-#        m_rcf = MODELS[mid]['sig_fact']
-
-        m_stel = LENSES[asw].get('m_s_geom', UK)
+        m_stel = LENSES[asw].get('m_s_geom', None)
         m_stel_jr = LENSES[asw].get('m_s_jr', UK)
         m_stel_sr = LENSES[asw].get('m_s_sr', UK)
-
-#        m_lens = MODELS[mid]['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
-#        m_lens_max = MODELS[mid]['M(<R)']['max'][-1] * m_rcf
-#        m_lens_min = MODELS[mid]['M(<R)']['min'][-1] * m_rcf
 
         m_moster = moster.inv(m_stel)
         
@@ -128,7 +122,6 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
                 
     fmt = "%6.4e"
 
-    
     try:
         log_m_lens = fmt % np.log10(m_lens)  # dito
     except:

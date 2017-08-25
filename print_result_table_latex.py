@@ -18,6 +18,7 @@ ALL_MODELS = CRDA.ALL_MODELS
 import moster
 
 
+UK = '\UK'
 
 with open('input/eval.txt', 'r') as f:
     lns = f.readlines()
@@ -81,17 +82,32 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     name = "$-$".join(name.split('-'))
     name = "$+$".join(name.split('+'))
 
-    zL = "\UK"
+    zL = UK
     m_ratio = None
     haloindex = None
+
+    m_stel = UK
+    m_stel_jr = UK
+    m_stel_sr = UK
+
+    m_lens = UK
+    m_lens_min = UK
+    m_lens_max = UK
+
+    m_moster = UK
     
+    if mid:
+        m_rcf = MODELS[mid]['sig_fact']
+        m_lens = MODELS[mid]['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
+        m_lens_max = MODELS[mid]['M(<R)']['max'][-1] * m_rcf
+        m_lens_min = MODELS[mid]['M(<R)']['min'][-1] * m_rcf
+
     if mid and 'm_s_geom' in LENSES[asw].keys():
         m_stel = LENSES[asw].get('m_s_geom', None)
-        m_lens = MODELS[mid]['M(<R)']['data'][-1] # usually called m_lens in the pipeline
+        m_stel_jr = LENSES[asw].get('m_s_jr', UK)
+        m_stel_sr = LENSES[asw].get('m_s_sr', UK)
+
         m_moster = moster.inv(m_stel)
-        
-        m_rcf = MODELS[mid]['sig_fact']
-        m_lens = m_lens * m_rcf
         
         zL = "%s" % MODELS[mid]['z_lens_measured']
         
@@ -104,16 +120,43 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
                 m_ratio = '%i'%r
             else:
                 m_ratio = '%.1e'%r
-                
     
+    fmt = "%4.1f"
+
     try:
-        haloindex = "%3.2f" % haloindex
-        log_m_stel = "%3.1f" % np.log10(m_stel)  # / msun they are already in solar masses
-        log_m_lens = "%3.1f" % np.log10(m_lens)  # dito
+        log_m_lens = fmt % np.log10(m_lens)  # dito
     except:
-        haloindex = "\UK"
-        log_m_stel = "\UK"
-        log_m_lens = "\UK"
+        log_m_lens = UK
+        
+    try:
+        haloindex = "%4.2f" % haloindex
+        log_m_stel = fmt % np.log10(m_stel)  # / msun they are already in solar masses
+    except:
+        haloindex  = UK
+        log_m_stel = UK
+
+    try:
+        m_stel     = fmt % m_stel
+        m_stel_jr  = fmt % m_stel_jr
+        m_stel_sr  = fmt % m_stel_sr
+    except:
+        m_stel     = UK
+        m_stel_jr  = UK
+        m_stel_sr  = UK
+        
+    try:
+        m_lens     = fmt % m_lens
+        m_lens_min = fmt % m_lens_min
+        m_lens_max = fmt % m_lens_max
+    except:
+        m_lens     = UK
+        m_lens_min = UK
+        m_lens_max = UK
+
+    try:
+        m_moster   = fmt % m_moster
+    except:
+        m_moster = UK
     
     m = {
         'asw'      : asw,
@@ -135,11 +178,11 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     s = """  {swid} & {asw} & {coords} & {zL}
     & {d1} & {d2} & {d3} & {d0} & {d4} & {d5}
-    & {m_stel} & {m_halo} & {haloindex} \\\\
+    & {m_stel} & {m_halo} & {haloindex}   \\\\
     
 """.format(**m)
 
-    print s.replace('\n', '\t')
+    print s.replace('\n', '\t').replace('&', '\t')
     ss += s
 
 ss += """
