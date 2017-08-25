@@ -17,7 +17,7 @@ ALL_MODELS = CRDA.ALL_MODELS
 
 import moster
 from EinsteinRadius import getEinsteinR
-
+from stelmass.angdiam import sig_factor, kappa_factor
 
 UK = ''
 
@@ -104,16 +104,33 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     if mid:
         M = MODELS[mid]
-        m_rcf = M['sig_fact']
+
+        if M['z_corrected']:
+            m_rcf = M['sig_fact']
+            k_rcf  = M['kappa_fact']
+        else:   # you could enable this to set the redshifts of uncorrected models to 0.5/2
+            zl_actual = 0.5
+            zs_actual = 2
+            zl_used   = 0.5
+            zs_used   = 2
+            m_rcf = sig_factor(zl_actual,zs_actual) / sig_factor(zl_used,zs_used)
+            k_rcf  = kappa_factor(zl_used, zs_used)
+#            k_rcf  = kappa_factor(0.5,2)
+
         m_lens = M['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
         m_lens_max = M['M(<R)']['max'][-1] * m_rcf
         m_lens_min = M['M(<R)']['min'][-1] * m_rcf
-
-        k_rcf  = M['kappa_fact']
-        rr = M['R']['data']        
+        
+        rr = M['R']['data']
         da = M['kappa(<R)']['data'] * k_rcf
         rE = getEinsteinR(rr, da)
-        if not rE:
+        
+        if not M['z_corrected']:
+            # if these values are not corrected they are not useable...
+            # remove this if if you want to approx with redshifts 0.5/2, as defined above
+            m_lens = UK
+            m_lens_max = UK
+            m_lens_min = UK
             rE = UK
 
 
@@ -174,7 +191,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         m_moster = UK
 
     try:
-        rE   = "%3.1f" % rE
+        rE   = "%4.2f" % rE
     except:
         rE = UK
     
