@@ -17,7 +17,7 @@ ALL_MODELS = CRDA.ALL_MODELS
 
 import moster
 
-UK = '-'
+UK = ''
 
 with open('input/eval.txt', 'r') as f:
     lns = f.readlines()
@@ -58,7 +58,11 @@ ss = ",".join([
 'log_10 ( Mlens / Msun )',
 
 'halo-matching index H',
-])
+
+'Mstel','Mlens','Mmoster',
+'Mstel_yr','Mstel_sr',
+'Mlens_min','Mlens_max',
+]) + "\n"
 
 for swid, asw in sorted(MAPS['swid2asw'].items()):
     
@@ -80,14 +84,35 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     zL = UK
     m_ratio = None
     haloindex = None
+
+    m_stel = UK
+    m_stel_jr = UK
+    m_stel_sr = UK
+
+    m_lens = UK
+    m_lens_min = UK
+    m_lens_max = UK
+
+    m_moster = UK
     
-    if mid and 'm_s_geom' in LENSES[asw].keys():
-        m_stel = LENSES[asw].get('m_s_geom', None)
-        m_lens = MODELS[mid]['M(<R)']['data'][-1] # usually called m_lens in the pipeline
-        m_moster = moster.inv(m_stel)
-        
+    if mid:
         m_rcf = MODELS[mid]['sig_fact']
-        m_lens = m_lens * m_rcf
+        m_lens = MODELS[mid]['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
+        m_lens_max = MODELS[mid]['M(<R)']['max'][-1] * m_rcf
+        m_lens_min = MODELS[mid]['M(<R)']['min'][-1] * m_rcf
+
+    if mid and 'm_s_geom' in LENSES[asw].keys():
+#        m_rcf = MODELS[mid]['sig_fact']
+
+        m_stel = LENSES[asw].get('m_s_geom', UK)
+        m_stel_jr = LENSES[asw].get('m_s_jr', UK)
+        m_stel_sr = LENSES[asw].get('m_s_sr', UK)
+
+#        m_lens = MODELS[mid]['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
+#        m_lens_max = MODELS[mid]['M(<R)']['max'][-1] * m_rcf
+#        m_lens_min = MODELS[mid]['M(<R)']['min'][-1] * m_rcf
+
+        m_moster = moster.inv(m_stel)
         
         zL = "%s" % MODELS[mid]['z_lens_measured']
         
@@ -101,23 +126,51 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
             else:
                 m_ratio = '%.1e'%r
                 
+    fmt = "%6.4e"
+
     
     try:
-        haloindex = "%6.4f" % haloindex
-        log_m_stel = "%6.4f" % np.log10(m_stel)  # / msun they are already in solar masses
-        log_m_lens = "%6.4f" % np.log10(m_lens)  # dito
+        log_m_lens = fmt % np.log10(m_lens)  # dito
     except:
-        haloindex = UK
-        log_m_stel = UK
         log_m_lens = UK
+        
+    try:
+        haloindex = "%5.3f" % haloindex
+        log_m_stel = fmt % np.log10(m_stel)  # / msun they are already in solar masses
+    except:
+        haloindex  = UK
+        log_m_stel = UK
+
+    try:
+        m_stel     = fmt % m_stel
+        m_stel_jr  = fmt % m_stel_jr
+        m_stel_sr  = fmt % m_stel_sr
+    except:
+        m_stel     = UK
+        m_stel_jr  = UK
+        m_stel_sr  = UK
+        
+    try:
+        m_lens     = fmt % m_lens
+        m_lens_min = fmt % m_lens_min
+        m_lens_max = fmt % m_lens_max
+    except:
+        m_lens     = UK
+        m_lens_min = UK
+        m_lens_max = UK
+
+    try:
+        m_moster   = fmt % m_moster
+    except:
+        m_moster = UK
     
     m = {
         'asw'      : asw,
         'swid'     : swid,
         #'mid':    mid,
         'coords'   : name,
-        'm_stel'   : log_m_stel,
-        'm_halo'   : log_m_lens,
+        'log_m_stel'   : log_m_stel,
+        'log_m_lens'   : log_m_lens,
         'm_ratio'  : m_ratio,
         'haloindex': haloindex,
         'zL' : zL,
@@ -127,15 +180,25 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         'd3' : dd[swid][3],
         'd4' : dd[swid][4],
         'd5' : dd[swid][5],
+        'm_stel'    : m_stel, 
+        'm_stel_jr' : m_stel_jr,
+        'm_stel_sr' : m_stel_sr,
+        'm_lens'    : m_lens,
+        'm_lens_min': m_lens_min,
+        'm_lens_max': m_lens_max,
+        'm_moster'  : m_moster,
     }
     
-    s = """{swid}, {asw}, {coords}, {zL},
-{d1}, {d2}, {d3}, {d0}, {d4}, {d5},
-{m_stel}, {m_halo}, {haloindex}\n    
-""".format(**m)
+    s = """
+{swid},{asw},{coords},{zL},
+{d1},{d2},{d3},{d0},{d4},{d5},
+{log_m_stel},{log_m_lens},{haloindex},
+{m_stel},{m_lens},{m_moster},
+{m_stel_jr},{m_stel_sr},{m_lens_min},{m_lens_max}
+""".format(**m).replace('\n', '')
 
     print s
-    ss += s
+    ss += s + "\n"
 
 #pyperclip.copy(ss)
 
