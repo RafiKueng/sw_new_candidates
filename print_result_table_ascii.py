@@ -16,6 +16,8 @@ MODELS, MAPS = CRDA.get_dataset_data("selected_models")
 ALL_MODELS = CRDA.ALL_MODELS
 
 import moster
+from EinsteinRadius import getEinsteinR
+
 
 UK = ''
 
@@ -54,15 +56,19 @@ ss = ",".join([
 'synthetic image reasonable',
 'mass map reasonable',
 
-'log_10 ( Mstel / Msun )',
-'log_10 ( Mlens / Msun )',
+'log_10 ( Mstel / Msun ) [1]',
+'log_10 ( Mlens / Msun ) [1]',
 
-'halo-matching index H',
+'halo-matching index H [1]',
 
-'Mstel','Mlens','Mmoster',
-'Mstel_yr','Mstel_sr',
-'Mlens_min','Mlens_max',
+'Mstel [Msun]','Mlens [Msun]','Mmoster [Msun]',
+'Mstel_yr [Msun]','Mstel_sr [Msun]',
+'Mlens_min [Msun]','Mlens_max [Msun]',
+
+'EinsteinRadius [arcsec]'
 ]) + "\n"
+    
+print ss
 
 for swid, asw in sorted(MAPS['swid2asw'].items()):
     
@@ -94,12 +100,22 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     m_lens_max = UK
 
     m_moster = UK
+    rE = UK
     
     if mid:
-        m_rcf = MODELS[mid]['sig_fact']
-        m_lens = MODELS[mid]['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
-        m_lens_max = MODELS[mid]['M(<R)']['max'][-1] * m_rcf
-        m_lens_min = MODELS[mid]['M(<R)']['min'][-1] * m_rcf
+        M = MODELS[mid]
+        m_rcf = M['sig_fact']
+        m_lens = M['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
+        m_lens_max = M['M(<R)']['max'][-1] * m_rcf
+        m_lens_min = M['M(<R)']['min'][-1] * m_rcf
+
+        k_rcf  = M['kappa_fact']
+        rr = M['R']['data']        
+        da = M['kappa(<R)']['data'] * k_rcf
+        rE = getEinsteinR(rr, da)
+        if not rE:
+            rE = UK
+
 
     if mid and 'm_s_geom' in LENSES[asw].keys():
         m_stel = LENSES[asw].get('m_s_geom', None)
@@ -156,6 +172,11 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         m_moster   = fmt % m_moster
     except:
         m_moster = UK
+
+    try:
+        rE   = "%3.1f" % rE
+    except:
+        rE = UK
     
     m = {
         'asw'      : asw,
@@ -180,6 +201,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         'm_lens_min': m_lens_min,
         'm_lens_max': m_lens_max,
         'm_moster'  : m_moster,
+        'rE'        : rE
     }
     
     s = """
@@ -187,14 +209,15 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
 {d1},{d2},{d3},{d0},{d4},{d5},
 {log_m_stel},{log_m_lens},{haloindex},
 {m_stel},{m_lens},{m_moster},
-{m_stel_jr},{m_stel_sr},{m_lens_min},{m_lens_max}
-""".format(**m).replace('\n', '')
+{m_stel_jr},{m_stel_sr},{m_lens_min},{m_lens_max},
+{rE}
+""".format(**m).replace('\n', '') 
 
     print s
     ss += s + "\n"
 
 #pyperclip.copy(ss)
 
-with open("output/table.csv", "w") as f:
+with open("output/table_1.csv", "w") as f:
     f.write(ss)
 

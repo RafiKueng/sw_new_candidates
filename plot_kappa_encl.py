@@ -20,11 +20,12 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
-from scipy import optimize, interpolate
 
 
 import create_data as CRDA
 import parse_candidates as PACA
+
+from EinsteinRadius import getEinsteinR
 
 
 DBG = SET.DEBUG
@@ -50,33 +51,6 @@ t_props = STY['text']
 
 if not os.path.exists(fpath):
     os.makedirs(fpath)
-
-
-def getEinsteinR(x, y):
-    # poly = interpolate.PiecewisePolynomial(x,y[:,np.newaxis])
-    poly = interpolate.BPoly.from_derivatives(x,y[:,np.newaxis])
-    
-    def one(x):
-        return poly(x)-1
-    
-    x_min = np.min(x)
-    x_max = np.max(x)
-    x_mid = poly(x[len(x)/2])
-    
-    rE,infodict,ier,mesg = optimize.fsolve(one, x_mid, full_output=True)
-    
-    #print rE,infodict,ier,mesg
-    
-    if (ier==1 or ier==5) and x_min<rE<x_max and len(rE)==1:
-        return rE[0]
-    elif len(rE)>1:
-        for r in rE:
-            if x_min<r<x_max:
-                return r
-    else:
-        return False
-    
-
 
 
 
