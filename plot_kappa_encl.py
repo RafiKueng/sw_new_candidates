@@ -29,7 +29,7 @@ from EinsteinRadius import getEinsteinR
 
 
 DBG = SET.DEBUG
-DBG = True
+#DBG = True
 DBG_DO = ["SW57",]
 
 MODELS, MAPS = CRDA.get_dataset_data()

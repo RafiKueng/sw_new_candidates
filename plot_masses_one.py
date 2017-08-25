@@ -124,8 +124,9 @@ if os.path.exists(ffn) and not overwrite:
     #continue
 
 # setup plot
-fig = plt.figure(**STY['figure_sq_big'])
+fig = plt.figure(**STY['figure_rect_big'])
 ax = fig.add_subplot(111)
+ax.set_aspect('equal')
 
 # plot range for additional stuff
 # make sure it's outside the plot range
@@ -204,7 +205,17 @@ for i, _ in enumerate(data.items()):
     
     
     #ax.annotate('%s' % swid, xy=(m_stellar,m_lens), textcoords='data', size="x-small")
-    ax.annotate('%s' % swid,
+    
+    # manual offset for overlapping label
+    lbl = '%s' % swid
+    if swid == 'SW28':
+        #lbl = "   "+lbl
+        m_stellar += m_stellar*0.075
+    if swid == 'SW29':
+        #lbl = lbl+"   "
+        m_stellar -= m_stellar*0.075
+    
+    ax.annotate(lbl,
                 xy=(m_stellar,m_lens),
                 ha='center',
                 va='center',
@@ -226,6 +237,12 @@ ax.set_ylabel('Lensing Mass $M_{lens}$ [ $M_{\odot}$ ]', **STY['label'])
 #axis limits
 ax.set_xlim(xmin=2.5e8, xmax=13e11)
 ax.set_ylim(ymin=2.5e10, ymax=13e13)
+ax.set_xlim(xmin=2.5e8, xmax=13e11)
+ax.set_ylim(ymin=2.5e10, ymax=13e13)
+
+ax.set_xlim(xmin=2.0e8, xmax=1.3e12)
+ax.set_ylim(ymin=6e10, ymax=2e13)
+
 
 ax.set_xscale("log", nonposx='clip')
 ax.set_yscale("log", nonposy='clip')

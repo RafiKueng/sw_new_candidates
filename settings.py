@@ -14,11 +14,11 @@ import matplotlib as mpl
 import matplotlib.transforms as transforms
 
 DEBUG = False
-DEBUG = True
+#DEBUG = True
 
 
 PrintAll = False
-PrintAll = True
+#PrintAll = True
 
 if PrintAll:
     DATASET_TO_USE = "all_models"
@@ -37,7 +37,7 @@ HILIGHT_SWID = ["SW"+_ for _ in HILIGHT_SWID]
 
 def set_mpl_rc():
     mpl.rcParams['font.family'] = 'serif'
-    mpl.rcParams['font.size'] = 16
+    mpl.rcParams['font.size'] = 20
 
     mpl.rcParams['text.usetex'] = True
     mpl.rcParams['text.latex.unicode'] = True
@@ -125,6 +125,11 @@ styles = {
 
     'figure_sq_big' : {
         'figsize' : (15*cm, 15*cm),
+        'dpi'     : dpi,
+    },
+
+    'figure_rect_big' : {
+        'figsize' : (15*cm, 10*cm),
         'dpi'     : dpi,
     },
 
