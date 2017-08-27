@@ -149,7 +149,7 @@ def create_imgs():
             print infile, outfile
             im = PIL.Image.open(infile)
             im.thumbnail(size, Image.ANTIALIAS)
-            im.save(outfile, "JPEG")
+            im.convert("RGB").save(outfile, "JPEG")  # convert from RGBA to RGB for jpeg
             #break
 
 # http://stackoverflow.com/questions/1011938/python-previous-and-next-values-inside-a-loop
@@ -371,6 +371,6 @@ for swid, tree in sorted(TREE.items()):
 
 
 create_imgs()
-create_pdf()
+#create_pdf()
 
 

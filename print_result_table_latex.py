@@ -67,6 +67,10 @@ ss = r"""
   \\ \hline
 """
 
+err_stel_r = []
+err_stel_a = []
+err_lens = []
+
 for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     mids = MAPS['swid2mids'].get(swid, None)
@@ -149,42 +153,85 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
             else:
                 m_ratio = '%.1e'%r
                 
-    fmt = "%4.1f"
 
-    try:
-        log_m_lens = fmt % np.log10(m_lens)  # dito
-    except:
-        log_m_lens = UK
+    fmte = "%6.4e"
+    
+    fmts  = "%4.1f"
+    fmtse = "%+4.1f"
+    
+    fmtl  = "%4.1f"
+    fmtle = "%+5.2f"
+
+    fmth  = "%4.2f"
         
     try:
-        haloindex = "%4.2f" % haloindex
-        log_m_stel = fmt % np.log10(m_stel)  # / msun they are already in solar masses
+        haloindex = fmth % haloindex
     except:
         haloindex  = UK
-        log_m_stel = UK
 
     try:
-        m_stel     = fmt % m_stel
-        m_stel_jr  = fmt % m_stel_jr
-        m_stel_sr  = fmt % m_stel_sr
-    except:
+#        print m_stel, m_stel_jr, m_stel_sr, np.log10(m_stel_jr), np.log10(m_stel), np.log10(m_stel_sr)
+
+        err_stel_r.append([
+            (np.log10(m_stel_sr) - np.log10(m_stel)) / np.log10(m_stel)  ,
+            (-np.log10(m_stel) + np.log10(m_stel_jr)) / np.log10(m_stel)
+        ])
+        err_stel_a.append([
+            (np.log10(m_stel_sr) - np.log10(m_stel)) ,
+            (-np.log10(m_stel) + np.log10(m_stel_jr))
+        ])
+
+        log_m_stel = fmts % np.log10(m_stel)  # / msun they are already in solar masses
+        log_m_stel_p = fmtse % ( np.log10(m_stel_sr) - np.log10(m_stel) )
+        log_m_stel_m = fmtse % ( -np.log10(m_stel) + np.log10(m_stel_jr) )
+
+        m_stel     = fmte % m_stel
+        m_stel_jr  = fmte % m_stel_jr
+        m_stel_sr  = fmte % m_stel_sr
+        
+
+
+    except TypeError:
         m_stel     = UK
         m_stel_jr  = UK
         m_stel_sr  = UK
         
+        log_m_stel = UK
+        log_m_stel_p = ""
+        log_m_stel_m = ""
+
+        
     try:
-        m_lens     = fmt % m_lens
-        m_lens_min = fmt % m_lens_min
-        m_lens_max = fmt % m_lens_max
+        err_lens.append([
+            (np.log10(m_lens_max) - np.log10(m_lens) ) / np.log10(m_lens) ,
+            (-np.log10(m_lens) + np.log10(m_lens_min)) / np.log10(m_lens)
+        ])
+
+        log_m_lens = fmtl % np.log10(m_lens)  # dito
+        log_m_lens_p = fmtle % ( np.log10(m_lens_max) - np.log10(m_lens) )
+        log_m_lens_m = fmtle % ( -np.log10(m_lens) + np.log10(m_lens_min) )
+
+        m_lens     = fmte % m_lens
+        m_lens_min = fmte % m_lens_min
+        m_lens_max = fmte % m_lens_max
+
+
     except:
         m_lens     = UK
         m_lens_min = UK
         m_lens_max = UK
 
+        log_m_lens = UK
+        log_m_lens_p = ""
+        log_m_lens_m = ""
+
+
     try:
         m_moster   = fmt % m_moster
     except:
         m_moster = UK
+
+
     
     m = {
         'asw'      : asw,
@@ -192,9 +239,13 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         #'mid':    mid,
         'coords'   : name,
         'm_stel'   : log_m_stel,
-        'm_halo'   : log_m_lens,
+        'm_lens'   : log_m_lens,
         'm_ratio'  : m_ratio,
         'haloindex': haloindex,
+        'm_stel_p' : log_m_stel_p,
+        'm_stel_m' : log_m_stel_m,
+        'm_lens_p' : log_m_lens_p,
+        'm_lens_m' : log_m_lens_m,
         'zL' : zL,
         'd0' : dd[swid][0],
         'd1' : dd[swid][1],
@@ -206,9 +257,15 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     s = """  {swid} & {asw} & {coords} & {zL}
     & {d1} & {d2} & {d3} & {d0} & {d4} & {d5}
-    & {m_stel} & {m_halo} & {haloindex}   \\\\
+    & ${m_stel}$
+    & ${m_lens}$
+    & {haloindex}   \\\\
     
-""".format(**m)
+""".format(**m) #.replace('-', '--')
+
+#    & ${m_stel}\substack{{ {m_stel_p} \\\\ {m_stel_m} }}$
+#    & ${m_lens}\substack{{ {m_lens_p} \\\\ {m_lens_m} }}$
+
 
     print s.replace('\n', '\t').replace('&', '\t')
     ss += s
@@ -223,4 +280,17 @@ ss += """
 
 with open("output/table.tex", "w") as f:
     f.write(ss)
+
+
+err_stel_a = np.array(err_stel_a)
+err_stel_r = np.array(err_stel_r)
+err_lens   = np.array(err_lens)
+
+print "max err stel:", np.max(np.abs(err_stel_r))
+print "max err lens:", np.max(np.abs(err_lens))
+
+print "max *span* for m_stel between jr and sr: (dex)", np.max(np.abs(err_stel_a)) * 2
+
+
+
 
