@@ -52,11 +52,13 @@ from create_data import LENS_CANDIDATES as LENSES
 
 Dates = {}
 Hists = {}
+HIST = {}
 
 nBins = 3 * 365 * 24 * 60
 alle = np.zeros(nBins)
 alle2 = np.zeros(nBins)
 users = {}
+xx = np.arange(nBins)
 
 for swid in MAPS['swid2mids'].keys():
     #if swid == 'SW01': continue
@@ -94,6 +96,12 @@ for swid in MAPS['swid2mids'].keys():
         for i,v in hist:
             alle2[i] += v
     
+    
+for k,v in Hists.items():
+    HIST[k] = np.zeros(nBins)
+    for i,j in v:
+        HIST[k][i] += j
+
 #    plt.step(hist[:,0]+1, np.cumsum(hist[:,1]))
 #
 #plt.xscale('log')
@@ -107,17 +115,39 @@ for i in [1, 60, 60*24, 60*24*7, 60*24*30, 60*24*365, 60*24*365*2]:
     ax.axvline(i, color='lightgray')
 ax.axvline(61000, color='darkgray', linestyle='--') # modelling challenge
 
+
 ax.step(np.arange(nBins), np.cumsum(alle), label='all')
-ax.step(np.arange(nBins), np.cumsum(alle2), label='excl. SW01')
+#ax.step(np.arange(nBins), np.cumsum(alle2), label='excl. SW01')
+
+
+#dict([ (k, np.sum(v)) for k,v in  HIST.items() ])
+
+stacked = []
+lbls = []
+for swidd in [1,5,20,29,45]:
+    swid = "SW%02i" % swidd
+    #ax.fill_between(np.arange(nBins), np.cumsum(HIST[swid]), 0, label=swid)
+    stacked.append(np.cumsum(HIST[swid]))
+    lbls.append(swid)
+
+rstacked = np.row_stack(reversed(stacked))
+ax.stackplot(xx, rstacked, labels=reversed(lbls))
+
+
+
+
+handles, labels = ax.get_legend_handles_labels()
+ax.legend(handles[::-1], labels[::-1])
+
 
 ax.set_xlabel("Time since first model [min]")
 ax.set_ylabel("Total number of models [1]")
-ax.legend()
+#ax.legend()
 
 ax.set_xscale('log')
-#ax.yscale('log')
+ax.set_yscale('log')
 
-ax.set_ylim([50,375])
+#ax.set_ylim([50,375])
 plt.tight_layout()
 #plt.show()
 
@@ -150,6 +180,6 @@ for k,v in users_cleaned.items():
 print "we got n major contributors:", count    
     
 
-
+#plt.close('all')
 
 
