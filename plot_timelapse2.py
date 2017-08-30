@@ -31,7 +31,7 @@ DBG = SET.DEBUG
 
 
 fpath    = join(S['output_dir'], 'timelapse')
-filename = 'timelapse.png'
+filename = 'timelapse2.png'
 
 
 if not os.path.exists(fpath):

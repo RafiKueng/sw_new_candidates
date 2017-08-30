@@ -31,7 +31,7 @@ DBG = SET.DEBUG
 
 
 fpath    = join(S['output_dir'], 'timelapse')
-filename = 'timelapse.png'
+filename = 'timelapse3.png'
 
 
 if not os.path.exists(fpath):
@@ -61,7 +61,7 @@ users = {}
 #alle2 = np.zeros(nBins)
 #xx = np.arange(nBins)
 
-
+START_DATE = dt.datetime(2013,1,1,0,0,0)
 
 nnn = 2.5 * 365 * 24 * 60 * 60 # max value needed
 res = 128  # subsampling..
@@ -83,7 +83,7 @@ for swid in MAPS['swid2mids'].keys():
     for mid in MAPS['swid2mids'][swid]:
         print "   ", mid
         M = ALL_MODELS[mid]
-        date = (parser.parse(M['created_on']) - dt.datetime(2013,3,1,0,0,0)).total_seconds()
+        date = (parser.parse(M['created_on']) - START_DATE).total_seconds()
         dates += [date,]
         u = M['user']
         if not u in users:
@@ -123,37 +123,56 @@ ncand = len(Dates.keys())
 #ax2 = fig.add_subplot(2,1,2,sharex=ax1)
 #
 
-fig, axes = plt.subplots(3, 1, sharex=True, **STY['figure_rect_med'])
-ax1, ax2, ax3 = axes
+plot_users = False
+#plot_users = True
+
+if plot_users:
+    fig, axes = plt.subplots(3, 1, sharex=True, **STY['figure_rect_med'])
+    ax1, ax2, ax3 = axes
+else:
+    fig, axes = plt.subplots(2, 1, sharex=True, **STY['figure_rect_med'])
+    ax1, ax2 = axes
+    ax3 = None
+
 fig.subplots_adjust(hspace=0)
 
-for swid, h in Hists.items():
+for swid, h in sorted(Hists.items()):
     if swid not in ['SW01','SW05','SW20','SW29', 'SW45']:
         continue
        
     a, b = np.histogram( np.array(h), xx)
-    if swid == 'SW01':
-        a /= 3
-    ax2.step(xx[:-1]/60/60/24, np.cumsum(a))
+#    if swid == 'SW01':
+#        a /= 3
+    ax2.step(xx[:-1]/60/60/24, np.cumsum(a), label=swid)
 #    ax1.step(xx[:-1]/60/60/24, a)
+
+ax2.set_yscale('log')
+ax2.legend()
 
 #plt.show()
 
-for user, lst in by_users.items():
-    if len(lst) < 5:
-        continue
-    a, b = np.histogram( np.array(lst), xx)
-    ax3.step(xx[:-1]/60/60/24, a, label="$%s$" % user)
-
-ax3.legend()
+if ax3:
+    for user, lst in by_users.items():
+        if len(lst) < 5:
+            continue
+        a, b = np.histogram( np.array(lst), xx)
+        ax3.step(xx[:-1]/60/60/24, a, label="$%s$" % user)
+    
+    ax3.legend()
     
 a, b = np.histogram( np.array(alldates), xx)
 ax1.step( xx[:-1]/60/60/24, np.cumsum(a) )
 
+ax2.set_xlabel("days since %s" % START_DATE.strftime("%b %d %Y"))
+ax1.set_ylabel("total number\nof models")
+ax2.set_ylabel("number of models\nper candidate")
 
+plt.tight_layout()
+
+imgname = join(fpath, filename)
+#plt.savefig(imgname, **STY['figure_save'])
 plt.show()
-
-
+plt.close('all')
     
 #    for i,v in hist:
 #        if i==0: i=1
