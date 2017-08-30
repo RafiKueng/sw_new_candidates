@@ -61,10 +61,11 @@ users = {}
 #alle2 = np.zeros(nBins)
 #xx = np.arange(nBins)
 
-START_DATE = dt.datetime(2013,1,1,0,0,0)
+START_DATE = dt.datetime(2013,5,20,0,0,0)
 
-nnn = 2.66 * 365 * 24 * 60 * 60 # max value needed
-res = 128  # subsampling..
+#nnn = 2.66 * 365 * 24 * 60 * 60 # max value needed
+nnn = 825 * 24 * 60 * 60 # max value needed
+res = 825*4  # subsampling..
 
 xx = np.geomspace(1, 10**np.ceil(np.log10(nnn)), np.ceil(np.log10(nnn))*res+1)
 xx = np.linspace(0, nnn, res)
@@ -164,7 +165,9 @@ if ax3:
     
     ax3.legend()
     
-ax1.legend()
+ax1.legend(loc='upper center', bbox_to_anchor=(0.3, 1.075), ncol=3)
+
+#ax1.set_xlim([-25,825])
 
 ax1.set_xlabel("days since %s" % START_DATE.strftime("%b %d %Y"))
 #ax1.set_ylabel("total number\nof models")
