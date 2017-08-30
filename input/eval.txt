@@ -39,7 +39,7 @@ SW21,  D*  , y , n , n ,   n,y
 SW22,  D*  , n*, n , n ,   n,y
 SW23,  SQ  , n , y , n ,   n,y
 SW24,  LQ  , n , y , n ,   y,y
-SW25+,     ,   ,   ,   ,    , 
+SW25+, D   , n , n , y ,   n,y
 SW26,  D   , y , n , y ,   n,n
 SW27,  LQ  , n , n , n ,   n,y
 SW28,  LQ  , n , y , n ,   y,y
