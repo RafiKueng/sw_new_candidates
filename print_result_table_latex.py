@@ -257,9 +257,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
     
     s = """  {swid} & {asw} & {coords} & {zL}
     & {d1} & {d2} & {d3} & {d0} & {d4} & {d5}
-    & ${m_stel}$
-    & ${m_lens}$
-    & {haloindex}   \\\\
+    & {m_stel} & {m_lens} & {haloindex}   \\\\
     
 """.format(**m) #.replace('-', '--')
 

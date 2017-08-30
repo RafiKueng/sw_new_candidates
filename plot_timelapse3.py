@@ -63,7 +63,7 @@ users = {}
 
 START_DATE = dt.datetime(2013,1,1,0,0,0)
 
-nnn = 2.5 * 365 * 24 * 60 * 60 # max value needed
+nnn = 2.66 * 365 * 24 * 60 * 60 # max value needed
 res = 128  # subsampling..
 
 xx = np.geomspace(1, 10**np.ceil(np.log10(nnn)), np.ceil(np.log10(nnn))*res+1)
@@ -127,14 +127,19 @@ plot_users = False
 #plot_users = True
 
 if plot_users:
-    fig, axes = plt.subplots(3, 1, sharex=True, **STY['figure_rect_med'])
+    fig, axes = plt.subplots(2, 1, sharex=True, **STY['figure_rect_med'])
     ax1, ax2, ax3 = axes
 else:
-    fig, axes = plt.subplots(2, 1, sharex=True, **STY['figure_rect_med'])
-    ax1, ax2 = axes
+    fig, axes = plt.subplots(1, 1, sharex=True, **STY['figure_rect_med'])
+    ax1 = axes
+    ax2 = None
     ax3 = None
 
-fig.subplots_adjust(hspace=0)
+#fig.subplots_adjust(hspace=0)
+
+a, b = np.histogram( np.array(alldates), xx)
+ax1.step( xx[:-1]/60/60/24, np.cumsum(a), color='k', linestyle='-', linewidth=3, label="all")
+#ax1.fill_between(xx[:-1]/60/60/24, np.cumsum(a), color='lightgray', step='pre')
 
 for swid, h in sorted(Hists.items()):
     if swid not in ['SW01','SW05','SW20','SW29', 'SW45']:
@@ -143,11 +148,10 @@ for swid, h in sorted(Hists.items()):
     a, b = np.histogram( np.array(h), xx)
 #    if swid == 'SW01':
 #        a /= 3
-    ax2.step(xx[:-1]/60/60/24, np.cumsum(a), label=swid)
+    ax1.step(xx[:-1]/60/60/24, np.cumsum(a), label=swid)
 #    ax1.step(xx[:-1]/60/60/24, a)
 
-ax2.set_yscale('log')
-ax2.legend()
+ax1.set_yscale('log')
 
 #plt.show()
 
@@ -160,17 +164,16 @@ if ax3:
     
     ax3.legend()
     
-a, b = np.histogram( np.array(alldates), xx)
-ax1.step( xx[:-1]/60/60/24, np.cumsum(a) )
+ax1.legend()
 
-ax2.set_xlabel("days since %s" % START_DATE.strftime("%b %d %Y"))
-ax1.set_ylabel("total number\nof models")
-ax2.set_ylabel("number of models\nper candidate")
+ax1.set_xlabel("days since %s" % START_DATE.strftime("%b %d %Y"))
+#ax1.set_ylabel("total number\nof models")
+ax1.set_ylabel("number of models")
 
 plt.tight_layout()
 
 imgname = join(fpath, filename)
-#plt.savefig(imgname, **STY['figure_save'])
+plt.savefig(imgname, **STY['figure_save'])
 plt.show()
 plt.close('all')
     

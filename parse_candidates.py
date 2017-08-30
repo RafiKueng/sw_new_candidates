@@ -70,6 +70,21 @@ def load_tex():
         MAP[asw] = swid
         
         print INT,'loaded', asw, swid #, d
+        
+    # add overlapping entries
+    overlapped = {
+        '07ls': '066w',
+        '07mq': '0717',
+        '5qiz': '5pq8'
+     }
+    for org, dbl in overlapped.items():
+        asworg = "ASW000%s" % org
+        aswdbl = "ASW000%s" % dbl
+        
+        swid = MAP[asworg]
+        MAP[aswdbl] = swid
+        
+    
     
     print I,"Status: parsed %i candidates" % len(DATA.keys())
 
