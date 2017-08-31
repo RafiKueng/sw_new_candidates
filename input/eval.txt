@@ -63,7 +63,7 @@ SW45,  CQ  , n , y , y ,   n,y
 SW46,  D   , y , y , n ,   y,y
 SW47,  D   , y , n , y ,   n,y
 SW48+, D   , y , n , y ,   y,y
-SW49+,     ,   ,   ,   ,    , 
+SW49+, D   , n , y , y ,   y,y
 SW50+, LQ  , y , n , y ,   y,y
 SW51+, D   , y , y , n ,   n,y
 SW52+, LQ  , y , n , y ,   y,y

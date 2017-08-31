@@ -37,8 +37,8 @@ from create_data import LENS_CANDIDATES as LENSES
 
 
 DBG = SET.DEBUG
-DBG = True
-DBG_swid = "SW02"
+#DBG = True
+#DBG_swid = "SW02"
 
 
 imgstypes = [

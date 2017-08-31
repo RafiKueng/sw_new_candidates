@@ -29,8 +29,8 @@ DBG = SET.DEBUG
 #DBG = True
 
 
-path     = join(S['output_dir'], 'mlens_vs_mstel_one')
-filename = 'mstel_vs_mtot_one.png'
+path     = join(S['output_dir'], 'mlens_vs_mstel')
+filename = 'mlens_vs_mstel.png'
 overwrite = True
 
 #areastyle = styles['forbiddenarea']
@@ -44,7 +44,7 @@ if not os.path.exists(path):
 from create_data import LENS_CANDIDATES as LENSES
 import create_data as CRDA
 import parse_candidates  as PACA
-from parse_candidates import MAP as ASW2SWID   #, MAP as SWID2ASW
+from parse_candidates import ASW2SWID   #, MAP as SWID2ASW
 
 
 SUBSET_MODELS, MAPS = CRDA.get_dataset_data('selected_models')
@@ -66,7 +66,10 @@ symdiff   = models_asws ^ lenses_asws   # aka XOR (in a or in b but not in both)
 print I,"status: total element:  %i / all data available for: %i" %(len(union), len(intersect))
 print INT,"missing:"
 for asw in symdiff:
-    print INT,'-',asw
+    s = ""
+    if asw in PACA.ASW2ASW.keys():
+        s = "but this is a double of %s" % PACA.ASW2ASW[asw]
+    print INT,'-',asw, s
     
 if DBG:
     intersect = ['ASW0007k4r','ASW0008swn']

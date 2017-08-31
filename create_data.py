@@ -55,7 +55,7 @@ def create_recent_models():
             tmpp[asw] = adata
     
     for asw, data in tmpp.items():
-        data['swid'] = PACA.MAP.get(asw, None)
+        data['swid'] = PACA.ASW2SWID.get(asw, None)
         ONLY_RECENT_MODELS[data['mid']] = data
     
     print "DONE"
@@ -73,7 +73,10 @@ def create_claude_models():
         if len(elems)==3 and len(elems[0])>1:
             swid, asw, mid = elems
             
-            if not asw in PACA.MAP.keys():
+            if asw in PACA.ASW2ASW.keys():
+                asw = PACA.ASW2ASW[asw]
+            
+            if not asw in PACA.ASW2SWID.keys():
                 print "\nasw not found in paca!", mid, asw, swid,
                 continue
             if not mid in samd.DATA.keys():
@@ -84,7 +87,7 @@ def create_claude_models():
                 continue
             
             data = samd.DATA[mid]
-            data['swid'] = PACA.MAP.get(asw, None)
+            data['swid'] = PACA.ASW2SWID.get(asw, None)
             CLAUDE_MODELS[mid] = data
     
     print "DONE"
@@ -103,9 +106,10 @@ def create_selected_models():
         elems = [_.strip() for _ in line.split(',')]
         if len(elems)==2 and len(elems[0])>1 and len(elems[1])>1:
             swid, mid = elems
-            asw = PACA.MAP.get(swid, None)
             
-            if not asw in PACA.MAP.keys():
+            asw = PACA.SWID2ASW.get(swid, None)
+            
+            if not asw in PACA.ASW2SWID.keys():
                 print "\nasw not found in paca!", mid, asw, swid,
                 continue
             if not mid in samd.DATA.keys():
@@ -116,7 +120,7 @@ def create_selected_models():
                 continue
             
             data = samd.DATA[mid]
-            data['swid'] = PACA.MAP.get(asw, None)
+            data['swid'] = PACA.ASW2SWID.get(asw, None)
             SELECTED_MODELS[mid] = data
     
     print "DONE"
@@ -139,8 +143,11 @@ def get_maps(data):
 #    m['swid2mid'] = dict(((m['swid'], k) for k,m in data.items()))
 #    m['asw2mid'] = dict(((m['asw'], k) for k,m in data.items() if m.get('asw')))
 
-    m['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
-    m['asw2swid'] = dict((k, v['swid']) for k, v in PACA.DATA.items())
+    #m['swid2asw'] = dict((v['swid'], k) for k, v in PACA.DATA.items())
+    #m['asw2swid'] = dict((k, v['swid']) for k, v in PACA.DATA.items())
+    
+    m['swid2asw'] = PACA.SWID2ASW  # this maps to the primary asw number
+    #m['asw2swid'] = PACA.ASW2SWID # don't use this, multiple asw map to one swid
     
     m['asw2mids'] = dict(((mm['asw'], []) for k,mm in data.items() if mm.get('asw')))
     for k,mm in data.items():

@@ -25,9 +25,12 @@ from settings import print_first_line, print_last_line, getI, del_cache
 
 
 DATA = {}
-MAP = {}
+#MAP = {}
 _c_list = []
 
+ASW2ASW = {}
+SWID2ASW = {}
+ASW2SWID = {}
 
 def load_tex():
     print I, 'load_tex'
@@ -66,23 +69,33 @@ def load_tex():
         }
         
         DATA[asw] = d
-        MAP[swid] = asw
-        MAP[asw] = swid
+        #MAP[swid] = asw
+        #MAP[asw] = swid
+        SWID2ASW[swid] = asw
+        ASW2SWID[asw] = swid
         
         print INT,'loaded', asw, swid #, d
         
     # add overlapping entries
+    # the first entry is the one to use / prefered, the second is an alias
     overlapped = {
         '07ls': '066w',
         '07mq': '0717',
-        '5qiz': '5pq8'
+        '5qiz': '5pq8',
+        '47ae': '9ans',
+        '5ma2': '5mp6',
+        '7xrs': '7wfj',
+        '7iwp': '7h27'
      }
     for org, dbl in overlapped.items():
         asworg = "ASW000%s" % org
         aswdbl = "ASW000%s" % dbl
         
-        swid = MAP[asworg]
-        MAP[aswdbl] = swid
+        swid = ASW2SWID[asworg]
+        #MAP[aswdbl] = swid
+        ASW2SWID[aswdbl] = swid
+        DATA[aswdbl] = DATA[asworg]
+        ASW2ASW[aswdbl] = asworg
         
     
     
@@ -107,7 +120,7 @@ def load_corrections():
         zlens = float(es[1] or 0)
         zsrc  = float(es[2] or 0)
 
-        asw = MAP[swid]
+        asw = SWID2ASW[swid]
         
         DATA[asw].update({
             'z_lens': float(zlens),
@@ -138,11 +151,11 @@ if len(sys.argv)>1:
         
 
 if os.path.isfile(pickle_fn):
-    DATA,MAP = load_pickle(I, pickle_fn)
+    DATA,ASW2ASW,SWID2ASW,ASW2SWID = load_pickle(I, pickle_fn)
 else:
     load_tex()
     load_corrections()
-    save_pickle(I, pickle_fn, (DATA,MAP))
+    save_pickle(I, pickle_fn, (DATA,ASW2ASW,SWID2ASW,ASW2SWID))
 
 save_csv(I, csv_fn, DATA, 'asw')
     

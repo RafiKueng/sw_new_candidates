@@ -63,10 +63,14 @@ def collect_data(mid):
 
     # add the asw id from FIMO
     asw = FIMO.DATA[mid]['asw']
+    # some object are on two images (overlapping borders..)
+    # clean this up by setting a prefered (check PACA)
+    if asw in PACA.ASW2ASW.keys():  
+        asw = PACA.ASW2ASW[asw]
     data['asw'] = asw
     
     # look up swid
-    swid = PACA.MAP.get(asw, None)
+    swid = PACA.ASW2SWID.get(asw, None)
     data['swid'] = swid
     
     # add the real/messured redshift of the lens from PACA (candidates.tex)

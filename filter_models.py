@@ -33,12 +33,12 @@ def filter_models():
     for mid, dat in COMO.DATA.items():
         asw = dat['asw']
         
-        if asw in PACA.MAP.keys():
+        if asw in PACA.ASW2SWID.keys():
             DATA[mid] = dat
-            #print INT, "%10s (%s)" % (mid, asw)
+            print INT, "%10s (%s) incl" % (mid, asw)
         else:
-            #print "GONE"
-            pass
+            print INT, "%10s (%s) GONE" % (mid, asw)
+
     print I,"status: total: %i / selected: %i" % (len(COMO.DATA.keys()), len(DATA.keys()))
 
 

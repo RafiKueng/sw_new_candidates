@@ -39,7 +39,7 @@ import matplotlib.gridspec as gridspec
 import parse_candidates as PACA
 import create_data as CRDA
 import get_state_and_config as GSAC # import will trigger download!
-import download_spl_input_images as DORG # import triggers download
+import download_orginals as DORG # import triggers download
 
 
 
