@@ -234,8 +234,8 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
 
     
     m = {
-        'asw'      : asw,
-        'swid'     : swid,
+        'asw'      : asw[-4:],
+        'swid'     : swid[-2:],
         #'mid':    mid,
         'coords'   : name,
         'm_stel'   : log_m_stel,
@@ -255,7 +255,7 @@ for swid, asw in sorted(MAPS['swid2asw'].items()):
         'd5' : dd[swid][5],
     }
     
-    s = """  {swid} & {asw} & {coords} & {zL}
+    s = """ \\sw{{{swid}}} & \\asw{{{asw}}} & {coords} & {zL}
     & {d1} & {d2} & {d3} & {d0} & {d4} & {d5}
     & {m_stel} & {m_lens} & {haloindex}   \\\\
     

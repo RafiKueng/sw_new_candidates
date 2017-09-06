@@ -23,7 +23,7 @@ SW05,  IQ  , y , y , y ,   y,y
 SW06,  LQ  , n , y , y*,   y,n*
 SW07+, D   , y , y , n ,   y,y
 SW08,  D   , y , y , n ,   y,y
-SW09,  SQ  , n , y , y ,   y,y
+SW09,  LQ  , n , y , y ,   y,y
 SW10,  D   , y , n , y ,   n,n
 SW11,  LQ  , n , y , n ,   y,y*
 SW12,  D   , y*, y , n ,   y,y
@@ -42,8 +42,8 @@ SW24,  LQ  , n , y , n ,   y,y
 SW25+, D   , n , n , y ,   n,y
 SW26,  D   , y , n , y ,   n,n
 SW27,  LQ  , n , n , n ,   n,y
-SW28,  LQ  , n , y , n ,   y,y
-SW29,  SQ  , n , y , y ,   y,y
+SW28,  SQ  , n , y , n ,   y,y
+SW29,  LQ  , n , y , y ,   y,y
 SW30+, IQ  , y , n , n ,   n,n
 SW31,  LQ  , n , y , n ,   y,y
 SW32+, IQ  , n , y , n ,   y,y
