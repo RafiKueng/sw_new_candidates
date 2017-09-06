@@ -27,6 +27,8 @@ S = SET.settings
 import create_data as CRDA
 import parse_candidates as PACA
 
+from EinsteinRadius import getEinsteinR
+
 import Image
 
 
@@ -230,6 +232,9 @@ def walkTreeMenu(tree, lvl, FH, swid):
         
 
 
+def splitexp(x):
+    return tuple(("%.2e" % x).split('e'))
+
 def walkTreeMain(tree, lvl, FH, swid, parent=None):
     
     for prev, curr, nxxt in previous_and_next(tree.items()):
@@ -283,6 +288,8 @@ def walkTreeMain(tree, lvl, FH, swid, parent=None):
 """)
         
 
+        m_rcf = M['sig_fact']
+        k_rcf  = M['kappa_fact']
 
         fdata = []
         fdata.append(r"GLASS pixel radius & %s & & px" % M['pixrad'])
@@ -298,19 +305,55 @@ def walkTreeMain(tree, lvl, FH, swid, parent=None):
         except:
             pass
         try:
-            x = LENSES[asw]['m_s_geom']
-            x  = ("%.2e" % x).split('e')
-            x = r"Stellar Mass & %s & $ \cdot 10^{%s} $ & $\Msun$" % (x[0], int(x[1]))
-            fdata.append(x)
-        except:
+            m_stel = LENSES[asw]['m_s_geom']
+            m_stel_jr = LENSES[asw]['m_s_jr']
+            m_stel_sr = LENSES[asw]['m_s_sr']
+            
+#            print m_stel, splitexp(m_stel)
+#            print r"Stellar Mass & %s & $ \cdot 10^{%s} $ & $\Msun$" % (splitexp(m_stel))
+            
+            fdata.append(r"Stellar Mass & %s & $ \cdot 10^{%s} $ & $\Msun$" % (splitexp(m_stel)))
+            fdata.append(r"Stellar Mass (young) & %s & $ \cdot 10^{%s} $ & $\Msun$" % (splitexp(m_stel_jr)))
+            fdata.append(r"Stellar Mass (old) & %s & $ \cdot 10^{%s} $ & $\Msun$" % (splitexp(m_stel_sr)))
+
+        except KeyError:
             pass
+        except:
+            raise
         try:
-            x = M['M(<R)']['data'][-1]
-            x  = ("%.2e" % x).split('e')
-            x = r"Total Mass & %s & $ \cdot 10^{%s} $ & $\Msun$" % (x[0], int(x[1]))
-            fdata.append(x)
+#            x = M['M(<R)']['data'][-1]
+#            x  = ("%.2e" % x).split('e')
+#            x = r"Total Mass & %s & $ \cdot 10^{%s} $ & $\Msun$" % (x[0], int(x[1]))
+#            fdata.append(x)
+
+            m_lens = M['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
+            m_lens_max = M['M(<R)']['max'][-1] * m_rcf
+            m_lens_min = M['M(<R)']['min'][-1] * m_rcf
+
+            fdata.append( r"Total Mass & %s & $ \cdot 10^{%s} $ & $\Msun$" % (splitexp(m_lens)))
+            fdata.append( r"Total Mass (max) & %s & $ \cdot 10^{%s} $ & $\Msun$" % (splitexp(m_lens_max) ))
+            fdata.append( r"Total Mass (min) & %s & $ \cdot 10^{%s} $ & $\Msun$" % (splitexp(m_lens_min) ))
+
+        except:
+            raise
+
+        try:
+            if M['z_corrected']:
+                
+    
+                m_lens = M['M(<R)']['data'][-1] * m_rcf # usually called m_lens in the pipeline
+                m_lens_max = M['M(<R)']['max'][-1] * m_rcf
+                m_lens_min = M['M(<R)']['min'][-1] * m_rcf
+                
+                rr = M['R']['data']
+                da = M['kappa(<R)']['data'] * k_rcf
+                rE = "%.2f" % getEinsteinR(rr, da)
+
+                x = r"Einstein Radius $r_\text{E}$ & %s & & arcsec" % (rE)
+                fdata.append(x)
         except:
             pass
+
         
         if M['type']=='old':
             lnk = "http://mite.physik.uzh.ch/data/%s" % mid
@@ -370,7 +413,7 @@ for swid, tree in sorted(TREE.items()):
         FH.write(FOOTER)
 
 
-create_imgs()
+#create_imgs()
 #create_pdf()
 
 

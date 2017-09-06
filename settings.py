@@ -18,14 +18,14 @@ DEBUG = False
 
 
 PrintAll = False
-#PrintAll = True
+PrintAll = True
 
 if PrintAll:
     DATASET_TO_USE = "all_models"
-    PRINT_MID = True
+#    PRINT_MID = True
 else:
     DATASET_TO_USE = "selected_models"
-    PRINT_MID = False
+#    PRINT_MID = False
     
 PRINT_MID = False
     
