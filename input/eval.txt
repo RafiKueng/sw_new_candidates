@@ -15,65 +15,65 @@
 # relates to the models selected in selected_models.csv
 # candidates with + dont have a redshift
 
-SW01+, SQ  , n , n , n ,   y,y
-SW02,  LQ  , n , y , n ,   y,y
-SW03+, D   , y , n , n ,   y,y
-SW04,  CQ* , y , n , n ,   n,y
-SW05,  IQ  , y , y , y ,   y,y
-SW06,  LQ  , n , y , y*,   y,n*
-SW07+, D   , y , y , n ,   y,y
-SW08,  D   , y , y , n ,   y,y
-SW09,  LQ  , n , y , y ,   y,y
-SW10,  D   , y , n , y ,   n,n
-SW11,  LQ  , n , y , n ,   y,y*
-SW12,  D   , y*, y , n ,   y,y
-SW13,  LQ  , n , n , n ,   n,n
-SW14+, SQ  , n , n , n ,   n,y
-SW15,  LQ  , n , y , n ,   y,y
-SW16,  D   , n , n , y ,   n,y
-SW17,  D   , y , n , n ,   n,y
-SW18,  D   , y , n , y ,   n,n
-SW19,  IQ  , n , y , n ,   n,y
-SW20,  IQ* , y , y*, y ,   n,y
-SW21,  D*  , y , n , n ,   n,y
-SW22,  D*  , n*, n , n ,   n,y
-SW23,  SQ  , n , y , n ,   n,y
-SW24,  LQ  , n , y , n ,   y,y
-SW25+, D   , n , n , y ,   n,y
-SW26,  D   , y , n , y ,   n,n
-SW27,  LQ  , n , n , n ,   n,y
-SW28,  SQ  , n , y , n ,   y,y
-SW29,  LQ  , n , y , y ,   y,y
-SW30+, IQ  , y , n , n ,   n,n
-SW31,  LQ  , n , y , n ,   y,y
-SW32+, IQ  , n , y , n ,   y,y
-SW33,  D   , y , y , n ,   n,y
-SW34,  D   , n , n , y ,   n,y
-SW35,  LQ  , n , y , n ,   y,y
-SW36,  D   , y , y , n ,   n,y
-SW37+, SQ  , n , n , y ,   y,y
-SW38,  LQ  , n , y , y ,   y,y
+SW01+, LQ  , n , n , n ,   y,y  ***
+SW02,  SQ  , n , y , n ,   y,y  ***
+SW03+, D   , y , n , n ,   y,y  ***
+SW04,  D   , y , n , n ,   n,y  ***
+SW05,  IQ  , y , y , y ,   y,y  ***
+SW06,  SQ  , n , y , y*,   y,n* ***
+SW07+, D   , y , y , n ,   y,y  ***
+SW08,  D   , y , y , n ,   y,y  ***
+SW09,  SQ  , n , y , y ,   y,y  ***
+SW10,  D   , y , n , y ,   n,n  ***
+SW11,  LQ  , n , y , n ,   y,y* ***
+SW12,  D   , y*, y , n ,   y,y  ***
+SW13,  SQ  , n , n , n ,   n,n  ***
+SW14+, SQ  , n , n , n ,   n,y  ***
+SW15,  CQ  , n , y , n ,   y,y  ***
+SW16,  D   , n , n , y ,   n,y  ***
+SW17,  D   , y , n , n ,   n,y  ***
+SW18,  D   , y , n , y ,   n,n  ***
+SW19,  IQ  , n , y , n ,   n,y  ***
+SW20,  D   , y , y*, y ,   n,y  ***
+SW21,  D*  , y , n , n ,   n,y  ***
+SW22,  D*  , n*, n , n ,   n,y  ***
+SW23,  LQ  , n , y , n ,   n,y  ***
+SW24,  D   , n , y , n ,   y,y  ***
+SW25+, D   , n , n , y ,   n,y  ***
+SW26,  D   , y , n , y ,   n,n  ***
+SW27,  LQ  , n , n , n ,   n,y  ***
+SW28,  LQ  , n , y , n ,   y,y  ***
+SW29,  SQ  , n , y , y ,   y,y  ***
+SW30+, IQ  , y , n , n ,   n,n  ***
+SW31,  LQ  , n , y , n ,   y,y  ***
+SW32+, IQ  , n , y , n ,   y,y  ***
+SW33,  D   , y , y , n ,   n,y  ***
+SW34,  D   , n , n , y ,   n,y  ***
+SW35,  LQ  , n , y , n ,   y,y  ***
+SW36,  D   , y , y , n ,   n,y  ***
+SW37+, SQ  , n , n , y ,   y,y  ***
+SW38,  LQ  , n , y , y ,   y,y  ***
 SW39+,     ,   ,   ,   ,    , 
-SW40+, SQ  , n , y , y ,   y,y
-SW41,  IQ* , y , n , y ,   y,y
-SW42,  IQ  , y , y , n ,   y,y
-SW43,  IQ  , n , n , n ,   n,y
-SW44,  D   , y , y , n ,   y,y
-SW45,  CQ  , n , y , y ,   n,y
-SW46,  D   , y , y , n ,   y,y
-SW47,  D   , y , n , y ,   n,y
-SW48+, D   , y , n , y ,   y,y
-SW49+, D   , n , y , y ,   y,y
-SW50+, LQ  , y , n , y ,   y,y
-SW51+, D   , y , y , n ,   n,y
-SW52+, LQ  , y , n , y ,   y,y
-SW53,  D   , y , n , y ,   n,y
-SW54,  CQ  , n , y , n ,   y,y
-SW55+, CQ  , n , y , y ,   y,n
-SW56,  D   , y , n , y ,   n,n
-SW57,  LQ  , n , y , n ,   n,n
-SW58,  SQ  , n , n , y ,   y,y
-SW59+, D   , y , n , y ,   y,y
+SW40+, SQ  , n , y , y ,   y,y  ***
+SW41,  IQ* , y , n , y ,   y,y  ***
+SW42,  IQ  , y , y , n ,   y,y  ***
+SW43,  SQ  , n , n , n ,   n,y  ***
+SW44,  LQ  , y , y , n ,   y,y  ***
+SW45,  CQ  , n , y , y ,   n,y  ***
+SW46,  D   , y , y , n ,   y,y  ***
+SW47,  D   , y , n , y ,   n,y  ***
+SW48+, D   , y , n , y ,   y,y  ***
+SW49+, D   , n , y , y ,   y,y  ***
+SW50+, LQ  , y , n , y ,   y,y  ***
+SW51+, D   , y , y , n ,   n,y  ***
+SW52+, SQ  , y , n , y ,   y,y  ***
+SW53,  D   , y , n , y ,   n,y  ***
+SW54,  CQ  , n , y , n ,   y,y  ***
+SW55+, CQ  , n , y , y ,   y,n  ***
+SW56,  D   , y , n , y ,   n,n  ***
+SW57,  SQ  , n , y , n ,   n,n  ***
+SW58,  LQ  , n , n , y ,   y,y  ***
+SW59+, D   , y , n , y ,   y,y  ***
 
 
 1, image morphology
