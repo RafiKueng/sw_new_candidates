@@ -123,7 +123,7 @@ def create_pdf(cleanup=True):
             
         # additional compression
         print "additional compression"
-        for swid in ["SW01",]:
+        for swid in []: # ["SW01",]:
             print swid
             SP.call(['gs',
                      '-sDEVICE=pdfwrite',
